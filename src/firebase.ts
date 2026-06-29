@@ -6,7 +6,19 @@ import {
   getDocFromServer,
   Firestore
 } from 'firebase/firestore';
-import firebaseConfig from './firebase-applet-config.json';
+import localConfig from './firebase-applet-config.json';
+
+// Use environment variables if set (e.g. on Vercel), falling back to local json values
+const metaEnv = (import.meta as any).env || {};
+const firebaseConfig = {
+  apiKey: metaEnv.VITE_FIREBASE_API_KEY || localConfig?.apiKey,
+  authDomain: metaEnv.VITE_FIREBASE_AUTH_DOMAIN || localConfig?.authDomain,
+  projectId: metaEnv.VITE_FIREBASE_PROJECT_ID || localConfig?.projectId,
+  storageBucket: metaEnv.VITE_FIREBASE_STORAGE_BUCKET || localConfig?.storageBucket,
+  messagingSenderId: metaEnv.VITE_FIREBASE_MESSAGING_SENDER_ID || localConfig?.messagingSenderId,
+  appId: metaEnv.VITE_FIREBASE_APP_ID || localConfig?.appId,
+  firestoreDatabaseId: metaEnv.VITE_FIREBASE_DATABASE_ID || localConfig?.firestoreDatabaseId || '(default)'
+};
 
 // Validate configurations - check if placeholder is being used
 export const isMockFirebase = 
