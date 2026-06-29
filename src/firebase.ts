@@ -10,21 +10,30 @@ import localConfig from './firebase-applet-config.json';
 
 // Use environment variables if set (e.g. on Vercel), falling back to local json values
 const metaEnv = (import.meta as any).env || {};
+const cfg = (localConfig || {}) as any;
 const firebaseConfig = {
-  apiKey: metaEnv.VITE_FIREBASE_API_KEY || localConfig?.apiKey,
-  authDomain: metaEnv.VITE_FIREBASE_AUTH_DOMAIN || localConfig?.authDomain,
-  projectId: metaEnv.VITE_FIREBASE_PROJECT_ID || localConfig?.projectId,
-  storageBucket: metaEnv.VITE_FIREBASE_STORAGE_BUCKET || localConfig?.storageBucket,
-  messagingSenderId: metaEnv.VITE_FIREBASE_MESSAGING_SENDER_ID || localConfig?.messagingSenderId,
-  appId: metaEnv.VITE_FIREBASE_APP_ID || localConfig?.appId,
-  firestoreDatabaseId: metaEnv.VITE_FIREBASE_DATABASE_ID || localConfig?.firestoreDatabaseId || '(default)'
+  apiKey: metaEnv.VITE_FIREBASE_API_KEY || cfg.apiKey,
+  authDomain: metaEnv.VITE_FIREBASE_AUTH_DOMAIN || cfg.authDomain,
+  projectId: metaEnv.VITE_FIREBASE_PROJECT_ID || cfg.projectId,
+  storageBucket: metaEnv.VITE_FIREBASE_STORAGE_BUCKET || cfg.storageBucket,
+  messagingSenderId: metaEnv.VITE_FIREBASE_MESSAGING_SENDER_ID || cfg.messagingSenderId,
+  appId: metaEnv.VITE_FIREBASE_APP_ID || cfg.appId,
+  firestoreDatabaseId: metaEnv.VITE_FIREBASE_DATABASE_ID || cfg.firestoreDatabaseId || '(default)'
 };
 
 // Validate configurations - check if placeholder is being used
-export const isMockFirebase = 
-  !firebaseConfig.apiKey || 
-  firebaseConfig.apiKey === 'placeholder-api-key-for-development' ||
-  firebaseConfig.apiKey.includes('placeholder');
+export const isMockFirebase = (() => {
+  const key = firebaseConfig.apiKey;
+  if (!key) return true;
+  if (typeof key !== 'string') return true;
+  const k = key.trim().toLowerCase();
+  if (k === '' || k === 'undefined' || k === 'null') return true;
+  if (k.includes('placeholder') || k.includes('your-') || k.includes('your_') || k.includes('<') || k.includes('>')) return true;
+  if (key.length < 20) return true;
+  // Google Cloud API keys (used by Firebase) always start with AIzaSy
+  if (!key.startsWith('AIzaSy')) return true;
+  return false;
+})();
 
 let firebaseApp;
 let firestoreDb: Firestore | null = null;
@@ -53,7 +62,6 @@ if (!isMockFirebase) {
     testConnection();
   } catch (err) {
     console.warn("Firebase failed to initialize. Falling back to sandbox storage.", err);
-    isMockFirebase === true;
   }
 }
 
