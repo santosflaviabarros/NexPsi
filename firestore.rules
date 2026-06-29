@@ -1,0 +1,222 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Default deny catch-all
+    match /{document=**} {
+      allow read, write: if false;
+    }
+    
+    // Global Security primitives
+    function isSignedIn() {
+      return request.auth != null;
+    }
+    
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_-]+$');
+    }
+    
+    function incoming() {
+      return request.resource.data;
+    }
+    
+    function existing() {
+      return resource.data;
+    }
+
+    // --- Psychologists Profiles ---
+    match /psychologists/{psychologistId} {
+      allow get: if isSignedIn() && psychologistId == request.auth.uid;
+      allow create: if isSignedIn() 
+        && psychologistId == request.auth.uid 
+        && incoming().userId == request.auth.uid
+        && incoming().name is string && incoming().name.size() <= 150
+        && incoming().email is string && incoming().email.size() <= 150
+        && incoming().crp is string && incoming().crp.size() <= 50
+        && incoming().specialties is string && incoming().specialties.size() <= 200
+        && incoming().keys().hasAll(['userId', 'name', 'email', 'crp', 'specialties', 'createdAt'])
+        && incoming().keys().size() == 6;
+        
+      allow update: if isSignedIn() 
+        && psychologistId == request.auth.uid 
+        && incoming().userId == request.auth.uid
+        && incoming().name is string && incoming().name.size() <= 150
+        && incoming().email is string && incoming().email.size() <= 150
+        && incoming().crp is string && incoming().crp.size() <= 50
+        && incoming().specialties is string && incoming().specialties.size() <= 200
+        && incoming().diff(existing()).affectedKeys().hasOnly(['name', 'email', 'crp', 'specialties']);
+    }
+
+    // --- Patients ---
+    match /patients/{patientId} {
+      allow get: if isSignedIn() && existing().psychologistId == request.auth.uid;
+      allow list: if isSignedIn() && resource.data.psychologistId == request.auth.uid;
+      
+      allow create: if isSignedIn()
+        && isValidId(patientId)
+        && incoming().psychologistId == request.auth.uid
+        && incoming().name is string && incoming().name.size() <= 150
+        && (!('id' in incoming()) || (incoming().id is string && incoming().id.size() <= 128))
+        && (!('email' in incoming()) || (incoming().email is string && incoming().email.size() <= 150))
+        && (!('phone' in incoming()) || (incoming().phone is string && incoming().phone.size() <= 50))
+        && (!('birthDate' in incoming()) || (incoming().birthDate is string && incoming().birthDate.size() <= 20))
+        && (!('cpf' in incoming()) || (incoming().cpf is string && incoming().cpf.size() <= 20))
+        && (!('notes' in incoming()) || (incoming().notes is string && incoming().notes.size() <= 2000))
+        && incoming().status in ['active', 'inactive']
+        && incoming().keys().hasAll(['psychologistId', 'name', 'status', 'createdAt'])
+        && incoming().keys().size() <= 15;
+        
+      allow update: if isSignedIn()
+        && existing().psychologistId == request.auth.uid
+        && incoming().psychologistId == request.auth.uid
+        && incoming().name is string && incoming().name.size() <= 150
+        && incoming().status in ['active', 'inactive']
+        && (!('email' in incoming()) || (incoming().email is string && incoming().email.size() <= 150))
+        && (!('phone' in incoming()) || (incoming().phone is string && incoming().phone.size() <= 50))
+        && (!('birthDate' in incoming()) || (incoming().birthDate is string && incoming().birthDate.size() <= 20))
+        && (!('cpf' in incoming()) || (incoming().cpf is string && incoming().cpf.size() <= 20))
+        && (!('notes' in incoming()) || (incoming().notes is string && incoming().notes.size() <= 2000))
+        && (!('createdAt' in incoming()) || incoming().createdAt == existing().createdAt)
+        && (!('id' in incoming()) || incoming().id == existing().id)
+        && incoming().diff(existing()).affectedKeys().hasOnly(['name', 'email', 'phone', 'birthDate', 'cpf', 'notes', 'status', 'psychologistId', 'createdAt', 'id']);
+        
+      allow delete: if isSignedIn() && existing().psychologistId == request.auth.uid;
+    }
+
+    // --- Appointments ---
+    match /appointments/{appointmentId} {
+      allow get: if isSignedIn() && existing().psychologistId == request.auth.uid;
+      allow list: if isSignedIn() && resource.data.psychologistId == request.auth.uid;
+      
+      allow create: if isSignedIn()
+        && isValidId(appointmentId)
+        && incoming().psychologistId == request.auth.uid
+        && incoming().patientId is string && incoming().patientId.size() <= 128
+        && incoming().patientName is string && incoming().patientName.size() <= 150
+        && incoming().date is string && incoming().date.size() <= 20
+        && incoming().time is string && incoming().time.size() <= 10
+        && (!('duration' in incoming()) || incoming().duration is int)
+        && incoming().type in ['presential', 'online']
+        && incoming().status in ['scheduled', 'completed', 'canceled']
+        && (!('notes' in incoming()) || (incoming().notes is string && incoming().notes.size() <= 1000))
+        && incoming().keys().hasAll(['psychologistId', 'patientId', 'patientName', 'date', 'time', 'type', 'status', 'createdAt', 'updatedAt']);
+        
+      allow update: if isSignedIn()
+        && existing().psychologistId == request.auth.uid
+        && incoming().psychologistId == request.auth.uid
+        && incoming().status in ['scheduled', 'completed', 'canceled']
+        && (!('notes' in incoming()) || (incoming().notes is string && incoming().notes.size() <= 1000))
+        && incoming().date is string && incoming().date.size() <= 20
+        && incoming().time is string && incoming().time.size() <= 10
+        && (!('patientId' in incoming()) || incoming().patientId == existing().patientId)
+        && (!('patientName' in incoming()) || incoming().patientName == existing().patientName)
+        && (!('createdAt' in incoming()) || incoming().createdAt == existing().createdAt)
+        && (!('id' in incoming()) || incoming().id == existing().id)
+        && incoming().diff(existing()).affectedKeys().hasOnly([
+          'date', 'time', 'duration', 'type', 'status', 'notes', 'updatedAt', 
+          'psychologistId', 'patientId', 'patientName', 'createdAt', 'id'
+        ]);
+        
+      allow delete: if isSignedIn() && existing().psychologistId == request.auth.uid;
+    }
+
+    // --- Medical Records ---
+    match /medical_records/{recordId} {
+      allow get: if isSignedIn() && existing().psychologistId == request.auth.uid;
+      allow list: if isSignedIn() && resource.data.psychologistId == request.auth.uid;
+      
+      allow create: if isSignedIn()
+        && isValidId(recordId)
+        && incoming().psychologistId == request.auth.uid
+        && incoming().patientId is string && incoming().patientId.size() <= 128
+        && incoming().patientName is string && incoming().patientName.size() <= 150
+        && incoming().sessionDate is string && incoming().sessionDate.size() <= 20
+        && incoming().title is string && incoming().title.size() <= 200
+        && (!('sessionSummary' in incoming()) || (incoming().sessionSummary is string && incoming().sessionSummary.size() <= 10000))
+        && (!('clinicalObservations' in incoming()) || (incoming().clinicalObservations is string && incoming().clinicalObservations.size() <= 10000))
+        && (!('therapeuticPlan' in incoming()) || (incoming().therapeuticPlan is string && incoming().therapeuticPlan.size() <= 10000))
+        && incoming().isLocked is bool
+        && incoming().keys().hasAll(['psychologistId', 'patientId', 'patientName', 'sessionDate', 'title', 'isLocked', 'createdAt', 'updatedAt']);
+        
+      allow update: if isSignedIn()
+        && existing().psychologistId == request.auth.uid
+        && incoming().psychologistId == request.auth.uid
+        && incoming().isLocked is bool
+        && incoming().title is string && incoming().title.size() <= 200
+        && (!('sessionSummary' in incoming()) || (incoming().sessionSummary is string && incoming().sessionSummary.size() <= 10000))
+        && (!('clinicalObservations' in incoming()) || (incoming().clinicalObservations is string && incoming().clinicalObservations.size() <= 10000))
+        && (!('therapeuticPlan' in incoming()) || (incoming().therapeuticPlan is string && incoming().therapeuticPlan.size() <= 10000))
+        && (!('patientId' in incoming()) || incoming().patientId == existing().patientId)
+        && (!('patientName' in incoming()) || incoming().patientName == existing().patientName)
+        && (!('sessionDate' in incoming()) || incoming().sessionDate == existing().sessionDate)
+        && (!('createdAt' in incoming()) || incoming().createdAt == existing().createdAt)
+        && (!('id' in incoming()) || incoming().id == existing().id)
+        && incoming().diff(existing()).affectedKeys().hasOnly([
+          'title', 'sessionSummary', 'clinicalObservations', 'therapeuticPlan', 
+          'isLocked', 'lockedAt', 'updatedAt', 'psychologistId', 
+          'patientId', 'patientName', 'sessionDate', 'createdAt', 'id'
+        ]);
+        
+      allow delete: if isSignedIn() && existing().psychologistId == request.auth.uid;
+    }
+
+    // --- Financial Transactions ---
+    match /transactions/{transactionId} {
+      allow get: if isSignedIn() && existing().psychologistId == request.auth.uid;
+      allow list: if isSignedIn() && resource.data.psychologistId == request.auth.uid;
+      
+      allow create: if isSignedIn()
+        && isValidId(transactionId)
+        && incoming().psychologistId == request.auth.uid
+        && incoming().type in ['income', 'expense']
+        && incoming().amount is number
+        && incoming().date is string && incoming().date.size() <= 20
+        && incoming().category is string && incoming().category.size() <= 100
+        && incoming().status in ['paid', 'pending']
+        && incoming().keys().hasAll(['psychologistId', 'type', 'amount', 'date', 'category', 'status', 'createdAt']);
+        
+      allow update: if isSignedIn()
+        && existing().psychologistId == request.auth.uid
+        && incoming().psychologistId == request.auth.uid
+        && incoming().type in ['income', 'expense']
+        && incoming().amount is number
+        && incoming().date is string && incoming().date.size() <= 20
+        && incoming().category is string && incoming().category.size() <= 100
+        && incoming().status in ['paid', 'pending']
+        && incoming().diff(existing()).affectedKeys().hasOnly([
+          'amount', 'date', 'category', 'description', 'paymentMethod', 'status', 'patientId', 'patientName'
+        ]);
+        
+      allow delete: if isSignedIn() && existing().psychologistId == request.auth.uid;
+    }
+
+    // --- Health Receipts and Prescriptions ---
+    match /health_receipts/{receiptId} {
+      allow get: if isSignedIn() && existing().psychologistId == request.auth.uid;
+      allow list: if isSignedIn() && resource.data.psychologistId == request.auth.uid;
+      
+      allow create: if isSignedIn()
+        && isValidId(receiptId)
+        && incoming().psychologistId == request.auth.uid
+        && incoming().patientId is string && incoming().patientId.size() <= 128
+        && incoming().patientName is string && incoming().patientName.size() <= 150
+        && incoming().patientCpf is string && incoming().patientCpf.size() <= 50
+        && incoming().date is string && incoming().date.size() <= 20
+        && incoming().type in ['payment_receipt', 'health_report', 'therapeutic_prescription']
+        && incoming().value is number
+        && incoming().description is string && incoming().description.size() <= 10000
+        && incoming().signatureLocked is bool
+        && incoming().keys().hasAll(['psychologistId', 'patientId', 'patientName', 'patientCpf', 'date', 'type', 'value', 'description', 'signatureLocked', 'createdAt']);
+        
+      allow update: if isSignedIn()
+        && existing().psychologistId == request.auth.uid
+        && incoming().psychologistId == request.auth.uid
+        && incoming().diff(existing()).affectedKeys().hasOnly([
+          'patientName', 'patientCpf', 'patientEmail', 'date', 'type', 'value', 'description', 'signatureLocked'
+        ]);
+        
+      allow delete: if isSignedIn() && existing().psychologistId == request.auth.uid;
+    }
+  }
+}
+

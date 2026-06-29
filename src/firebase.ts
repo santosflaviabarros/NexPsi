@@ -1,0 +1,97 @@
+import { initializeApp, getApps, getApp } from 'firebase/app';
+import { getAuth } from 'firebase/auth';
+import { 
+  getFirestore, 
+  doc, 
+  getDocFromServer,
+  Firestore
+} from 'firebase/firestore';
+import firebaseConfig from './firebase-applet-config.json';
+
+// Validate configurations - check if placeholder is being used
+export const isMockFirebase = 
+  !firebaseConfig.apiKey || 
+  firebaseConfig.apiKey === 'placeholder-api-key-for-development' ||
+  firebaseConfig.apiKey.includes('placeholder');
+
+let firebaseApp;
+let firestoreDb: Firestore | null = null;
+let firebaseAuth: any = null;
+
+if (!isMockFirebase) {
+  try {
+    firebaseApp = getApps().length > 0 ? getApp() : initializeApp(firebaseConfig);
+    // CRITICAL: The app will break without this line
+    firestoreDb = getFirestore(firebaseApp, firebaseConfig.firestoreDatabaseId);
+    firebaseAuth = getAuth(firebaseApp);
+
+    // CRITICAL CONSTRAINT: When the application initially boots, test the live connection
+    const testConnection = async () => {
+      if (firestoreDb) {
+        try {
+          await getDocFromServer(doc(firestoreDb, 'test', 'connection'));
+          console.log("Firebase connection established successfully.");
+        } catch (error) {
+          if (error instanceof Error && error.message.includes('the client is offline')) {
+            console.error("Please check your Firebase configuration. Client is offline.");
+          }
+        }
+      }
+    };
+    testConnection();
+  } catch (err) {
+    console.warn("Firebase failed to initialize. Falling back to sandbox storage.", err);
+    isMockFirebase === true;
+  }
+}
+
+export const db = firestoreDb;
+export const auth = firebaseAuth;
+
+// Error handlers conforming exactly to target schema
+export enum OperationType {
+  CREATE = 'create',
+  UPDATE = 'update',
+  DELETE = 'delete',
+  LIST = 'list',
+  GET = 'get',
+  WRITE = 'write',
+}
+
+export interface FirestoreErrorInfo {
+  error: string;
+  operationType: OperationType;
+  path: string | null;
+  authInfo: {
+    userId?: string | null;
+    email?: string | null;
+    emailVerified?: boolean | null;
+    isAnonymous?: boolean | null;
+    tenantId?: string | null;
+    providerInfo?: {
+      providerId?: string | null;
+      email?: string | null;
+    }[];
+  };
+}
+
+export function handleFirestoreError(error: unknown, operationType: OperationType, path: string | null): never {
+  const errInfo: FirestoreErrorInfo = {
+    error: error instanceof Error ? error.message : String(error),
+    authInfo: {
+      userId: auth?.currentUser?.uid || null,
+      email: auth?.currentUser?.email || null,
+      emailVerified: auth?.currentUser?.emailVerified || null,
+      isAnonymous: auth?.currentUser?.isAnonymous || null,
+      tenantId: auth?.currentUser?.tenantId || null,
+      providerInfo: auth?.currentUser?.providerData?.map((provider: any) => ({
+        providerId: provider.providerId,
+        email: provider.email,
+      })) || []
+    },
+    operationType,
+    path
+  };
+  console.error('Firestore Error: ', JSON.stringify(errInfo));
+  throw new Error(JSON.stringify(errInfo));
+}

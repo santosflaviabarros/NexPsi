@@ -1,0 +1,6 @@
+{
+  "name": "NexPsi",
+  "description": "Sistema completo para gestão de psicólogos, agendamentos intuitivos e prontuários digitais seguros.",
+  "requestFramePermissions": ["microphone"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
