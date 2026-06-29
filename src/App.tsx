@@ -183,161 +183,238 @@ export default function App() {
   const todaysAppointments = appointments.filter(a => a.date === todayString && a.status === 'scheduled');
 
   return (
-    <div className="min-h-screen bg-slate-50/50 text-slate-850 flex flex-col font-sans antialiased selection:bg-indigo-100 select-none">
+    <div className="min-h-screen bg-slate-50/50 text-slate-850 flex flex-col md:flex-row font-sans antialiased selection:bg-indigo-100 select-none">
       
-      {/* HEADER NAVIGATION */}
-      <header className="bg-white border-b border-slate-100 shadow-xs sticky top-0 z-40">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            
-            {/* Logo brand */}
-            <div className="flex items-center gap-2">
-              <div className="p-2 bg-indigo-600 text-white rounded-xl shadow-md">
-                <ShieldCheck className="w-5 h-5" id="header-brand-logo" />
-              </div>
-              <span className="text-xl font-bold tracking-tight text-slate-900">
-                Nex<span className="text-indigo-600">Psi</span>
-              </span>
-            </div>
-
-            {/* Middle navigation tabs */}
-            <nav className="hidden md:flex items-center gap-1.5 bg-slate-100/75 p-1 rounded-xl border border-slate-200/50">
-              <button
-                onClick={() => { setActiveTab('dashboard'); clearPreselectedPatient(); }}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
-                  activeTab === 'dashboard' 
-                    ? 'bg-white text-indigo-700 shadow-sm' 
-                    : 'text-slate-500 hover:text-slate-800'
-                }`}
-              >
-                <LayoutDashboard className="w-4 h-4" /> Painel de Controle
-              </button>
-              <button
-                onClick={() => { setActiveTab('consultas'); clearPreselectedPatient(); }}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
-                  activeTab === 'consultas' 
-                    ? 'bg-white text-indigo-700 shadow-sm' 
-                    : 'text-slate-500 hover:text-slate-800'
-                }`}
-              >
-                <Calendar className="w-4 h-4" /> Agenda
-                {appointments.filter(a => a.status === 'scheduled').length > 0 && (
-                  <span className="ml-1 bg-indigo-100 text-indigo-800 px-1.5 py-0.5 rounded-full text-[10px] font-black">
-                    {appointments.filter(a => a.status === 'scheduled').length}
-                  </span>
-                )}
-              </button>
-              <button
-                onClick={() => { setActiveTab('pacientes'); clearPreselectedPatient(); }}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
-                  activeTab === 'pacientes' 
-                    ? 'bg-white text-indigo-700 shadow-sm' 
-                    : 'text-slate-500 hover:text-slate-800'
-                }`}
-              >
-                <Users className="w-4 h-4" /> Pacientes
-              </button>
-              <button
-                onClick={() => { setActiveTab('prontuarios'); clearPreselectedPatient(); }}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
-                  activeTab === 'prontuarios' 
-                    ? 'bg-white text-indigo-700 shadow-sm' 
-                    : 'text-slate-500 hover:text-slate-800'
-                }`}
-              >
-                <FileText className="w-4 h-4" /> Prontuários
-              </button>
-              <button
-                onClick={() => { setActiveTab('copiloto'); clearPreselectedPatient(); }}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
-                  activeTab === 'copiloto' 
-                    ? 'bg-indigo-600 text-white shadow-sm' 
-                    : 'text-slate-500 hover:text-slate-850'
-                }`}
-              >
-                <Mic className={`w-4 h-4 ${activeTab === 'copiloto' ? 'text-amber-300' : 'text-indigo-500 animate-pulse'}`} /> Copiloto de Voz
-              </button>
-              <button
-                onClick={() => { setActiveTab('anamneses'); clearPreselectedPatient(); }}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
-                  activeTab === 'anamneses' 
-                    ? 'bg-white text-indigo-700 shadow-sm' 
-                    : 'text-slate-500 hover:text-slate-800'
-                }`}
-              >
-                <Files className="w-4 h-4" /> Modelos
-              </button>
-              <button
-                onClick={() => { setActiveTab('referencias'); clearPreselectedPatient(); }}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
-                  activeTab === 'referencias' 
-                    ? 'bg-white text-indigo-700 shadow-sm' 
-                    : 'text-slate-500 hover:text-slate-800'
-                }`}
-              >
-                <BookOpen className="w-4 h-4" /> Referências
-              </button>
-              <button
-                onClick={() => { setActiveTab('financeiro'); clearPreselectedPatient(); }}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
-                  activeTab === 'financeiro' 
-                    ? 'bg-white text-indigo-700 shadow-sm' 
-                    : 'text-slate-500 hover:text-slate-800'
-                }`}
-              >
-                <DollarSign className="w-4 h-4 text-emerald-600" /> Financeiro
-              </button>
-              <button
-                onClick={() => { setActiveTab('whatsapp'); clearPreselectedPatient(); }}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
-                  activeTab === 'whatsapp' 
-                    ? 'bg-white text-indigo-700 shadow-sm' 
-                    : 'text-slate-500 hover:text-slate-800'
-                }`}
-              >
-                <MessageSquare className="w-4 h-4 text-emerald-500 fill-emerald-500/10" /> WhatsApp
-              </button>
-            </nav>
-
-            {/* Right therapist profile chip */}
-            <div className="flex items-center gap-3">
-              <button
-                onClick={() => setActiveTab('perfil')}
-                className="flex items-center gap-2 bg-slate-50 border border-slate-100 hover:bg-slate-100 px-3 py-1.5 rounded-xl transition-all cursor-pointer"
-              >
-                <div className="w-6.5 h-6.5 rounded-full overflow-hidden bg-indigo-50 text-indigo-600 flex items-center justify-center font-bold text-xs shrink-0 border border-slate-250">
-                  {currentUser?.photoURL ? (
-                    <img 
-                      src={currentUser.photoURL} 
-                      alt={profile?.name || "Psicólogo"} 
-                      className="w-full h-full object-cover"
-                      referrerPolicy="no-referrer"
-                    />
-                  ) : (
-                    profile ? profile.name.charAt(0) : 'P'
-                  )}
-                </div>
-                <div className="text-left hidden sm:block">
-                  <p className="text-[10px] font-bold text-slate-800 line-clamp-1">{profile?.name || "Psicólogo"}</p>
-                  <p className="text-[9px] text-indigo-600 font-medium tracking-wide leading-none">{profile?.email || currentUser?.email}</p>
-                  {profile?.crp && profile.crp !== "Configurar CRP" && (
-                    <p className="text-[8px] text-slate-400 font-mono tracking-wider mt-0.5">{profile.crp}</p>
-                  )}
-                </div>
-              </button>
-
-              <button
-                onClick={handleLogout}
-                id="btn-logout"
-                title="Sair do Portal"
-                className="p-2 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-xl transition-colors cursor-pointer"
-              >
-                <LogOut className="w-5 h-5" />
-              </button>
-            </div>
+      {/* DESKTOP SIDEBAR */}
+      <aside className="hidden md:flex md:flex-col md:w-64 md:h-screen md:sticky md:top-0 border-r border-slate-100 bg-white shrink-0 z-40">
+        {/* Logo brand */}
+        <div className="p-6 border-b border-slate-100/80 flex items-center gap-2.5 shrink-0">
+          <div className="p-2 bg-indigo-600 text-white rounded-xl shadow-md">
+            <ShieldCheck className="w-5.5 h-5.5" id="sidebar-brand-logo" />
+          </div>
+          <div className="flex flex-col">
+            <span className="text-lg font-extrabold tracking-tight text-slate-900 leading-none">
+              Nex<span className="text-indigo-600">Psi</span>
+            </span>
+            <span className="text-[10px] text-slate-400 font-semibold mt-1 uppercase tracking-wider">Portal Clínico</span>
           </div>
         </div>
-      </header>
+
+        {/* Navigation List */}
+        <nav className="flex-1 px-3 py-6 space-y-1.5 overflow-y-auto">
+          <button
+            onClick={() => { setActiveTab('dashboard'); clearPreselectedPatient(); }}
+            className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all duration-200 cursor-pointer ${
+              activeTab === 'dashboard' 
+                ? 'bg-indigo-50 text-indigo-700 shadow-xs' 
+                : 'text-slate-500 hover:text-slate-800 hover:bg-slate-50'
+            }`}
+          >
+            <LayoutDashboard className="w-4.5 h-4.5" />
+            <span>Painel de Controle</span>
+          </button>
+          
+          <button
+            onClick={() => { setActiveTab('consultas'); clearPreselectedPatient(); }}
+            className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all duration-200 cursor-pointer ${
+              activeTab === 'consultas' 
+                ? 'bg-indigo-50 text-indigo-700 shadow-xs' 
+                : 'text-slate-500 hover:text-slate-800 hover:bg-slate-50'
+            }`}
+          >
+            <div className="flex items-center gap-3">
+              <Calendar className="w-4.5 h-4.5" />
+              <span>Agenda</span>
+            </div>
+            {appointments.filter(a => a.status === 'scheduled').length > 0 && (
+              <span className="bg-indigo-100 text-indigo-800 px-1.5 py-0.5 rounded-full text-[10px] font-black">
+                {appointments.filter(a => a.status === 'scheduled').length}
+              </span>
+            )}
+          </button>
+
+          <button
+            onClick={() => { setActiveTab('pacientes'); clearPreselectedPatient(); }}
+            className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all duration-200 cursor-pointer ${
+              activeTab === 'pacientes' 
+                ? 'bg-indigo-50 text-indigo-700 shadow-xs' 
+                : 'text-slate-500 hover:text-slate-800 hover:bg-slate-50'
+            }`}
+          >
+            <Users className="w-4.5 h-4.5" />
+            <span>Pacientes</span>
+          </button>
+
+          <button
+            onClick={() => { setActiveTab('prontuarios'); clearPreselectedPatient(); }}
+            className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all duration-200 cursor-pointer ${
+              activeTab === 'prontuarios' 
+                ? 'bg-indigo-50 text-indigo-700 shadow-xs' 
+                : 'text-slate-500 hover:text-slate-800 hover:bg-slate-50'
+            }`}
+          >
+            <FileText className="w-4.5 h-4.5" />
+            <span>Prontuários</span>
+          </button>
+
+          <button
+            onClick={() => { setActiveTab('copiloto'); clearPreselectedPatient(); }}
+            className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all duration-200 cursor-pointer ${
+              activeTab === 'copiloto' 
+                ? 'bg-indigo-600 text-white shadow-md' 
+                : 'text-slate-500 hover:text-slate-850 hover:bg-slate-50'
+            }`}
+          >
+            <Mic className={`w-4.5 h-4.5 ${activeTab === 'copiloto' ? 'text-amber-300' : 'text-indigo-500'}`} />
+            <span>Copiloto de Voz</span>
+          </button>
+
+          <button
+            onClick={() => { setActiveTab('anamneses'); clearPreselectedPatient(); }}
+            className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all duration-200 cursor-pointer ${
+              activeTab === 'anamneses' 
+                ? 'bg-indigo-50 text-indigo-700 shadow-xs' 
+                : 'text-slate-500 hover:text-slate-800 hover:bg-slate-50'
+            }`}
+          >
+            <Files className="w-4.5 h-4.5" />
+            <span>Modelos</span>
+          </button>
+
+          <button
+            onClick={() => { setActiveTab('referencias'); clearPreselectedPatient(); }}
+            className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all duration-200 cursor-pointer ${
+              activeTab === 'referencias' 
+                ? 'bg-indigo-50 text-indigo-700 shadow-xs' 
+                : 'text-slate-500 hover:text-slate-800 hover:bg-slate-50'
+            }`}
+          >
+            <BookOpen className="w-4.5 h-4.5" />
+            <span>Referências</span>
+          </button>
+
+          <button
+            onClick={() => { setActiveTab('financeiro'); clearPreselectedPatient(); }}
+            className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all duration-200 cursor-pointer ${
+              activeTab === 'financeiro' 
+                ? 'bg-indigo-50 text-indigo-700 shadow-xs' 
+                : 'text-slate-500 hover:text-slate-800 hover:bg-slate-50'
+            }`}
+          >
+            <DollarSign className="w-4.5 h-4.5 text-emerald-600" />
+            <span>Financeiro</span>
+          </button>
+
+          <button
+            onClick={() => { setActiveTab('whatsapp'); clearPreselectedPatient(); }}
+            className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all duration-200 cursor-pointer ${
+              activeTab === 'whatsapp' 
+                ? 'bg-indigo-50 text-indigo-700 shadow-xs' 
+                : 'text-slate-500 hover:text-slate-800 hover:bg-slate-50'
+            }`}
+          >
+            <MessageSquare className="w-4.5 h-4.5 text-emerald-500 fill-emerald-500/10" />
+            <span>WhatsApp</span>
+          </button>
+        </nav>
+
+        {/* Profile Footer */}
+        <div className="p-4 border-t border-slate-100 shrink-0 bg-slate-50/50">
+          <div className="flex items-center justify-between gap-2">
+            <button
+              onClick={() => setActiveTab('perfil')}
+              className="flex items-center gap-2.5 hover:bg-slate-100 p-2 rounded-xl transition-all cursor-pointer text-left flex-1 min-w-0"
+            >
+              <div className="w-8 h-8 rounded-full overflow-hidden bg-indigo-50 text-indigo-600 flex items-center justify-center font-bold text-sm shrink-0 border border-slate-200">
+                {currentUser?.photoURL ? (
+                  <img 
+                    src={currentUser.photoURL} 
+                    alt={profile?.name || "Psicólogo"} 
+                    className="w-full h-full object-cover"
+                    referrerPolicy="no-referrer"
+                  />
+                ) : (
+                  profile ? profile.name.charAt(0) : 'P'
+                )}
+              </div>
+              <div className="min-w-0 flex-1">
+                <p className="text-[11px] font-extrabold text-slate-800 truncate">{profile?.name || "Psicólogo"}</p>
+                <p className="text-[9px] text-indigo-600 font-medium truncate leading-none mt-0.5">{profile?.email || currentUser?.email}</p>
+                {profile?.crp && profile.crp !== "Configurar CRP" && (
+                  <p className="text-[8px] text-slate-400 font-mono tracking-wider mt-1">{profile.crp}</p>
+                )}
+              </div>
+            </button>
+            
+            <button
+              onClick={handleLogout}
+              id="btn-logout-sidebar"
+              title="Sair do Portal"
+              className="p-2 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-xl transition-colors cursor-pointer shrink-0"
+            >
+              <LogOut className="w-4.5 h-4.5" />
+            </button>
+          </div>
+        </div>
+      </aside>
+
+      {/* RIGHT CONTENT AREA WRAPPER */}
+      <div className="flex-1 flex flex-col min-w-0">
+        
+        {/* MOBILE HEADER NAVIGATION */}
+        <header className="bg-white border-b border-slate-100 shadow-xs sticky top-0 z-40 md:hidden">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex justify-between items-center h-16">
+              
+              {/* Logo brand */}
+              <div className="flex items-center gap-2">
+                <div className="p-2 bg-indigo-600 text-white rounded-xl shadow-md">
+                  <ShieldCheck className="w-5 h-5" id="header-brand-logo" />
+                </div>
+                <span className="text-xl font-bold tracking-tight text-slate-900">
+                  Nex<span className="text-indigo-600">Psi</span>
+                </span>
+              </div>
+
+              {/* Right therapist profile chip */}
+              <div className="flex items-center gap-3">
+                <button
+                  onClick={() => setActiveTab('perfil')}
+                  className="flex items-center gap-2 bg-slate-50 border border-slate-100 hover:bg-slate-100 px-3 py-1.5 rounded-xl transition-all cursor-pointer"
+                >
+                  <div className="w-6.5 h-6.5 rounded-full overflow-hidden bg-indigo-50 text-indigo-600 flex items-center justify-center font-bold text-xs shrink-0 border border-slate-250">
+                    {currentUser?.photoURL ? (
+                      <img 
+                        src={currentUser.photoURL} 
+                        alt={profile?.name || "Psicólogo"} 
+                        className="w-full h-full object-cover"
+                        referrerPolicy="no-referrer"
+                      />
+                    ) : (
+                      profile ? profile.name.charAt(0) : 'P'
+                    )}
+                  </div>
+                  <div className="text-left hidden sm:block">
+                    <p className="text-[10px] font-bold text-slate-800 line-clamp-1">{profile?.name || "Psicólogo"}</p>
+                    <p className="text-[9px] text-indigo-600 font-medium tracking-wide leading-none">{profile?.email || currentUser?.email}</p>
+                    {profile?.crp && profile.crp !== "Configurar CRP" && (
+                      <p className="text-[8px] text-slate-400 font-mono tracking-wider mt-0.5">{profile.crp}</p>
+                    )}
+                  </div>
+                </button>
+
+                <button
+                  onClick={handleLogout}
+                  id="btn-logout"
+                  title="Sair do Portal"
+                  className="p-2 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-xl transition-colors cursor-pointer"
+                >
+                  <LogOut className="w-5 h-5" />
+                </button>
+              </div>
+            </div>
+          </div>
+        </header>
 
       {/* MOBILE TAB CONTROLLER */}
       <div className="md:hidden bg-white border-b border-slate-100 grid grid-cols-8 select-none shrink-0 text-center font-semibold text-xs py-1">
@@ -719,6 +796,7 @@ export default function App() {
           </div>
         </div>
       </footer>
+      </div> {/* Closes flex-1 flex flex-col min-w-0 */}
     </div>
   );
 }
