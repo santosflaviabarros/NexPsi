@@ -9,19 +9,12 @@ interface AuthViewProps {
 }
 
 export default function AuthView({ onLogin }: AuthViewProps) {
-  const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [errorMess, setErrorMess] = useState('');
 
   const handleGoogleLogin = async () => {
     setIsLoading(true);
     setErrorMess('');
-
-    if (password !== 'Flavia7') {
-      setErrorMess('Senha de acesso incorreta. Por favor, insira a chave de segurança correta.');
-      setIsLoading(false);
-      return;
-    }
 
     if (isMockFirebase || !auth) {
       // Mock flow only as emergency fallback if firebase isn't configured, but with santosflaviabarros@gmail.com
@@ -65,7 +58,7 @@ export default function AuthView({ onLogin }: AuthViewProps) {
             <ShieldCheck className="w-8 h-8" id="auth-logo-icon" />
           </div>
           <span className="text-3xl font-bold tracking-tight text-slate-900">
-            Nex<span className="text-indigo-600">Psi</span>
+            Psi<span className="text-indigo-600">Flow</span>
           </span>
         </div>
         <p className="text-sm font-medium text-slate-500 uppercase tracking-wider mb-6">
@@ -96,38 +89,15 @@ export default function AuthView({ onLogin }: AuthViewProps) {
             </div>
           )}
 
-          <div className="space-y-5">
-            {/* Password Verification Field */}
-            <div className="space-y-1.5">
-              <label className="block text-xs font-extrabold text-slate-600 uppercase tracking-wider">
-                Chave de Acesso do Sistema
-              </label>
-              <div className="relative rounded-xl shadow-xs">
-                <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
-                  <Lock className="w-4 h-4 text-slate-400" />
-                </div>
-                <input
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="Digite a senha necessária"
-                  className="block w-full pl-10 pr-4 py-3 border border-slate-250 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm font-semibold placeholder:text-slate-300 placeholder:font-medium text-slate-800 bg-slate-50/50"
-                />
-              </div>
-              <p className="text-[10px] text-slate-400 font-medium">
-                Insira a senha de liberação para habilitar e prosseguir com o login do Google.
-              </p>
-            </div>
-
-            <div className="border-t border-slate-100 my-4 pt-4">
-              {/* Primary Action: Google Auth Button */}
-              <button
-                onClick={handleGoogleLogin}
-                type="button"
-                disabled={isLoading}
-                id="google-login-btn"
-                className="w-full flex items-center justify-center gap-3 py-3 px-4 border border-slate-200 hover:border-slate-300 rounded-xl shadow-xs text-sm font-semibold text-slate-700 bg-white hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 transition-colors cursor-pointer"
-              >
+          <div className="space-y-4">
+            {/* Primary Action: Google Auth Button */}
+            <button
+              onClick={handleGoogleLogin}
+              type="button"
+              disabled={isLoading}
+              id="google-login-btn"
+              className="w-full flex items-center justify-center gap-3 py-3 px-4 border border-slate-200 hover:border-slate-300 rounded-xl shadow-xs text-sm font-semibold text-slate-700 bg-white hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 transition-colors cursor-pointer"
+            >
               <svg className="w-5 h-5 shrink-0" viewBox="0 0 24 24" aria-hidden="true">
                 <path
                   fill="#4285F4"
@@ -148,7 +118,6 @@ export default function AuthView({ onLogin }: AuthViewProps) {
               </svg>
               <span>{isLoading ? 'Conectando...' : 'Entrar com o Google'}</span>
             </button>
-          </div>
           </div>
         </div>
       </motion.div>

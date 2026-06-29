@@ -1,18 +1,7 @@
 import tailwindcss from '@tailwindcss/vite';
 import react from '@vitejs/plugin-react';
-import fs from 'fs';
 import path from 'path';
 import {defineConfig} from 'vite';
-
-// Ensure firebase-applet-config.json exists during build so it compiles fine on Vercel/GitHub
-const configPath = path.resolve(__dirname, 'src/firebase-applet-config.json');
-if (!fs.existsSync(configPath)) {
-  try {
-    fs.writeFileSync(configPath, '{}');
-  } catch (err) {
-    console.warn('Could not create fallback firebase-applet-config.json:', err);
-  }
-}
 
 export default defineConfig(() => {
   return {
