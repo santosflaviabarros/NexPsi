@@ -1673,14 +1673,56 @@ Local: _________________________________, Data: _____/_____/_________`;
         /^(paciente|nome|idade|cpf|rg|respons[aá]vel|data|nascimento|endere[cç]o|telefone|contato|encaminhamento|solicitante|finalidade|diagn[oó]stico|assunto|ref|local|emissor|autor|interessado|profissional|registro|psic[oó]log[oa]|t[ií]tulo)/i.test(cleanLine) ||
         cleanLine.split('\n').some(l => /^(paciente|nome|idade|cpf|rg|respons[aá]vel|data|endere[cç]o|telefone|solicitante|finalidade):/i.test(l.trim()));
       const isDateLocationLine = /^[A-Za-zÀ-ÿ\s]+,\s*(\d{1,2}\s+de\s+[A-Za-zÀ-ÿ]+\s+de\s+\d{4}|\d{2}\/\d{2}\/\d{4}|_{2,})/i.test(cleanLine);
-      
+
+      // Signature block handling: ensure underscore line is present directly above the name
+      if (isSignatureLine) {
+        // If cleanLine has underscore or psychologist name
+        const lines = cleanLine.split('\n');
+        const hasUnderscoreInChunk = cleanLine.includes('____') || cleanLine.includes('---');
+        
+        return (
+          <div key={index} style={{ textAlign: 'center', marginTop: isPrint ? '36px' : '24px', marginBottom: isPrint ? '20px' : '14px', fontFamily: 'Arial, Helvetica, sans-serif' }}>
+            {/* If no underscore exists in the chunk, place one above the name */}
+            {!hasUnderscoreInChunk && (
+              <p style={{ margin: '0 0 6px 0', fontSize: isPrint ? '11pt' : '11px', color: isPrint ? '#000000' : '#475569', letterSpacing: '-0.5px' }}>
+                ___________________________________________________________
+              </p>
+            )}
+            {lines.map((line, lIdx) => {
+              const trimmed = line.trim();
+              if (!trimmed) return null;
+              if (trimmed.includes('____') || trimmed.includes('----')) {
+                return (
+                  <p key={lIdx} style={{ margin: '0 0 6px 0', fontSize: isPrint ? '11pt' : '11px', color: isPrint ? '#000000' : '#475569', letterSpacing: '-0.5px' }}>
+                    ___________________________________________________________
+                  </p>
+                );
+              }
+              const isName = trimmed.toLowerCase().includes(psychologistName.toLowerCase()) || 
+                             trimmed.toLowerCase().includes('flávia') || 
+                             (lIdx === 1 && !trimmed.toLowerCase().includes('crp'));
+              return (
+                <p key={lIdx} style={{ 
+                  margin: '2px 0', 
+                  fontSize: isPrint ? (isName ? '11.5pt' : '9.5pt') : (isName ? '11.5px' : '9.5px'),
+                  fontWeight: isName ? 'bold' : 'normal',
+                  color: isPrint ? '#000000' : '#334155'
+                }}>
+                  {trimmed}
+                </p>
+              );
+            })}
+          </div>
+        );
+      }
+
       const pStyle: CSSProperties = {
         textAlign: (isMetadataOrField || isListItem) ? 'left' : 'justify',
         lineHeight: '1.5',
         fontSize: isPrint ? '12pt' : '12px',
         fontFamily: 'Arial, Helvetica, sans-serif',
         marginBottom: '14px',
-        textIndent: (isListItem || isCenteredHeader || isSignatureLine || isMetadataOrField || isDateLocationLine) ? '0' : '1.25cm',
+        textIndent: (isListItem || isCenteredHeader || isMetadataOrField || isDateLocationLine) ? '0' : '1.25cm',
         whiteSpace: 'pre-line',
         wordBreak: 'break-word'
       };
@@ -1688,8 +1730,6 @@ Local: _________________________________, Data: _____/_____/_________`;
       if (isCenteredHeader) {
         pStyle.textAlign = 'center';
         pStyle.fontWeight = 'bold';
-      } else if (isSignatureLine) {
-        pStyle.textAlign = 'center';
       } else if (isDateLocationLine) {
         pStyle.textAlign = 'right';
       }
@@ -2089,7 +2129,7 @@ Content-Location: file:///document.html
   ${includeSignBox && !textHasSignature(currentGeneratedText) ? `
   <br/><br/>
   <div class="signature-box" style="margin-top: 35px; text-align: center; font-family: Arial, sans-serif;">
-    <div style="width: 280px; margin: 0 auto 6px auto; border-top: 1px solid #111111;"></div>
+    <p style="margin: 0 0 6px 0; font-size: 11pt; color: #000000; letter-spacing: -0.5px;">___________________________________________________________</p>
     <p style="margin: 0; font-weight: bold; font-size: 11pt;">${psychologistName}</p>
     <p style="margin: 2px 0 0 0; font-size: 9pt; color: #444444;">Psicóloga Clínica: CRP ${formatCrpDisplay(psychologistCrp)}</p>
   </div>
@@ -2219,7 +2259,7 @@ ${logoBase64}
           ${includeSignBox && !textHasSignature(currentGeneratedText) ? `
           <br/><br/>
           <div class="signature-box" style="margin-top: 35px; text-align: center; font-family: Arial, sans-serif;">
-            <div style="width: 280px; margin: 0 auto 6px auto; border-top: 1px solid #111111;"></div>
+            <p style="margin: 0 0 6px 0; font-size: 11pt; color: #000000; letter-spacing: -0.5px;">___________________________________________________________</p>
             <p style="margin: 0; font-weight: bold; font-size: 11pt;">${psychologistName}</p>
             <p style="margin: 2px 0 0 0; font-size: 9pt; color: #444444;">Psicóloga Clínica: CRP ${formatCrpDisplay(psychologistCrp)}</p>
           </div>
@@ -3808,7 +3848,7 @@ ${logoBase64}
                 {/* Print Sign Box representation visually */}
                 {includeSignBox && !textHasSignature(currentGeneratedText) && (
                   <div className="mt-8 text-center font-sans">
-                    <div className="w-56 mx-auto mb-2 border-t border-slate-400" />
+                    <p className="text-slate-400 font-sans text-xs mb-1 tracking-tighter">___________________________________________________________</p>
                     <p className="text-[11px] font-black text-slate-800 mt-1">{psychologistName}</p>
                     <p className="text-[9px] text-slate-500 font-bold">Psicóloga Clínica: CRP {formatCrpDisplay(psychologistCrp)}</p>
                   </div>
@@ -3938,7 +3978,7 @@ ${logoBase64}
             {/* Print Sign Box */}
             {includeSignBox && !textHasSignature(currentGeneratedText) && (
               <div style={{ marginTop: '40px', textAlign: 'center', fontSize: '11px', color: '#111111', fontFamily: 'Arial, Helvetica, sans-serif' }}>
-                <div style={{ width: '280px', margin: '0 auto 8px auto', borderTop: '1px solid #111111' }} />
+                <p style={{ margin: '0 0 6px 0', fontSize: '11pt', color: '#000000', letterSpacing: '-0.5px' }}>___________________________________________________________</p>
                 <p style={{ fontWeight: 'bold', margin: '0', fontSize: '11pt', color: '#111111' }}>{psychologistName}</p>
                 <p style={{ margin: '3px 0 0 0', fontSize: '9pt', color: '#444444' }}>Psicóloga Clínica: CRP {formatCrpDisplay(psychologistCrp)}</p>
               </div>

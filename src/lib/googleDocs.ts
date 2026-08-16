@@ -84,7 +84,7 @@ export const createGoogleDoc = async (title: string, textContent: string, option
   if (options.includeSignBox && !textHasSignature) {
     signatureHtml += `
       <div style="margin-top: 40px; text-align: center; font-size: 11pt; color: #333333; font-family: Arial, sans-serif;">
-        <div style="width: 280px; margin: 0 auto 8px auto; border-top: 1px solid #111111;"></div>
+        <p style="margin: 0 0 6px 0; font-size: 11pt; color: #000000; letter-spacing: -0.5px;">___________________________________________________________</p>
         <p style="font-weight: bold; margin: 0; font-size: 11pt; color: #111111;">${options.psychologistName || 'Dra. Flávia Barros'}</p>
         <p style="margin: 3px 0 0 0; font-size: 9pt; color: #444444;">Psicóloga Clínica: CRP ${formatCrp(options.psychologistCrp)}</p>
       </div>
