@@ -1667,53 +1667,20 @@ Local: _________________________________, Data: _____/_____/_________`;
       cleanLine = cleanLine.replace(/Psicóloga\s+Clínica\s+[•·-]\s+CRP\s*(nº|n°|:)?/gi, 'Psicóloga Clínica: CRP');
 
       const isListItem = cleanLine.startsWith('-') || cleanLine.startsWith('*') || /^\d+\./.test(cleanLine);
-      const isCenteredHeader = cleanLine === cleanLine.toUpperCase() && cleanLine.length < 80;
-      
-      // Check for raw standalone underscore line
-      const isPureUnderscore = /^[_—\s-]{5,}$/.test(cleanLine);
-      if (isPureUnderscore) {
-        return (
-          <div key={index} style={{ width: isPrint ? '260px' : '220px', margin: isPrint ? '24px auto 6px auto' : '18px auto 4px auto', borderTop: isPrint ? '1px solid #111111' : '1px solid #94a3b8' }} />
-        );
-      }
-
-      // If cleanLine combines underscore bar with signature text on lines
-      if (cleanLine.startsWith('____') || cleanLine.includes('\n____')) {
-        const parts = cleanLine.split(/\n/);
-        return (
-          <div key={index} style={{ textAlign: 'center', marginBottom: isPrint ? '16px' : '12px', fontFamily: 'Arial, Helvetica, sans-serif' }}>
-            {parts.map((part, pIdx) => {
-              const trimmedPart = part.trim();
-              if (!trimmedPart) return null;
-              if (/^[_—\s-]{5,}$/.test(trimmedPart)) {
-                return (
-                  <div key={pIdx} style={{ width: isPrint ? '260px' : '220px', margin: isPrint ? '24px auto 6px auto' : '18px auto 4px auto', borderTop: isPrint ? '1px solid #111111' : '1px solid #94a3b8' }} />
-                );
-              }
-              return (
-                <p key={pIdx} style={{ 
-                  margin: '2px 0', 
-                  fontSize: isPrint ? (pIdx === 1 ? '11pt' : '9.5pt') : (pIdx === 1 ? '11px' : '9.5px'),
-                  fontWeight: pIdx === 1 ? 'bold' : 'normal',
-                  color: isPrint ? '#111111' : '#334155'
-                }}>
-                  {trimmedPart}
-                </p>
-              );
-            })}
-          </div>
-        );
-      }
-
+      const isCenteredHeader = (cleanLine === cleanLine.toUpperCase() && cleanLine.length < 80) || cleanLine.startsWith('#');
       const isSignatureLine = cleanLine.includes('______') || cleanLine.includes(psychologistName);
+      const isMetadataOrField = 
+        /^(paciente|nome|idade|cpf|rg|respons[aá]vel|data|nascimento|endere[cç]o|telefone|contato|encaminhamento|solicitante|finalidade|diagn[oó]stico|assunto|ref|local|emissor|autor|interessado|profissional|registro|psic[oó]log[oa]|t[ií]tulo)/i.test(cleanLine) ||
+        cleanLine.split('\n').some(l => /^(paciente|nome|idade|cpf|rg|respons[aá]vel|data|endere[cç]o|telefone|solicitante|finalidade):/i.test(l.trim()));
+      const isDateLocationLine = /^[A-Za-zÀ-ÿ\s]+,\s*(\d{1,2}\s+de\s+[A-Za-zÀ-ÿ]+\s+de\s+\d{4}|\d{2}\/\d{2}\/\d{4}|_{2,})/i.test(cleanLine);
       
       const pStyle: CSSProperties = {
-        textAlign: 'justify',
+        textAlign: (isMetadataOrField || isListItem) ? 'left' : 'justify',
         lineHeight: '1.5',
         fontSize: isPrint ? '12pt' : '12px',
         fontFamily: 'Arial, Helvetica, sans-serif',
         marginBottom: '14px',
-        textIndent: (isListItem || isCenteredHeader || isSignatureLine) ? '0' : '1.25cm',
+        textIndent: (isListItem || isCenteredHeader || isSignatureLine || isMetadataOrField || isDateLocationLine) ? '0' : '1.25cm',
         whiteSpace: 'pre-line',
         wordBreak: 'break-word'
       };
@@ -1723,6 +1690,8 @@ Local: _________________________________, Data: _____/_____/_________`;
         pStyle.fontWeight = 'bold';
       } else if (isSignatureLine) {
         pStyle.textAlign = 'center';
+      } else if (isDateLocationLine) {
+        pStyle.textAlign = 'right';
       }
 
       return (
@@ -2092,18 +2061,24 @@ Content-Location: file:///document.html
         if (!cleanLine) return '';
         
         const isListItem = cleanLine.startsWith('-') || cleanLine.startsWith('*') || /^\d+\./.test(cleanLine);
-        const isCenteredHeader = cleanLine === cleanLine.toUpperCase() && cleanLine.length < 80;
+        const isCenteredHeader = (cleanLine === cleanLine.toUpperCase() && cleanLine.length < 80) || cleanLine.startsWith('#');
         const isSignatureLine = cleanLine.includes('______') || cleanLine.includes(psychologistName);
+        const isMetadataOrField = 
+          /^(paciente|nome|idade|cpf|rg|respons[aá]vel|data|nascimento|endere[cç]o|telefone|contato|encaminhamento|solicitante|finalidade|diagn[oó]stico|assunto|ref|local|emissor|autor|interessado|profissional|registro|psic[oó]log[oa]|t[ií]tulo)/i.test(cleanLine) ||
+          cleanLine.split('\n').some(l => /^(paciente|nome|idade|cpf|rg|respons[aá]vel|data|endere[cç]o|telefone|solicitante|finalidade):/i.test(l.trim()));
+        const isDateLocationLine = /^[A-Za-zÀ-ÿ\s]+,\s*(\d{1,2}\s+de\s+[A-Za-zÀ-ÿ]+\s+de\s+\d{4}|\d{2}\/\d{2}\/\d{4}|_{2,})/i.test(cleanLine);
         
         let pStyle = 'font-family: Arial, sans-serif; font-size: 12pt; line-height: 1.5; text-align: justify; margin-bottom: 12pt; word-break: break-word;';
         if (isCenteredHeader) {
           pStyle += ' text-align: center; font-weight: bold; text-indent: 0;';
         } else if (isSignatureLine) {
           pStyle += ' text-align: center; text-indent: 0;';
-        } else if (!isListItem) {
-          pStyle += ' text-indent: 1.25cm;';
+        } else if (isDateLocationLine) {
+          pStyle += ' text-align: right; text-indent: 0;';
+        } else if (isListItem || isMetadataOrField) {
+          pStyle += ' text-align: left; text-indent: 0;';
         } else {
-          pStyle += ' text-indent: 0;';
+          pStyle += ' text-indent: 1.25cm;';
         }
 
         return `<p style="${pStyle}">${cleanLine.replace(/\n/g, '<br/>')}</p>`;
@@ -2216,18 +2191,24 @@ ${logoBase64}
                 if (!cleanLine) return '';
                 
                 const isListItem = cleanLine.startsWith('-') || cleanLine.startsWith('*') || /^\d+\./.test(cleanLine);
-                const isCenteredHeader = cleanLine === cleanLine.toUpperCase() && cleanLine.length < 80;
+                const isCenteredHeader = (cleanLine === cleanLine.toUpperCase() && cleanLine.length < 80) || cleanLine.startsWith('#');
                 const isSignatureLine = cleanLine.includes('______') || cleanLine.includes(psychologistName);
+                const isMetadataOrField = 
+                  /^(paciente|nome|idade|cpf|rg|respons[aá]vel|data|nascimento|endere[cç]o|telefone|contato|encaminhamento|solicitante|finalidade|diagn[oó]stico|assunto|ref|local|emissor|autor|interessado|profissional|registro|psic[oó]log[oa]|t[ií]tulo)/i.test(cleanLine) ||
+                  cleanLine.split('\n').some(l => /^(paciente|nome|idade|cpf|rg|respons[aá]vel|data|endere[cç]o|telefone|solicitante|finalidade):/i.test(l.trim()));
+                const isDateLocationLine = /^[A-Za-zÀ-ÿ\s]+,\s*(\d{1,2}\s+de\s+[A-Za-zÀ-ÿ]+\s+de\s+\d{4}|\d{2}\/\d{2}\/\d{4}|_{2,})/i.test(cleanLine);
                 
                 let pStyle = 'font-family: Arial, sans-serif; font-size: 12pt; line-height: 1.5; text-align: justify; margin-bottom: 12pt; word-break: break-word;';
                 if (isCenteredHeader) {
                   pStyle += ' text-align: center; font-weight: bold; text-indent: 0;';
                 } else if (isSignatureLine) {
                   pStyle += ' text-align: center; text-indent: 0;';
-                } else if (!isListItem) {
-                  pStyle += ' text-indent: 1.25cm;';
+                } else if (isDateLocationLine) {
+                  pStyle += ' text-align: right; text-indent: 0;';
+                } else if (isListItem || isMetadataOrField) {
+                  pStyle += ' text-align: left; text-indent: 0;';
                 } else {
-                  pStyle += ' text-indent: 0;';
+                  pStyle += ' text-indent: 1.25cm;';
                 }
 
                 return `<p style="${pStyle}">${cleanLine.replace(/\n/g, '<br/>')}</p>`;

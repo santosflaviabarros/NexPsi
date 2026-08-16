@@ -156,6 +156,14 @@ export const createGoogleDoc = async (title: string, textContent: string, option
           text-indent: 0; 
           margin-left: 0.5in; 
         }
+        .left-text { 
+          text-align: left; 
+          text-indent: 0; 
+        }
+        .right-text { 
+          text-align: right; 
+          text-indent: 0; 
+        }
         .center-text { 
           text-align: center; 
           text-indent: 0; 
@@ -178,16 +186,24 @@ export const createGoogleDoc = async (title: string, textContent: string, option
           const cleanLine = p.trim();
           if (!cleanLine) return '';
           const isListItem = cleanLine.startsWith('-') || cleanLine.startsWith('*') || /^\d+\./.test(cleanLine);
-          const isCenteredHeader = cleanLine === cleanLine.toUpperCase() && cleanLine.length < 80;
+          const isCenteredHeader = (cleanLine === cleanLine.toUpperCase() && cleanLine.length < 80) || cleanLine.startsWith('#');
           const isSignatureLine = cleanLine.includes('______');
+          const isMetadataOrField = 
+            /^(paciente|nome|idade|cpf|rg|respons[aá]vel|data|nascimento|endere[cç]o|telefone|contato|encaminhamento|solicitante|finalidade|diagn[oó]stico|assunto|ref|local|emissor|autor|interessado|profissional|registro|psic[oó]log[oa]|t[ií]tulo)/i.test(cleanLine) ||
+            cleanLine.split('\n').some(l => /^(paciente|nome|idade|cpf|rg|respons[aá]vel|data|endere[cç]o|telefone|solicitante|finalidade):/i.test(l.trim()));
+          const isDateLocationLine = /^[A-Za-zÀ-ÿ\s]+,\s*(\d{1,2}\s+de\s+[A-Za-zÀ-ÿ]+\s+de\s+\d{4}|\d{2}\/\d{2}\/\d{4}|_{2,})/i.test(cleanLine);
           
           let pClass = '';
           if (isCenteredHeader) {
             pClass = ' class="center-text" style="font-weight: bold;"';
           } else if (isSignatureLine) {
             pClass = ' class="center-text"';
+          } else if (isDateLocationLine) {
+            pClass = ' class="right-text"';
           } else if (isListItem) {
             pClass = ' class="list-item"';
+          } else if (isMetadataOrField) {
+            pClass = ' class="left-text"';
           }
           
           return `<p${pClass}>${cleanLine.replace(/\n/g, '<br/>')}</p>`;
