@@ -5,12 +5,14 @@ import {
   ClipboardList, Brain, X, AlertCircle, Info, RefreshCw, Play,
   Printer, Download, ListTodo, FileCheck, Heart, Smile
 } from 'lucide-react';
+import { TestRunnerModal } from './TestRunnerModal';
 import { 
-  EADS21_QUESTIONS, EADS21_ANSWERS, ASRS18_QUESTIONS, ASRS18_ANSWERS,
-  BDIII_QUESTIONS, BAI_QUESTIONS,
-  interpretBDIII, interpretBAI, interpretEADS21,
-  MOM_ANSWERS, MOM_D_QUESTIONS, MOM_A_QUESTIONS, MOM_R_QUESTIONS, MOM_P_QUESTIONS,
-  interpretMOMDepression, interpretMOMAnxiety, interpretMOMAnger, interpretMOMPanic
+  ASRS18_QUESTIONS, ASRS18_ANSWERS,
+  BDIII_QUESTIONS, BDIII_ANSWERS, interpretBDIII,
+  BAI_QUESTIONS, BAI_ANSWERS, interpretBAI,
+  MOM_D_QUESTIONS, MOM_A_QUESTIONS, MOM_R_QUESTIONS, MOM_P_QUESTIONS, MOM_ANSWERS,
+  interpretMOMDepression, interpretMOMAnxiety, interpretMOMAnger, interpretMOMPanic,
+  EADS21_QUESTIONS, EADS21_ANSWERS, interpretEADS21
 } from '../data/testsData';
 import {
   CLINICAL_DEMANDS, CLINICAL_RESOURCES, ClinicalResource, ClinicalResourceField
@@ -424,6 +426,247 @@ export default function ReferencesView() {
 
   const psychologicalTestsDatabase: PsychologicalTest[] = [
     {
+      id: "PHQ-9",
+      name: "Patient Health Questionnaire-9 (Rastreio de Depressão)",
+      abbreviation: "PHQ-9",
+      category: "Sintomas",
+      purpose: "Rastreio e mensuração da severidade de sintomas depressivos no padrão DSM-5.",
+      targetPublic: "Adultos e Adolescentes",
+      ageRange: "12 anos ou mais",
+      satepsiStatus: "Não Restrito",
+      applicationType: "Autoaplicável de 9 itens contínuos de 4 pontos (2 a 3 min)",
+      description: "Padrão-ouro global para triagem rápida de depressão na atenção primária e psicoterapia. Avalia humor deprimido, anedonia, sono, energia, apetite, culpa, concentração, agitação/retardo e ideação suicida.",
+      dimensionsTested: [
+        "Sintomas nucleares da depressão (humor deprimido, anedonia)",
+        "Sintomas cognitivo-somáticos (sono, fadiga, apetite, culpa, concentração)",
+        "Rastreio de risco de ideação de morte (Item 9)"
+      ]
+    },
+    {
+      id: "GAD-7",
+      name: "Generalized Anxiety Disorder-7 (Escala de Ansiedade)",
+      abbreviation: "GAD-7",
+      category: "Sintomas",
+      purpose: "Rastreio e quantificação de gravidade do Transtorno de Ansiedade Generalizada (TAG).",
+      targetPublic: "Adultos e Adolescentes",
+      ageRange: "12 anos ou mais",
+      satepsiStatus: "Não Restrito",
+      applicationType: "Autoaplicável de 7 itens de 4 pontos (2 a 3 min)",
+      description: "Instrumento amplamente validado para rastreio de sintomas nucleares de ansiedade, inquietação motora, preocupações incontroláveis, tensão muscular e irritabilidade.",
+      dimensionsTested: [
+        "Preocupações incontroláveis e expectativa apreensiva",
+        "Tensão psicomotora e hipervigilância",
+        "Sensação de medo de que algo terrível aconteça"
+      ]
+    },
+    {
+      id: "SPIN",
+      name: "Social Phobia Inventory (Inventário de Fobia Social)",
+      abbreviation: "SPIN",
+      category: "Sintomas",
+      purpose: "Avaliação e triagem de Transtorno de Ansiedade Social (Fobia Social).",
+      targetPublic: "Adultos e Jovens",
+      ageRange: "14 anos ou mais",
+      satepsiStatus: "Não Restrito",
+      applicationType: "Autoaplicável de 17 itens de 5 pontos (3 a 5 min)",
+      description: "Mede o medo de avaliação negativa, vergonha pública, evitação de eventos sociais e sintomas somáticos de desconforto em interações interpessoais.",
+      dimensionsTested: [
+        "Medo de humilhação e julgamento social",
+        "Comportamentos de esquiva e evitação de grupos",
+        "Sintomas fisiológicos (rubor, tremores, taquicardia social)"
+      ]
+    },
+    {
+      id: "OCI-R",
+      name: "Inventário Obsessivo-Compulsivo Revisado (TOC)",
+      abbreviation: "OCI-R",
+      category: "Sintomas",
+      purpose: "Mapeamento e triagem de sintomas de Transtorno Obsessivo-Compulsivo (TOC).",
+      targetPublic: "Adultos e Jovens",
+      ageRange: "14 anos ou mais",
+      satepsiStatus: "Não Restrito",
+      applicationType: "Autoaplicável de 18 itens de 5 pontos (3 a 5 min)",
+      description: "Avalia a presença e intensidade de rituais compulsivos e pensamentos obsessivos em 6 subtipos clínicos específicos.",
+      dimensionsTested: [
+        "Lavagem e limpeza compulsiva",
+        "Checagem e verificação repetitiva",
+        "Ordenação e simetria rígida",
+        "Obsessões de conteúdo inaceitável / intrusivo",
+        "Acumulação patológica e neutralização mental"
+      ]
+    },
+    {
+      id: "PCL-5",
+      name: "PTSD Checklist for DSM-5 (Checklist de TEPT / Trauma)",
+      abbreviation: "PCL-5",
+      category: "Sintomas",
+      purpose: "Rastreio e monitoramento de Transtorno de Estresse Pós-Traumático (TEPT).",
+      targetPublic: "Adultos e Adolescentes expostos a eventos traumáticos",
+      ageRange: "16 anos ou mais",
+      satepsiStatus: "Não Restrito",
+      applicationType: "Autoaplicável de 20 itens de 5 pontos (5 a 8 min)",
+      description: "Mapeia os 4 agrupamentos de sintomas de trauma do DSM-5: intrusão/flashbacks, esquiva deliberada, alterações cognitivas/afeto negativo e hiperestimulação/reatividade.",
+      dimensionsTested: [
+        "Critério B: Sintomas intrusivos e pesadelos",
+        "Critério C: Esquiva persistente de memórias e gatilhos",
+        "Critério D: Alterações cognitivas e humor negativo",
+        "Critério E: Hipervigilância, sobressalto e irritabilidade"
+      ]
+    },
+    {
+      id: "MSI-BPD",
+      name: "McLean Screening Instrument (Transtorno Borderline)",
+      abbreviation: "MSI-BPD",
+      category: "Sintomas",
+      purpose: "Rastreio sensível de Transtorno de Personalidade Limítrofe (Borderline).",
+      targetPublic: "Adultos e Jovens com instabilidade afetiva",
+      ageRange: "16 anos ou mais",
+      satepsiStatus: "Não Restrito",
+      applicationType: "Autoaplicável de 10 perguntas dicotômicas (2 min)",
+      description: "Escala validada internacionalmente para detecção preliminar de padrões de instabilidade interpessoal, medo de abandono, desregulação emocional, impulsividade autodestrutiva e vazio crônico.",
+      dimensionsTested: [
+        "Instabilidade nos relacionamentos e medo de abandono",
+        "Impulsividade e comportamentos de risco",
+        "Instabilidade afetiva e raiva intensa",
+        "Dissociação sob estresse e sensação de vazio"
+      ]
+    },
+    {
+      id: "MDQ",
+      name: "Mood Disorder Questionnaire (Rastreio de Transtorno Bipolar)",
+      abbreviation: "MDQ",
+      category: "Sintomas",
+      purpose: "Triagem de episódios de mania e hipomania do Espectro Bipolar.",
+      targetPublic: "Adultos com queixa de oscilação de humor",
+      ageRange: "16 anos ou mais",
+      satepsiStatus: "Não Restrito",
+      applicationType: "Autoaplicável de 13 itens + critérios de simultaneidade (3 min)",
+      description: "Detecta histórico de fases de elevação patológica do humor, grandiosidade, aceleração do pensamento, redução da necessidade de sono, desinibição e impulsividade.",
+      dimensionsTested: [
+        "Sintomas eufóricos e irritáveis de mania/hipomania",
+        "Critério de ocorrência simultânea dos sintomas",
+        "Nível de prejuízo psicossocial gerado"
+      ]
+    },
+    {
+      id: "EAT-26",
+      name: "Eating Attitudes Test (Transtornos Alimentares)",
+      abbreviation: "EAT-26",
+      category: "Sintomas",
+      purpose: "Triagem e rastreio de risco de Anorexia Nervosa, Bulimia e TCA.",
+      targetPublic: "Jovens e Adultos",
+      ageRange: "12 anos ou mais",
+      satepsiStatus: "Não Restrito",
+      applicationType: "Autoaplicável de 26 itens de 6 pontos (5 min)",
+      description: "Instrumento amplamente utilizado na clínica e pesquisa para mapear atitudes alimentares patológicas, dietas restritivas extremas, preocupações obsessivas com peso corporal e condutas purgativas.",
+      dimensionsTested: [
+        "Fator I: Dieta restritiva e pavor de engordar",
+        "Fator II: Bulimia e preocupação excessiva com comida",
+        "Fator III: Autocontrole oral e pressões ambientais"
+      ]
+    },
+    {
+      id: "ISI",
+      name: "Insomnia Severity Index (Índice de Gravidade de Insônia)",
+      abbreviation: "ISI",
+      category: "Sintomas",
+      purpose: "Avaliação da gravidade da insônia e do impacto na funcionalidade diurna.",
+      targetPublic: "Adultos e Idosos com queixas de sono",
+      ageRange: "16 anos ou mais",
+      satepsiStatus: "Não Restrito",
+      applicationType: "Autoaplicável de 7 itens de 5 pontos (2 min)",
+      description: "Mede dificuldades na indução e manutenção do sono, despertares precoces, satisfação subjetiva e grau de interferência na rotina diurna.",
+      dimensionsTested: [
+        "Dificuldades de início e continuidade do sono",
+        "Insatisfação subjetiva com o padrão de sono",
+        "Prejuízos no funcionamento diurno e preocupação"
+      ]
+    },
+    {
+      id: "AUDIT",
+      name: "AUDIT - Identificação do Uso de Álcool (OMS)",
+      abbreviation: "AUDIT",
+      category: "Sintomas",
+      purpose: "Rastreio e triagem de padrões de consumo de risco, uso nocivo e dependência de álcool.",
+      targetPublic: "Geral (Atenção básica, clínica e hospitalar)",
+      ageRange: "15 anos ou mais",
+      satepsiStatus: "Não Restrito",
+      applicationType: "Autoaplicável ou entrevista de 10 itens (3 min)",
+      description: "Desenvolvido pela OMS para orientar intervenções breves e encaminhamentos especializados através de pontuações estratificadas em 4 zonas de risco clínico.",
+      dimensionsTested: [
+        "Frequência e quantidade do consumo alcoólico",
+        "Sinais preliminares de dependência física/psíquica",
+        "Problemas e danos decorrentes do uso de álcool"
+      ]
+    },
+    {
+      id: "AQ-10",
+      name: "Autism Spectrum Quotient - 10 (Rastreio TEA Adulto)",
+      abbreviation: "AQ-10",
+      category: "Sintomas",
+      purpose: "Triagem rápida de traços do Espectro Autista em adultos com inteligência preservada.",
+      targetPublic: "Adultos com suspeita diagnóstica de TEA (Nível 1 de Suporte)",
+      ageRange: "18 anos ou mais",
+      satepsiStatus: "Não Restrito",
+      applicationType: "Autoaplicável de 10 itens (2 min)",
+      description: "Recomendado pelo protocolo clínico internacional do NICE para identificar se há indicação prioritária de avaliação neuropsicológica e diagnóstica para autismo.",
+      dimensionsTested: [
+        "Atenção a detalhes e monotropismo",
+        "Flexibilidade cognitiva e mudança de rotina",
+        "Comunicação e reciprocidade socioemocional"
+      ]
+    },
+    {
+      id: "SNAP-IV",
+      name: "Escala SNAP-IV (TDAH e TOD Infantojuvenil)",
+      abbreviation: "SNAP-IV",
+      category: "Sintomas",
+      purpose: "Avaliação de sintomas de desatenção, hiperatividade e oposição desafiadora.",
+      targetPublic: "Crianças e Adolescentes (respondido por pais ou professores)",
+      ageRange: "5 a 17 anos",
+      satepsiStatus: "Não Restrito",
+      applicationType: "Questionário de 18 itens contínuos de 4 pontos (3 a 5 min)",
+      description: "Baseado nos critérios do DSM-IV/DSM-5 para TDAH e Transtorno Opositivo Desafiador. Permite cálculo separado das médias de Desatenção e Hiperatividade/Impulsividade.",
+      dimensionsTested: [
+        "Desatenção e funções executivas escolares",
+        "Hiperatividade motora e impulsividade verbal/física"
+      ]
+    },
+    {
+      id: "MBI",
+      name: "Maslach Burnout Inventory - Screening (Burnout)",
+      abbreviation: "MBI",
+      category: "Sintomas",
+      purpose: "Rastreio e mensuração de estresse ocupacional e Síndrome de Burnout.",
+      targetPublic: "Profissionais ativos e trabalhadores sob estresse crônico",
+      ageRange: "18 anos ou mais",
+      satepsiStatus: "Não Restrito",
+      applicationType: "Autoaplicável de 10 itens de 5 pontos (3 min)",
+      description: "Avalia a exaustão emocional decorrente do ambiente laboral e o distanciamento afetivo/despersonalização interpessoal, alinhado ao CID-11 (QD85).",
+      dimensionsTested: [
+        "Exaustão emocional e sobrecarga mental",
+        "Despersonalização e atitudes cínicas no trabalho",
+        "Sentimento de realização e eficácia profissional"
+      ]
+    },
+    {
+      id: "C-SSRS",
+      name: "Escala Columbia de Risco de Suicídio (C-SSRS)",
+      abbreviation: "C-SSRS",
+      category: "Sintomas",
+      purpose: "Triagem sistemática do nível de risco e severidade da ideação suicida.",
+      targetPublic: "População clínica geral e serviços de emergência",
+      ageRange: "Todas as idades",
+      satepsiStatus: "Não Restrito",
+      applicationType: "Entrevista clínica estruturada de 6 perguntas (2 min)",
+      description: "Instrumento padrão-ouro mundial para identificação rápida do nível de risco de suicídio (Baixo, Moderado, Alto) e orientação imediata do protocolo de segurança.",
+      dimensionsTested: [
+        "Ideação passiva vs. ideação ativa",
+        "Método, intenção e plano estruturado",
+        "Comportamentos preparatórios e histórico de tentativas"
+      ]
+    },
+    {
       id: "BDI-II",
       name: "Inventário de Depressão de Beck - II",
       abbreviation: "BDI-II",
@@ -456,60 +699,6 @@ export default function ReferencesView() {
       ]
     },
     {
-      id: "BFP",
-      name: "Bateria Fatorial de Personalidade",
-      abbreviation: "BFP",
-      category: "Personalidade",
-      purpose: "Avaliação da estrutura de personalidade baseada no Big Five (Cinco Grandes Fatores).",
-      targetPublic: "Profissionais, clínicos e acadêmicos",
-      ageRange: "14 a 86 anos (escolaridade mínima: Ensino Fundamental)",
-      satepsiStatus: "Favorável",
-      applicationType: "Individual ou coletiva, papel ou informatizada (approx. 30 a 40 min)",
-      description: "Instrumento multifacetado projetado para mapear a personalidade de forma robusta e padronizada para a população brasileira, ideal para psicologia clínica, organizacional, seleção e orientação profissional.",
-      dimensionsTested: [
-        "Neuroticismo (Vulnerabilidade, Instabilidade Emocional, Passividade, Depressão)",
-        "Extroversão (Comunicação, Altivez, Dinamismo, Interações Sociais)",
-        "Socialização (Amabilidade, Pró-sociabilidade, Confiança nas Pessoas)",
-        "Realização (Competência, Ponderação/Prudência, Empenho/Busca de Resultados)",
-        "Abertura para Novidades (Interesses Culturais, Fantasia, Busca de Novas Experiências)"
-      ]
-    },
-    {
-      id: "HTP",
-      name: "HTP - Casa-Árvore-Pessoa (Técnica Projetiva de Desenho)",
-      abbreviation: "HTP",
-      category: "Personalidade",
-      purpose: "Avaliação projetiva de aspectos da dinâmica da personalidade e autoimagem.",
-      targetPublic: "Clínica Geral, Infantil e Adulto",
-      ageRange: "8 anos ou mais",
-      satepsiStatus: "Favorável",
-      applicationType: "Individual, tempo livre (mediana de 20 a 30 minutos)",
-      description: "Técnica projetiva que estimula a projeção de elementos da personalidade inconsciente por meio do ato de desenhar uma Casa (relação familiar e lar), uma Árvore (desenvolvimento vital e self inconsciente) e uma Pessoa (autoimagem física e social).",
-      dimensionsTested: [
-        "Desenho da Casa (segurança interna, calor doméstico, defesas e limites)",
-        "Desenho da Árvore (traços vitais, contato com a realidade, traumas passados, recursos de ego)",
-        "Desenho da Pessoa (esquema corporal, identidade de gênero, expressão social, conflitos interativos)"
-      ]
-    },
-    {
-      id: "WISC-IV",
-      name: "Escala Wechsler de Inteligência para Crianças - 4ª Edição",
-      abbreviation: "WISC-IV",
-      category: "Cognitivo",
-      purpose: "Avaliação do QI global e funcionamento cognitivo estrutural infantil.",
-      targetPublic: "Crianças e adolescentes",
-      ageRange: "6 anos e 0 meses a 16 anos e 11 meses",
-      satepsiStatus: "Favorável",
-      applicationType: "Individual, presencial obrigatório (approx. 60 a 90 min)",
-      description: "Padrão-ouro global para avaliação de inteligência e diagnóstico de deficiência intelectual, superdotação/altas habilidades ou dificuldades específicas de aprendizagem no público em idade escolar.",
-      dimensionsTested: [
-        "Índice de Compreensão Verbal (ICV - Vocabulário, Semelhanças, Compreensão)",
-        "Índice de Organização Perceptual (IOP - Cubos, Conceitos Figurativos, Raciocínio Matricial)",
-        "Índice de Memória de Trabalho (IMT - Dígitos, Sequência de Números e Letras)",
-        "Índice de Velocidade de Processamento (IVP - Código, Procurar Símbolos)"
-      ]
-    },
-    {
       id: "EADS-21",
       name: "Escala de Depressão, Ansiedade e Estresse - 21",
       abbreviation: "EADS-21",
@@ -519,7 +708,7 @@ export default function ReferencesView() {
       ageRange: "12 anos ou mais",
       satepsiStatus: "Não Restrito",
       applicationType: "Autoaplicável de 21 itens contínuos de 4 pontos (3 a 5 min)",
-      description: "Versão curta em português britânico/brasileiro da DASS-21, projetada para mensurar e discriminar estados afetivos de depressão, ansiedade e estresse. Excelente para acompanhamento de evolução terapêutica semanal.",
+      description: "Versão curta em português da DASS-21, projetada para mensurar e discriminar estados afetivos de depressão, ansiedade e estresse. Excelente para acompanhamento semanal.",
       dimensionsTested: [
         "Depressão (disforia, desvalorização da vida, autodepreciação, apatia)",
         "Ansiedade (hiperexcitação autonômica, efeitos musculoesqueléticos, apreensão)",
@@ -528,7 +717,7 @@ export default function ReferencesView() {
     },
     {
       id: "ASRS-18",
-      name: "Adult ADHD Self-Report Scale (Escala de Autoavaliação de TDAH em Adultos)",
+      name: "Adult ADHD Self-Report Scale (TDAH em Adultos)",
       abbreviation: "ASRS-18",
       category: "Sintomas",
       purpose: "Rastreio e triagem de sintomas de TDAH em indivíduos adultos.",
@@ -536,7 +725,7 @@ export default function ReferencesView() {
       ageRange: "18 anos ou mais",
       satepsiStatus: "Não Restrito",
       applicationType: "Autoaplicável de 18 questões rápidas (approx. 5 min)",
-      description: "Instrumento de rastreamento preliminar validado pela Organização Mundial da Saúde (OMS) para captar sintomas de desatenção e hiperatividade-impulsividade compatíveis com os critérios do DSM-5.",
+      description: "Instrumento de rastreamento preliminar validado pela Organização Mundial da Saúde (OMS) para captar sintomas de desatenção e hiperatividade-impulsividade no padrão DSM-5.",
       dimensionsTested: [
         "Parte A - Sintomas primários preditivos (6 itens de desatenção e hiperatividade crítica)",
         "Parte B - Detalhamento clínico secundário (12 itens adicionais de severidade)"
@@ -552,9 +741,9 @@ export default function ReferencesView() {
       ageRange: "Adultos e Adolescentes",
       satepsiStatus: "Não Restrito",
       applicationType: "Autoaplicável de 15 itens contínuos de 4 pontos (3 a 5 min)",
-      description: "Escala clínica do aclamado livro de terapia cognitivo-comportamental (TCC) 'A Mente Vencendo o Humor'. Permite quantificar a severidade do sofrimento depressivo nas últimas semanas e avaliar as respostas semanais do paciente à terapia.",
+      description: "Escala clínica do livro de terapia cognitivo-comportamental (TCC) 'A Mente Vencendo o Humor'. Permite quantificar a severidade do sofrimento depressivo.",
       dimensionsTested: [
-        "Humor triste/melancólico, anedonia, cognição disfuncional de culpa ou inadequação, fadiga, isolamento, ideações dolorosas."
+        "Humor triste, anedonia, cognição de culpa, fadiga, isolamento, ideações dolorosas."
       ]
     },
     {
@@ -567,9 +756,9 @@ export default function ReferencesView() {
       ageRange: "Adultos e Adolescentes",
       satepsiStatus: "Não Restrito",
       applicationType: "Autoaplicável de 15 itens de 4 pontos (3 a 5 min)",
-      description: "Instrumento sensível composto por 15 itens para monitoramento semanal ou periódico de sintomas somáticos, cognitivos e autonômicos de ansiedade, baseado nas intervenções de TCC descritas no livro.",
+      description: "Monitoramento de sintomas somáticos, cognitivos e autonômicos de ansiedade, baseado em intervenções da TCC.",
       dimensionsTested: [
-        "Tensão muscular, hiperatividade autonômica, preocupações e pensamentos apreensivos, evitação fóbica e hipervigilância."
+        "Tensão muscular, hiperatividade autonômica, preocupações, evitação fóbica."
       ]
     },
     {
@@ -577,14 +766,14 @@ export default function ReferencesView() {
       name: "Inventário de Raiva - A Mente Vencendo o Humor",
       abbreviation: "MOM-R",
       category: "Sintomas",
-      purpose: "Avaliação do controle expressivo, reatividade hostil e impulsividade do paciente.",
+      purpose: "Avaliação do controle expressivo, reatividade hostil e impulsividade.",
       targetPublic: "Pacientes com demandas de regulação emocional e manejo da raiva",
       ageRange: "Adultos e Adolescentes",
       satepsiStatus: "Não Restrito",
       applicationType: "Autoaplicável de 15 itens estruturados de 4 pontos (3 a 5 min)",
-      description: "Permite mapear o limiar de irritabilidade, impulsos coléricos imediatos, ruminações ressentidas e desequilíbrios na expressão verbal ou corporal da agressividade ativa.",
+      description: "Mapeia limiar de irritabilidade, impulsos coléricos imediatos, ruminações ressentidas e desequilíbrios de agressividade.",
       dimensionsTested: [
-        "Irritabilidade/impaciência cotidiana, impulsos agressivos físicos/verbais, ressentimento acumulado e culpabilização de terceiros."
+        "Irritabilidade cotidiana, impulsos agressivos, ressentimento acumulado."
       ]
     },
     {
@@ -592,14 +781,103 @@ export default function ReferencesView() {
       name: "Inventário de Pânico - A Mente Vencendo o Humor",
       abbreviation: "MOM-P",
       category: "Sintomas",
-      purpose: "Quantificação e triagem de severidade de sintomas agudos de ansiedade extrema / pânico.",
-      targetPublic: "Pacientes com histórico de crises agudas, agorafobia ou sobressaltos severos",
+      purpose: "Quantificação e triagem de severidade de crises agudas de ansiedade e pânico.",
+      targetPublic: "Pacientes com histórico de crises agudas ou agorafobia",
       ageRange: "Adultos e Adolescentes",
       satepsiStatus: "Não Restrito",
-      applicationType: "Autoaplicável de 15 itens com foco em descargas adrenérgicas e evitação agorafóbica (3 a 5 min)",
-      description: "Focado em mapear as manifestações somáticas desestruturantes de pânico (falta de ar, dor precordial, medo de morrer/enlouquecer) e os comportamentos secundários de evitação fóbica espacial (agorafobia).",
+      applicationType: "Autoaplicável de 15 itens (3 a 5 min)",
+      description: "Mapeia manifestações somáticas de pânico (falta de ar, dor precordial, medo de morrer/enlouquecer) e esquiva agorafóbica.",
       dimensionsTested: [
-        "Surtos somatopsíquicos agudos (cardiorrespiratórios, neurológicos), dismorfismo de controle e cognições catastróficas, evitação espacial agorafóbica."
+        "Surtos somatopsíquicos agudos, cognições catastróficas, evitação agorafóbica."
+      ]
+    },
+    {
+      id: "BFP",
+      name: "Bateria Fatorial de Personalidade",
+      abbreviation: "BFP",
+      category: "Personalidade",
+      purpose: "Avaliação da estrutura de personalidade baseada no Big Five (Cinco Grandes Fatores).",
+      targetPublic: "Profissionais, clínicos e acadêmicos",
+      ageRange: "14 a 86 anos",
+      satepsiStatus: "Favorável",
+      applicationType: "Individual ou coletiva, papel ou informatizada (approx. 30 a 40 min)",
+      description: "Instrumento multifacetado projetado para mapear a personalidade de forma robusta e padronizada para a população brasileira.",
+      dimensionsTested: [
+        "Neuroticismo (Vulnerabilidade, Instabilidade Emocional, Passividade)",
+        "Extroversão (Comunicação, Dinamismo, Interações Sociais)",
+        "Socialização (Amabilidade, Pró-sociabilidade, Confiança)",
+        "Realização (Competência, Ponderação, Disciplina)",
+        "Abertura para Novidades (Interesses Culturais, Fantasia, Curiosidade)"
+      ]
+    },
+    {
+      id: "HTP",
+      name: "HTP - Casa-Árvore-Pessoa (Técnica Projetiva)",
+      abbreviation: "HTP",
+      category: "Personalidade",
+      purpose: "Avaliação projetiva de aspectos da dinâmica da personalidade e autoimagem.",
+      targetPublic: "Clínica Geral, Infantil e Adulto",
+      ageRange: "8 anos ou mais",
+      satepsiStatus: "Favorável",
+      applicationType: "Individual, tempo livre (mediana de 20 a 30 minutos)",
+      description: "Técnica projetiva gráfica que estimula a projeção de elementos do self inconsciente, defesas e integração afetiva.",
+      dimensionsTested: [
+        "Desenho da Casa (segurança interna, ambiente familiar, defesas)",
+        "Desenho da Árvore (traços vitais, contato com a realidade, traumas)",
+        "Desenho da Pessoa (esquema corporal, identidade, relações sociais)"
+      ]
+    },
+    {
+      id: "WISC-IV",
+      name: "Escala Wechsler de Inteligência Infantil - 4ª Edição",
+      abbreviation: "WISC-IV",
+      category: "Cognitivo",
+      purpose: "Avaliação do QI global e funcionamento cognitivo estrutural infantil.",
+      targetPublic: "Crianças e adolescentes",
+      ageRange: "6 anos e 0 meses a 16 anos e 11 meses",
+      satepsiStatus: "Favorável",
+      applicationType: "Individual, presencial obrigatório (approx. 60 a 90 min)",
+      description: "Padrão-ouro global para avaliação de inteligência e diagnóstico de deficiência intelectual, superdotação ou dificuldades de aprendizagem.",
+      dimensionsTested: [
+        "Índice de Compreensão Verbal (ICV)",
+        "Índice de Organização Perceptual (IOP)",
+        "Índice de Memória de Trabalho (IMT)",
+        "Índice de Velocidade de Processamento (IVP)"
+      ]
+    },
+    {
+      id: "WAIS-III",
+      name: "Escala Wechsler de Inteligência para Adultos - WAIS-III",
+      abbreviation: "WAIS-III",
+      category: "Cognitivo",
+      purpose: "Avaliação de capacidade intelectual e perfil neurocognitivo de adultos.",
+      targetPublic: "Adultos e Idosos",
+      ageRange: "16 a 89 anos",
+      satepsiStatus: "Favorável",
+      applicationType: "Individual, presencial (approx. 75 a 90 min)",
+      description: "Avaliação clínica de QI Verbal, QI de Execução e QI Total para investigação de declínio cognitivo, lesões cerebrais e altas habilidades.",
+      dimensionsTested: [
+        "Compreensão Verbal (Semelhanças, Vocabulário, Informação)",
+        "Organização Perceptual (Completar Figuras, Cubos, Raciocínio Matricial)",
+        "Memória Operacional (Aritmética, Dígitos)",
+        "Velocidade de Processamento (Código, Procurar Símbolos)"
+      ]
+    },
+    {
+      id: "R-1",
+      name: "Teste Não-Verbal de Inteligência R-1",
+      abbreviation: "R-1",
+      category: "Cognitivo",
+      purpose: "Avaliação de inteligência fluida e raciocínio analógico não-verbal.",
+      targetPublic: "Adolescentes e Adultos com diferentes graus de escolaridade",
+      ageRange: "18 a 68 anos",
+      satepsiStatus: "Favorável",
+      applicationType: "Individual ou coletivo (com limite de tempo de 30 min)",
+      description: "Instrumento baseado em matrizes figurativas para aferição do Fator Geral 'g' de inteligência, independente de nível de linguagem ou fluência verbal.",
+      dimensionsTested: [
+        "Raciocínio lógico dedutivo",
+        "Relações espaciais e figuras analógicas",
+        "Fator Geral 'g' de inteligência"
       ]
     }
   ];

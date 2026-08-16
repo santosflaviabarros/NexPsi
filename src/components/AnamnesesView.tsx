@@ -3,7 +3,8 @@ import {
   Copy, Check, FileText, Baby, Sparkles, User, HeartHandshake, 
   Printer, ClipboardCopy, Info, Landmark, Coins, FileSignature, 
   ClipboardCheck, MapPin, CalendarDays, Heading, UserCheck, ShieldAlert,
-  Image, Plus, Upload, Download, ExternalLink
+  Image, Plus, Upload, Download, ExternalLink, Send, Stethoscope, Share2,
+  Search, CopyCheck, RefreshCw, Layers, SlidersHorizontal, BookmarkPlus, Tag
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Patient, Psychologist } from '../types';
@@ -22,6 +23,7 @@ type MainCategory =
   | 'presenca' 
   | 'laudos' 
   | 'atestado' 
+  | 'encaminhamento'
   | 'reembolso' 
   | 'credenciamento'
   | 'meus_modelos';
@@ -101,103 +103,108 @@ export default function AnamnesesView({ patients, profile }: AnamnesesViewProps)
   interface CustomTemplate {
     id: string;
     title: string;
+    category?: 'Encaminhamentos' | 'Laudos e Relatórios' | 'Atestados e Declarações' | 'Contratos e Termos' | 'Financeiro e Convênios' | 'Personalizados';
     content: string;
   }
   const defaultCustomTemplates: CustomTemplate[] = [
+    // 1. LAUDOS E RELATÓRIOS (CFP 06/2019)
     {
-      id: 'template_de_declaracao',
-      title: 'Declaração de Acompanhamento Terapêutico',
-      content: `DECLARAÇÃO PSICOLÓGICA DE SEGUIMENTO CLINICO
+      id: 'template_laudo_psicologico',
+      title: 'Laudo Psicológico Clínico Completo (CFP 06/2019)',
+      category: 'Laudos e Relatórios',
+      content: `LAUDO PSICOLÓGICO
+(Em conformidade com a Resolução CFP nº 06/2019)
 
-Declaro para os devidos fins de comprovação que o(a) paciente {paciente}, inscrito(a) sob CPF nº {cpf}, realiza acompanhamento psicoterápico sob meus cuidados profissionais.
+1. IDENTIFICAÇÃO
+Autora/Emissora: {psicologo} • Registro: CRP nº {crp}
+Pessoa Interessada / Paciente: {paciente}
+CPF do(a) Paciente: {cpf}
+Finalidade: Avaliação e parecer psicológico clínico especializado
 
-O paciente mantem atendimentos regulares em consultório clínico.
+2. DESCRIÇÃO DA DEMANDA
+O(A) paciente buscou atendimento por encaminhamento de profissional de saúde para investigação e avaliação de sintomas de instabilidade emocional, desregulação do humor, ansiedade acentuada e alterações do padrão de sono, com reflexos nas relações interpessoais e desempenho funcional.
 
-{cidade}, {data}.`
-    },
-    {
-      id: 'template_de_evolucao',
-      title: 'Relatório de Evolução Psicológica',
-      content: `RELATÓRIO DE EVOLUÇÃO CLÍNICA SINTÉTICO
+3. PROCEDIMENTOS
+Foram realizadas entrevistas clínicas semiestruturadas com o(a) paciente, anamnese psicológica detalhada, observação clínica do comportamento e aplicação de inventários de rastreio psicológico devidamente validados pelo SATEPSI (CFP). O processo de avaliação ocorreu ao longo de sessões individuais de 50 minutos.
 
-Paciente: {paciente}
-CPF do Paciente: {cpf}
+4. ANÁLISE PSICOLÓGICA
+No decorrer do processo avaliativo, o(a) paciente apresentou-se orientado(a) globalmente no tempo e espaço, com discurso coerente e fluxo de pensamento preservado. Evidenciou-se humor deprimido/ansioso com reatividade a estressores psicossociais, cognições autocríticas e queixas somáticas de tensão e fadiga. Os resultados dos instrumentos técnicos indicaram nível moderado a grave de ansiedade e sintomas depressivos reativos.
 
-Constatou-se evolução favorável do paciente no período recente, com aquisição de regulação emocional ativa e progresso nos objetivos terapêuticos iniciais.
+5. CONCLUSÃO TÉCNICA
+Com base nos dados coligidos e fundamentação técnico-científica da Psicologia, conclui-se que o quadro clínico apresentado é compatível com hipótese diagnóstica de Transtorno de Ansiedade Generalizada (CID-10: F41.1) associado a sintomas depressivos reativos (CID-10: F32).
+Recomenda-se a continuidade do acompanhamento psicoterápico em frequência semanal, com foco em regulação emocional e reestruturação cognitiva, além de avaliação psiquiátrica complementar para suporte medicamentoso.
 
-O acompanhamento clínico prossegue conforme recomendado profissionalmente.
-
-{cidade}, {data}.`
-    },
-    {
-      id: 'template_atestado_comparecimento',
-      title: 'Atestado de Comparecimento do Paciente',
-      content: `ATESTADO DE COMPARECIMENTO EM SESSÃO
-
-Atesto para os devidos fins de justificativa que o(a) paciente {paciente}, inscrito(a) sob CPF nº {cpf}, compareceu e participou de atendimento em psicoterapia clínica no dia de hoje, no horário agendado.
-
-O referido é a expressão da verdade para os devidos fins de comprovação.
-
-{cidade}, {data}.`
-    },
-    {
-      id: 'template_tcle',
-      title: 'Termo de Consentimento Livre e Esclarecido (TCLE)',
-      content: `TERMO DE CONSENTIMENTO LIVRE E ESCLARECIDO (TCLE)
-
-Eu, {paciente}, inscrito(a) sob o CPF nº {cpf}, dou ciência e pleno consentimento para ingresso no processo terapêutico desenvolvido sob a responsabilidade ética do(a) profissional {psicologo}, com inscrição ativa sob o registro profissional CRP nº {crp}.
-
-Fui informado(a) e dou minha expressa anuência sobre:
-1. A abordagem clínica adotada para as necessidades de cuidado mental.
-2. O caráter de confidencialidade estrita, conforme preconiza o Código de Ética Profissional do Psicólogo e a Lei Geral de Proteção de Dados (LGPD).
-3. A frequência estabelecida e as normas acordadas sobre reposições, agendamentos e cancelamentos de horários.
+Este laudo tem caráter confidencial e validade contextual, não devendo ser utilizado para fins diversos aos aqui expressos.
 
 {cidade}, {data}.
 
 ___________________________________________________________
-Assinatura do(a) Paciente`
+{psicologo}
+Psicólogo(a) Clínico(a) • CRP nº {crp}`
     },
     {
-      id: 'template_recibo_simples',
-      title: 'Recibo Simples de Consulta Psicológica',
-      content: `RECIBO DE HONORÁRIOS PROFISSIONAIS
+      id: 'template_relatorio_psicologico',
+      title: 'Relatório Psicológico Clínico (CFP 06/2019)',
+      category: 'Laudos e Relatórios',
+      content: `RELATÓRIO PSICOLÓGICO
+(Em conformidade com a Resolução CFP nº 06/2019)
 
-Recebi do(a) paciente {paciente}, inscrito(a) sob o CPF nº {cpf}, o valor total correspondente aos serviços especializados de atendimento em Psicoterapia Clínica Geral.
+1. IDENTIFICAÇÃO
+Psicólogo(a) Responsável: {psicologo} • Registro: CRP nº {crp}
+Paciente: {paciente} • CPF: {cpf}
+Solicitante: A pedido do(a) próprio(a) paciente / Convênio
 
-Referência técnica: Sessão clínica de acompanhamento e suporte.
+2. DESCRIÇÃO DA DEMANDA
+Relatório emitido para fins de comprovação e síntese do acompanhamento psicoterápico individual realizado no consultório.
 
-Pelo recebimento, dou ao pagador plena e geral quitação.
+3. PROCEDIMENTO
+O acompanhamento psicoterápico vem sendo realizado por meio de sessões regulares presenciais/online com duração de 50 minutos, utilizando técnicas da abordagem clínica baseada em evidências.
 
-{cidade}, {data}.`
+4. ANÁLISE
+Durante o período de acompanhamento, observou-se engajamento positivo do(a) paciente no processo terapêutico, com progressiva tomada de consciência sobre padrões de pensamento disfuncionais, estratégias de enfrentamento de estresse e melhora nos índices de regulação do humor e qualidade de vida.
+
+5. CONCLUSÃO
+Recomenda-se a manutenção do tratamento psicoterápico em regime de continuidade para consolidação dos ganhos terapêuticos e prevenção de recaídas.
+
+{cidade}, {data}.
+
+___________________________________________________________
+{psicologo}
+Psicólogo(a) Clínico(a) • CRP nº {crp}`
     },
     {
-      id: 'template_entrevista_inicial',
-      title: 'Roteiro de Triagem / Entrevista Inicial',
-      content: `FORMULÁRIO DE TRIAGEM E ENTREVISTA DIAGNÓSTICA
+      id: 'template_parecer_psicologico',
+      title: 'Parecer Psicológico Técnico (CFP 06/2019)',
+      category: 'Laudos e Relatórios',
+      content: `PARECER PSICOLÓGICO
+(Em conformidade com a Resolução CFP nº 06/2019)
 
-Paciente: {paciente}
-CPF do Paciente: {cpf}
-Data da Coleta: {data}
+EMENTA: Análise técnica e fundamentação psicológica sobre matéria solicitada.
 
-1. ANAMNESE E QUEIXA CLÍNICA INICIAL:
-__________________________________________________________________
+1. IDENTIFICAÇÃO
+Psicólogo(a) Parecerista: {psicologo} • Registro: CRP nº {crp}
+Solicitante: {paciente} • CPF: {cpf}
+Assunto: Parecer técnico sobre condições psicológicas e enquadre clínico
 
-2. HISTÓRIA FAMILIAR E ROTINA SOCIAL:
-__________________________________________________________________
+2. EXPOSIÇÃO DE MOTIVOS
+Trata-se de solicitação para manifestação técnica fundamentada sobre a necessidade de acompanhamento e suporte emocional específico face a circunstâncias de estresse e sobrecarga psicossocial recente.
 
-3. ANTECEDENTES PSIQUIÁTRICOS E MEDICAMENTOS DE RELEVO:
-__________________________________________________________________
+3. DISCUSSÃO TÉCNICA E ANÁLISE
+Com base nos conhecimentos científicos da ciência psicológica e na análise contextual apresentada, observa-se que situações de alta exigência adaptativa demandam suporte especializado para preservação da saúde mental e integridade funcional.
 
-4. COMPREENSÃO E ESTRATÉGIA TERAPÊUTICA COMBINADA:
-__________________________________________________________________
+4. CONCLUSÃO
+Opina-se favoravelmente à implementação das medidas de apoio e suporte psicológico recomendadas, devendo o processo ser conduzido em consonância com as diretrizes éticas da profissão.
 
-Encaminhamento e observação clínica continuará no consultório.
+{cidade}, {data}.
 
-{cidade}, {data}.`
+___________________________________________________________
+{psicologo}
+Psicólogo(a) Parecerista • CRP nº {crp}`
     },
     {
       id: 'template_ficha_soap',
-      title: 'Ficha de Registro Clínico e Evolução (Modelo SOAP)',
+      title: 'Registro de Sessão e Evolução (Estrutura SOAP)',
+      category: 'Laudos e Relatórios',
       content: `REGISTRO CLÍNICO DE EVOLUÇÃO TERAPÊUTICA (ESTRUTURA SOAP)
 
 Paciente: {paciente}
@@ -233,6 +240,530 @@ Assinatura do(a) Psicólogo(a): {psicologo}
 Registro Profissional: CRP nº {crp}
 
 {cidade}, {data}.`
+    },
+    {
+      id: 'template_de_evolucao',
+      title: 'Relatório de Evolução Clínica Sintético',
+      category: 'Laudos e Relatórios',
+      content: `RELATÓRIO DE EVOLUÇÃO CLÍNICA SINTÉTICO
+
+Paciente: {paciente}
+CPF do Paciente: {cpf}
+
+Constatou-se evolução favorável do paciente no período recente, com aquisição de regulação emocional ativa e progresso nos objetivos terapêuticos iniciais.
+
+O acompanhamento clínico prossegue conforme recomendado profissionalmente.
+
+{cidade}, {data}.`
+    },
+    {
+      id: 'template_entrevista_inicial',
+      title: 'Roteiro de Triagem e Anamnese Inicial',
+      category: 'Laudos e Relatórios',
+      content: `FORMULÁRIO DE TRIAGEM E ENTREVISTA DIAGNÓSTICA
+
+Paciente: {paciente}
+CPF do Paciente: {cpf}
+Data da Coleta: {data}
+
+1. ANAMNESE E QUEIXA CLÍNICA INICIAL:
+__________________________________________________________________
+
+2. HISTÓRIA FAMILIAR E ROTINA SOCIAL:
+__________________________________________________________________
+
+3. ANTECEDENTES PSIQUIÁTRICOS E MEDICAMENTOS DE RELEVO:
+__________________________________________________________________
+
+4. COMPREENSÃO E ESTRATÉGIA TERAPÊUTICA COMBINADA:
+__________________________________________________________________
+
+Encaminhamento e observação clínica continuará no consultório.
+
+{cidade}, {data}.`
+    },
+
+    // 2. ENCAMINHAMENTOS (CFP 06/2019)
+    {
+      id: 'template_encaminhamento_psiquiatrico',
+      title: 'Encaminhamento: Avaliação Psiquiátrica (Psicofarmacologia)',
+      category: 'Encaminhamentos',
+      content: `ENCAMINHAMENTO PSICOLÓGICO CLÍNICO
+(Em conformidade com a Resolução CFP nº 06/2019 e Código de Ética Profissional)
+
+1. DESTINATÁRIO:
+Ao(À) Médico(a) Psiquiatra
+
+2. IDENTIFICAÇÃO DO(A) PACIENTE:
+Nome: {paciente}
+CPF: {cpf}
+
+3. PROFISSIONAL EMISSOR(A):
+Psicólogo(a): {psicologo} • Registro: CRP nº {crp}
+
+4. MOTIVO DO ENCAMINHAMENTO:
+Encaminho o(a) paciente acima identificado(a), em acompanhamento psicoterápico sob meus cuidados profissionais, para avaliação clínica especializada com foco em suporte psicofarmacológico.
+
+5. HISTÓRICO E SINTOMATOLOGIA OBSERVADA:
+No decurso dos atendimentos psicoterápicos, constatou-se a presença de sintomas de ansiedade aguda com manifestações somáticas (taquicardia, tensão muscular, insônia inicial) e episódios de oscilação tímica com impacto funcional nas atividades cotidianas e laborais.
+
+Hipótese diagnóstica de relevo: Investigação para Transtorno de Ansiedade Generalizada (CID-10: F41.1) / Episódio Depressivo (CID-10: F32).
+
+6. SOLICITAÇÃO:
+Solicito avaliação psiquiátrica especializada e conduta psicofarmacológica que julgar pertinente, colocando-me à disposição para discussão e acompanhamento interdisciplinar do caso clínico.
+
+Declaro que este documento foi devidamente esclarecido e consentido pelo(a) paciente.
+
+{cidade}, {data}.
+
+___________________________________________________________
+{psicologo}
+Psicólogo(a) Clínico(a) • CRP nº {crp}`
+    },
+    {
+      id: 'template_encaminhamento_neurologico',
+      title: 'Encaminhamento: Neurologia (TDAH / TEA / Funções Executivas)',
+      category: 'Encaminhamentos',
+      content: `ENCAMINHAMENTO PSICOLÓGICO CLÍNICO
+(Em conformidade com a Resolução CFP nº 06/2019 e Código de Ética Profissional)
+
+1. DESTINATÁRIO:
+Ao(À) Médico(a) Neurologista / Neuropediatra
+
+2. IDENTIFICAÇÃO DO(A) PACIENTE:
+Nome: {paciente}
+CPF: {cpf}
+
+3. PROFISSIONAL EMISSOR(A):
+Psicólogo(a): {psicologo} • Registro: CRP nº {crp}
+
+4. MOTIVO DO ENCAMINHAMENTO:
+Encaminho o(a) paciente para avaliação especializada com foco em investigação das funções atencionais, controle inibitório e funções executivas.
+
+5. SINTOMATOLOGIA OBSERVADA:
+Durante as sessões clínicas e análise comportamental, observou-se padrão recorrente de desatenção sustentada, desorganização no cotidiano, impulsividade verbal/motora, oscilação de rendimento cognitivo e sobrecarga sensorial.
+
+Hipótese diagnóstica para investigação: Rastreio de Transtorno de Déficit de Atenção e Hiperatividade - TDAH (CID-10: F90 / CID-11: 6A05) ou investigação do Espectro Autista (TEA).
+
+6. SOLICITAÇÃO:
+Solicito criteriosa avaliação neurológica e realização de exames complementares para confirmação diagnóstica e eventual alinhamento medicamentoso/neurocognitivo.
+
+{cidade}, {data}.
+
+___________________________________________________________
+{psicologo}
+Psicólogo(a) Clínico(a) • CRP nº {crp}`
+    },
+    {
+      id: 'template_encaminhamento_psicopedagogico',
+      title: 'Encaminhamento: Psicopedagogia (Dificuldades Escolares)',
+      category: 'Encaminhamentos',
+      content: `ENCAMINHAMENTO PSICOLÓGICO CLÍNICO
+(Em conformidade com a Resolução CFP nº 06/2019 e Código de Ética Profissional)
+
+1. DESTINATÁRIO:
+Ao(À) Especialista em Psicopedagogia / Coordenação Pedagógica
+
+2. IDENTIFICAÇÃO DO(A) PACIENTE:
+Nome: {paciente}
+CPF: {cpf}
+
+3. PROFISSIONAL EMISSOR(A):
+Psicólogo(a): {psicologo} • Registro: CRP nº {crp}
+
+4. MOTIVO DO ENCAMINHAMENTO:
+Investigação e intervenção especializada para superação de dificuldades no processo de aprendizagem, leitura e raciocínio lógico-matemático.
+
+5. HISTÓRICO E SINTOMATOLOGIA:
+No contexto do atendimento clínico, evidenciaram-se queixas frequentes de bloqueio atencional em ambiente escolar, lentificação na aquisição da escrita/leitura, sentimentos de inadequação e baixa autoeficácia acadêmica.
+
+6. SOLICITAÇÃO:
+Encaminho para avaliação psicopedagógica formal, desenvolvimento de plano de tutoria/estudo personalizado e alinhamento com a equipe escolar.
+
+{cidade}, {data}.
+
+___________________________________________________________
+{psicologo}
+Psicólogo(a) Clínico(a) • CRP nº {crp}`
+    },
+    {
+      id: 'template_encaminhamento_nutricional',
+      title: 'Encaminhamento: Nutrição (Comportamento Alimentar)',
+      category: 'Encaminhamentos',
+      content: `ENCAMINHAMENTO PSICOLÓGICO CLÍNICO
+(Em conformidade com a Resolução CFP nº 06/2019 e Código de Ética Profissional)
+
+1. DESTINATÁRIO:
+Ao(À) Nutricionista Clínico(a) / Especialista em Comportamento Alimentar
+
+2. IDENTIFICAÇÃO DO(A) PACIENTE:
+Nome: {paciente}
+CPF: {cpf}
+
+3. PROFISSIONAL EMISSOR(A):
+Psicólogo(a): {psicologo} • Registro: CRP nº {crp}
+
+4. MOTIVO DO ENCAMINHAMENTO:
+Acompanhamento nutricional especializado e reeducação da relação com a alimentação e autoimagem.
+
+5. SINTOMATOLOGIA:
+Identificou-se padrão recorrente de comer emocional, episódios de compulsão alimentar seguidos de culpa intensa, alternância com restrições severas e distorções cognitivas sobre a percepção corporal.
+
+6. SOLICITAÇÃO:
+Encaminho para elaboração de plano alimentar flexível, com abordagem sem dietas punitivas, trabalhando em consonância com a reestruturação cognitiva das crenças nucleares.
+
+{cidade}, {data}.
+
+___________________________________________________________
+{psicologo}
+Psicólogo(a) Clínico(a) • CRP nº {crp}`
+    },
+    {
+      id: 'template_encaminhamento_fonoaudiologico',
+      title: 'Encaminhamento: Fonoaudiologia (Comunicação / PAC)',
+      category: 'Encaminhamentos',
+      content: `ENCAMINHAMENTO PSICOLÓGICO CLÍNICO
+(Em conformidade com a Resolução CFP nº 06/2019 e Código de Ética Profissional)
+
+1. DESTINATÁRIO:
+Ao(À) Fonoaudiólogo(a) Clínico(a)
+
+2. IDENTIFICAÇÃO DO(A) PACIENTE:
+Nome: {paciente}
+CPF: {cpf}
+
+3. PROFISSIONAL EMISSOR(A):
+Psicólogo(a): {psicologo} • Registro: CRP nº {crp}
+
+4. MOTIVO DO ENCAMINHAMENTO:
+Avaliação fonoaudiológica e triagem de Processamento Auditivo Central (PAC) e comunicação verbal.
+
+5. SINTOMATOLOGIA:
+Constatou-se insegurança comunicativa, trocas fonêmicas ocasionais, queixa de dificuldade de compreensão em ambientes ruidosos e reflexos na socialização.
+
+6. SOLICITAÇÃO:
+Solicito avaliação fonoaudiológica detalhada e conduta terapêutica correspondente para fortalecimento da comunicação e redução da ansiedade social associada.
+
+{cidade}, {data}.
+
+___________________________________________________________
+{psicologo}
+Psicólogo(a) Clínico(a) • CRP nº {crp}`
+    },
+    {
+      id: 'template_encaminhamento_multidisciplinar',
+      title: 'Encaminhamento: Equipe Multidisciplinar / Interdisciplinar',
+      category: 'Encaminhamentos',
+      content: `ENCAMINHAMENTO INTERDISCIPLINAR EM SAÚDE
+(Em conformidade com a Resolução CFP nº 06/2019 e Código de Ética Profissional)
+
+1. DESTINATÁRIO:
+Aos Cuidados do(a) Profissional Especialista / Equipe Interdisciplinar
+
+2. IDENTIFICAÇÃO DO(A) PACIENTE:
+Nome: {paciente}
+CPF: {cpf}
+
+3. PROFISSIONAL EMISSOR(A):
+Psicólogo(a): {psicologo} • Registro: CRP nº {crp}
+
+4. HISTÓRICO E MOTIVO DO ENCAMINHAMENTO:
+O(A) paciente encontra-se em acompanhamento psicoterápico regular. Com o objetivo de proporcionar uma intervenção global e integrada à sua saúde e desenvolvimento, faz-se indicada a avaliação especializada complementar.
+
+5. DIRETRIZES DA INTERVENÇÃO CONJUNTA:
+Encaminho para avaliação especializada em sua área de atuação e desenvolvimento de plano terapêutico/pedagógico correspondente, colocando-me à disposição para troca de informações e alinhamento de condutas.
+
+{cidade}, {data}.
+
+___________________________________________________________
+{psicologo}
+Psicólogo(a) Clínico(a) • CRP nº {crp}`
+    },
+
+    // 3. ATESTADOS E DECLARAÇÕES (CFP 06/2019)
+    {
+      id: 'template_atestado_afastamento',
+      title: 'Atestado Psicológico: Afastamento / Repouso (CFP 06/2019)',
+      category: 'Atestados e Declarações',
+      content: `ATESTADO PSICOLÓGICO
+(Em conformidade com a Resolução CFP nº 06/2019)
+
+Atesto, para os devidos fins de direito e comprovação de saúde, que o(a) paciente {paciente}, portador(a) do CPF nº {cpf}, encontra-se sob meus cuidados profissionais em acompanhamento psicoterápico clínico.
+
+Em decorrência de quadro reativo de estresse agudo e sintomatologia de ansiedade que demandam repouso e reestruturação emocional, recomendo o afastamento temporário de suas atividades rotineiras/laborais pelo período de 5 (cinco) dias a contar desta data.
+
+(Informação sobre hipótese diagnóstica omitida em resguardo ao sigilo profissional, salvo autorização prévia e expressa do paciente nos termos da Resolução CFP 06/2019).
+
+Por ser a expressão técnica e ética da verdade, firmo o presente documento.
+
+{cidade}, {data}.
+
+___________________________________________________________
+{psicologo}
+Psicólogo(a) Clínico(a) • CRP nº {crp}`
+    },
+    {
+      id: 'template_atestado_comparecimento',
+      title: 'Atestado de Comparecimento do Paciente em Sessão',
+      category: 'Atestados e Declarações',
+      content: `ATESTADO DE COMPARECIMENTO EM SESSÃO PSICOLÓGICA
+
+Atesto para os devidos fins de justificativa que o(a) paciente {paciente}, inscrito(a) sob o CPF nº {cpf}, compareceu e participou de sessão de psicoterapia clínica individual no dia de hoje, no horário agendado de 50 minutos.
+
+O referido documento é emitido a pedido do(a) próprio(a) paciente para fins de comprovação.
+
+{cidade}, {data}.
+
+___________________________________________________________
+{psicologo}
+Psicólogo(a) Clínico(a) • CRP nº {crp}`
+    },
+    {
+      id: 'template_declaracao_presenca_pais',
+      title: 'Declaração de Presença de Acompanhante / Pais',
+      category: 'Atestados e Declarações',
+      content: `DECLARAÇÃO DE PRESENÇA DE ACOMPANHANTE / PAIS
+
+Declaro para os devidos fins de comprovação e justificativa que o(a) responsável compareceu neste consultório de psicologia clínica no dia de hoje, acompanhando o(a) paciente {paciente} (CPF: {cpf}) durante o atendimento terapêutico e orientação parental.
+
+{cidade}, {data}.
+
+___________________________________________________________
+{psicologo}
+Psicólogo(a) Clínico(a) • CRP nº {crp}`
+    },
+    {
+      id: 'template_de_declaracao',
+      title: 'Declaração de Acompanhamento Psicoterápico',
+      category: 'Atestados e Declarações',
+      content: `DECLARAÇÃO PSICOLÓGICA DE SEGUIMENTO CLÍNICO
+
+Declaro para os devidos fins de comprovação que o(a) paciente {paciente}, inscrito(a) sob CPF nº {cpf}, realiza acompanhamento psicoterápico sob meus cuidados profissionais neste consultório, mantendo frequência regular e compromisso com o processo terapêutico.
+
+{cidade}, {data}.
+
+___________________________________________________________
+{psicologo}
+Psicólogo(a) Clínico(a) • CRP nº {crp}`
+    },
+
+    // 4. CONTRATOS E TERMOS ÉTICOS
+    {
+      id: 'template_contrato_terapeutico',
+      title: 'Contrato Terapêutico e Enquadre Clínico (Adulto)',
+      category: 'Contratos e Termos',
+      content: `CONTRATO DE PRESTAÇÃO DE SERVIÇOS PSICOLÓGICOS E ENQUADRE CLÍNICO
+
+Pelo presente instrumento particular, de um lado:
+PROFISSIONAL: {psicologo}, Psicólogo(a) Clínico(a), inscrito(a) no CRP sob o nº {crp}.
+PACIENTE: {paciente}, inscrito(a) no CPF sob o nº {cpf}.
+
+As partes acordam as seguintes cláusulas de enquadre terapêutico:
+
+CLÁUSULA 1ª - DO OBJETO E ABORDAGEM
+O presente contrato tem como objeto a prestação de serviços de psicoterapia clínica individual, visando o autoconhecimento, regulação emocional e desenvolvimento da saúde mental.
+
+CLÁUSULA 2ª - DO SIGILO PROFISSIONAL E LGPD
+Todas as informações compartilhadas em sessão são protegidas por sigilo profissional irrestrito, em conformidade com o Código de Ética Profissional do Psicólogo e a Lei Geral de Proteção de Dados (Lei nº 13.709/2018).
+
+CLÁUSULA 3ª - DA DURAÇÃO E FREQUÊNCIA DAS SESSÕES
+As sessões têm duração de 50 (cinquenta) minutos, realizadas em dia e horário previamente acordados, em frequência semanal ou quinzenal.
+
+CLÁUSULA 4ª - DOS HONORÁRIOS E FORMA DE PAGAMENTO
+O valor do investimento por sessão é previamente pactuado entre as partes, com pagamento a ser realizado por transferência Pix ou depósito até o dia acordado de cada mês.
+
+CLÁUSULA 5ª - DAS DESMARCAÇÕES E FALTAS
+Desmarcações devem ser comunicadas com antecedência mínima de 24 (vinte e quatro) horas para possibilidade de reposição conforme disponibilidade da agenda. Sessões desmarcadas sem aviso prévio ou faltas sem justificativa médica serão faturadas normalmente.
+
+CLÁUSULA 6ª - DO ENCERRAMENTO E ALTA TERAPÊUTICA
+O processo terapêutico pode ser finalizado por qualquer das partes, recomendando-se a realização de uma sessão de encerramento e fechamento clínico.
+
+Por estarem de pleno acordo com os termos, firmam o presente enquadre.
+
+{cidade}, {data}.
+
+___________________________________          ___________________________________
+{psicologo}                                    {paciente}
+CRP nº {crp}                                   Paciente`
+    },
+    {
+      id: 'template_contrato_infantil',
+      title: 'Contrato Terapêutico Infantojuvenil (com Pais/Responsáveis)',
+      category: 'Contratos e Termos',
+      content: `CONTRATO TERAPÊUTICO INFANTOJUVENIL E ACORDO COM OS PAIS / RESPONSÁVEIS
+
+PROFISSIONAL: {psicologo}, CRP nº {crp}
+PACIENTE (CRIANÇA/ADOLESCENTE): {paciente}
+CPF DO PACIENTE: {cpf}
+
+1. ENQUADRE DO ATENDIMENTO CLÍNICO
+O atendimento infantojuvenil envolve sessões com a criança/adolescente e sessões periódicas de devolutiva e orientação com os pais ou responsáveis legais.
+
+2. SIGILO E ESPAÇO DA CRIANÇA
+O espaço terapêutico da criança é resguardado pelo sigilo ético. Detalhes das brincadeiras, desenhos e narrativas são confidenciais, compartilhando-se com os responsáveis as diretrizes de desenvolvimento, manejo comportamental e impressões clínicas gerais.
+
+3. PONTUALIDADE E FREQUÊNCIA
+A regularidade nas sessões é fundamental para o vínculo e eficácia do tratamento. Faltas devem ser comunicadas com 24h de antecedência.
+
+{cidade}, {data}.
+
+___________________________________________________________
+Assinatura dos Pais / Responsáveis Legais`
+    },
+    {
+      id: 'template_contrato_telepsicologia',
+      title: 'Contrato de Telepsicologia / Atendimento Online (CFP 11/2018)',
+      category: 'Contratos e Termos',
+      content: `TERMO E CONTRATO DE ATENDIMENTO ONLINE (TELEPSICOLOGIA)
+(Em conformidade com a Resolução CFP nº 11/2018)
+
+PROFISSIONAL: {psicologo} • Registro: CRP nº {crp} • Cadastro e-Psi Ativo
+PACIENTE: {paciente} • CPF: {cpf}
+
+1. PLATAFORMA E CONEXÃO
+Os atendimentos ocorrem por videochamada em plataforma com criptografia de ponta a ponta. É dever do(a) paciente garantir ambiente privado, livre de interrupções e com fones de ouvido.
+
+2. VEDAÇÃO DE GRAVAÇÕES NÃO AUTORIZADAS
+É expressamente proibida a gravação em áudio, vídeo ou transcrição de qualquer sessão por qualquer das partes sem autorização mútua prévia por escrito.
+
+3. CONTATO DE EMERGÊNCIA
+Em caso de instabilidade grave de conexão ou crise durante o atendimento remoto, fica estabelecido canal de contato de emergência.
+
+{cidade}, {data}.
+
+___________________________________          ___________________________________
+{psicologo}                                    {paciente}
+CRP nº {crp}                                   Paciente`
+    },
+    {
+      id: 'template_tcle',
+      title: 'Termo de Consentimento Livre e Esclarecido (TCLE & LGPD)',
+      category: 'Contratos e Termos',
+      content: `TERMO DE CONSENTIMENTO LIVRE E ESCLARECIDO (TCLE & LGPD)
+
+Eu, {paciente}, inscrito(a) sob o CPF nº {cpf}, declaro que recebi e compreendi todas as informações sobre os objetivos, métodos, sigilo ético e funcionamento do processo psicoterápico conduzido por {psicologo} (CRP nº {crp}).
+
+Fui informado(a) e dou minha expressa anuência sobre:
+1. A abordagem clínica adotada para as necessidades de cuidado mental.
+2. O caráter de confidencialidade estrita, conforme preconiza o Código de Ética Profissional do Psicólogo e a Lei Geral de Proteção de Dados (LGPD).
+3. A frequência estabelecida e as normas acordadas sobre reposições, agendamentos e cancelamentos de horários.
+
+{cidade}, {data}.
+
+___________________________________________________________
+Assinatura do(a) Paciente`
+    },
+    {
+      id: 'template_termo_gravacao_copiloto',
+      title: 'Termo de Autorização para Gravação e Copiloto de IA',
+      category: 'Contratos e Termos',
+      content: `TERMO DE AUTORIZAÇÃO PARA GRAVAÇÃO DE ÁUDIO E USO DE COPILOTO CLÍNICO
+
+Paciente: {paciente} • CPF: {cpf}
+Psicólogo(a): {psicologo} • Registro: CRP nº {crp}
+
+Autorizo o(a) profissional acima a utilizar ferramentas de gravação de áudio e inteligência artificial clínica assistiva durante as sessões psicoterápicas, estritamente para fins de transcrição, apoio na elaboração de prontuários clínicos e organização das anotações de evolução.
+
+Fui informado(a) de que:
+- Os áudios e transcrições são de uso exclusivo do(a) psicólogo(a) e protegidos por sigilo profissional.
+- Nenhuma informação é divulgada ou comercializada a terceiros.
+- Posso revogar esta autorização a qualquer momento.
+
+{cidade}, {data}.
+
+___________________________________________________________
+Assinatura do(a) Paciente`
+    },
+    {
+      id: 'template_notificacao_faltas',
+      title: 'Notificação de Desligamento / Encerramento Clínico',
+      category: 'Contratos e Termos',
+      content: `NOTIFICAÇÃO DE ENCERRAMENTO E DESLIGAMENTO CLÍNICO
+
+Prezado(a) {paciente},
+
+Entramos em contato referente ao seu processo de psicoterapia clínica sob os cuidados de {psicologo} (CRP nº {crp}).
+
+Tendo em vista a ausência de comparecimento às últimas sessões agendadas sem retorno às tentativas de contato e reagendamento, comunicamos o encerramento formal do acompanhamento e a liberação do respectivo horário na agenda profissional.
+
+Ressaltamos a importância da continuidade dos cuidados com sua saúde mental e permanecemos à disposição caso deseje retomar o processo terapêutico em momento futuro oportuno.
+
+{cidade}, {data}.
+
+___________________________________________________________
+{psicologo}
+Psicólogo(a) Clínico(a) • CRP nº {crp}`
+    },
+
+    // 5. FINANCEIRO E CONVÊNIOS
+    {
+      id: 'template_pedido_reembolso',
+      title: 'Declaração para Pedido de Reembolso ao Convênio / Plano',
+      category: 'Financeiro e Convênios',
+      content: `DECLARAÇÃO DE TRATAMENTO PSICOLÓGICO E PEDIDO DE REEMBOLSO
+
+À Diretoria de Assistência Médica e Reembolso
+Operadora do Seguro Saúde / Convênio do Paciente
+
+Prezados Senhores,
+
+Por meio da presente, venho atestar que o(a) paciente beneficiário(a) {paciente}, portador(a) do CPF nº {cpf}, realiza tratamento psicoterápico de acompanhamento regular em meu consultório profissional.
+
+Dados do tratamento para fins de cobertura e reembolso:
+- Psicólogo(a) Assistente: {psicologo}, Registro: CRP nº {crp}.
+- Frequência: Sessões clínicas individuais com duração de 50 minutos.
+- Os pagamentos dos honorários profissionais foram devidamente liquidados.
+
+Salienta-se que o atendimento psicológico encontra plena pertinência nas garantias normativas de reembolso e direito de cobertura de saúde suplementar.
+
+{cidade}, {data}.
+
+___________________________________________________________
+{psicologo}
+Psicólogo(a) Clínico(a) • CRP nº {crp}`
+    },
+    {
+      id: 'template_recibo_simples',
+      title: 'Recibo de Honorários Profissionais de Consulta',
+      category: 'Financeiro e Convênios',
+      content: `RECIBO DE HONORÁRIOS PROFISSIONAIS
+
+Recebi do(a) paciente {paciente}, inscrito(a) sob o CPF nº {cpf}, o valor total de honorários correspondente aos serviços especializados de atendimento em Psicoterapia Clínica Geral.
+
+Referência técnica: Sessão clínica de acompanhamento e suporte.
+
+Pelo recebimento, dou ao pagador plena e geral quitação.
+
+{cidade}, {data}.
+
+___________________________________________________________
+{psicologo}
+Psicólogo(a) Clínico(a) • CRP nº {crp}`
+    },
+    {
+      id: 'template_solicitacao_credenciamento',
+      title: 'Solicitação de Credenciamento a Operadora de Saúde',
+      category: 'Financeiro e Convênios',
+      content: `SOLICITAÇÃO FORMAL DE CREDENCIAMENTO PROFISSIONAL EM OPERADORA DE SAÚDE
+
+À Diretoria de Cadastro, Expansão de Rede Credenciada e Parcerias Assistenciais.
+
+Assunto: Proposta para Credenciamento Profissional em Serviços de Psicologia Clínica
+
+Apresento-me frente a este prestigiado plano de saúde, manifestando meu pleno interesse em figurar de forma ativa na rede qualificada de psicólogos cooperados na localidade de {cidade}.
+
+DADOS DO PROFISSIONAL EMISSOR:
+- Nome Completo: {psicologo}
+- Conselho Regional: CRP nº {crp}
+- Estrutura de atendimento: Consultório climatizado e adequado às normas sanitárias vigentes, além de infraestrutura para telepsicologia em conformidade com o CFP.
+
+Coloco-me à inteira disposição para envio de documentações adicionais e certidões solicitadas de praxe.
+
+{cidade}, {data}.
+
+___________________________________________________________
+{psicologo}
+Psicólogo(a) Clínico(a) • CRP nº {crp}`
     }
   ];
 
@@ -258,6 +789,89 @@ Registro Profissional: CRP nº {crp}
   const [selectedCustomTemplateId, setSelectedCustomTemplateId] = useState<string>(() => {
     return customTemplates[0]?.id || '';
   });
+
+  const [templateCategoryFilter, setTemplateCategoryFilter] = useState<string>('Todos');
+  const [templateSearchQuery, setTemplateSearchQuery] = useState<string>('');
+  const [templateActionToast, setTemplateActionToast] = useState<string | null>(null);
+
+  const showToast = (msg: string) => {
+    setTemplateActionToast(msg);
+    setTimeout(() => {
+      setTemplateActionToast(null);
+    }, 3000);
+  };
+
+  const handleDuplicateTemplate = (templateId: string) => {
+    const original = customTemplates.find(t => t.id === templateId);
+    if (!original) return;
+    const newId = `custom_copy_${Date.now()}`;
+    const duplicated: CustomTemplate = {
+      id: newId,
+      title: `${original.title} (Cópia Personalizada)`,
+      category: original.category || 'Personalizados',
+      content: original.content
+    };
+    const updated = [duplicated, ...customTemplates];
+    setCustomTemplates(updated);
+    setSelectedCustomTemplateId(newId);
+    showToast('Modelo duplicado com sucesso! Agora você pode editá-lo livremente.');
+  };
+
+  const handleRestoreBaseTemplates = () => {
+    const existingIds = new Set(customTemplates.map(t => t.id));
+    let addedCount = 0;
+    const merged = [...customTemplates];
+    
+    defaultCustomTemplates.forEach(def => {
+      if (!existingIds.has(def.id)) {
+        merged.push(def);
+        addedCount++;
+      }
+    });
+
+    setCustomTemplates(merged);
+    showToast(addedCount > 0 ? `${addedCount} modelos base restaurados!` : 'Todos os modelos base já estão na sua lista.');
+  };
+
+  const handleResetAllToFactory = () => {
+    if (confirm("Atenção: Isso redefinirá todos os modelos de documentos para a versão original padrão de fábrica. Deseja continuar?")) {
+      setCustomTemplates(defaultCustomTemplates);
+      setSelectedCustomTemplateId(defaultCustomTemplates[0]?.id || '');
+      showToast('Modelos redefinidos com sucesso para a versão oficial!');
+    }
+  };
+
+  const handleExportTemplatesJson = () => {
+    try {
+      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(customTemplates, null, 2));
+      const downloadAnchor = document.createElement('a');
+      downloadAnchor.setAttribute("href", dataStr);
+      downloadAnchor.setAttribute("download", `meus_modelos_clinicos_backup_${new Date().toISOString().slice(0, 10)}.json`);
+      document.body.appendChild(downloadAnchor);
+      downloadAnchor.click();
+      downloadAnchor.remove();
+      showToast('Backup dos modelos exportado em JSON com sucesso!');
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const handleSaveCurrentDocAsCustomModel = () => {
+    const docTitle = getDocumentCategoryTitle();
+    const docContent = getDocumentContent();
+    const newId = `custom_from_doc_${Date.now()}`;
+    const newTemplate: CustomTemplate = {
+      id: newId,
+      title: `${docTitle} - Modelo Editável`,
+      category: 'Personalizados',
+      content: docContent
+    };
+    const updated = [newTemplate, ...customTemplates];
+    setCustomTemplates(updated);
+    setSelectedCustomTemplateId(newId);
+    setActiveTab('meus_modelos');
+    showToast(`"${docTitle}" salvo na aba "Meus Modelos" para personalização!`);
+  };
 
   const [isImporting, setIsImporting] = useState<boolean>(false);
 
@@ -393,6 +1007,90 @@ Registro Profissional: CRP nº {crp}
 
   const [atestadoDias, setAtestadoDias] = useState<string>('5');
   const [atestadoMotivo, setAtestadoMotivo] = useState<string>('Necessidade de afastamento temporário de atividades laborais em decorrência de estresse pós-traumático de intensidade severa (CID 10: F43.1). (Autorizado pelo paciente).');
+
+  // Encaminhamento specific properties & presets (CFP 06/2019)
+  type EncaminhamentoPresetKey = 'psiquiatria' | 'neurologia' | 'psicopedagogia' | 'nutricao' | 'fonoaudiologia' | 'clinica_geral' | 'personalizado';
+
+  const ENCAMINHAMENTO_PRESETS: Record<EncaminhamentoPresetKey, {
+    label: string;
+    icon: string;
+    destinatario: string;
+    motivo: string;
+    historico: string;
+    hipoteses: string;
+    solicitacao: string;
+  }> = {
+    psiquiatria: {
+      label: 'Psiquiatria (Avaliação Medicamentosa)',
+      icon: '🧠',
+      destinatario: 'Ao(À) Médico(a) Psiquiatra',
+      motivo: 'Avaliação clínica especializada com foco em suporte psicofarmacológico para manejo de sintomas de ansiedade aguda e oscilação tímica.',
+      historico: 'O(A) paciente realiza acompanhamento psicoterápico sob meus cuidados. No decurso dos atendimentos, constatou-se a presença de sintomas de ansiedade aguda com manifestações somáticas (taquicardia, tensão muscular, insônia inicial) e episódios de desânimo acentuado com prejuízo funcional em suas atividades cotidianas e laborais.',
+      hipoteses: 'Sintomatologia compatível com Transtorno de Ansiedade Generalizada (CID-10: F41.1) e Episódio Depressivo Moderado (CID-10: F32.1).',
+      solicitacao: 'Encaminho o(a) paciente para avaliação psiquiátrica especializada, diagnóstico diferencial e eventual introdução/ajuste medicamentoso, colocando-me à inteira disposição para discussão e acompanhamento interdisciplinar do caso clínico.'
+    },
+    neurologia: {
+      label: 'Neurologia / TDAH / TEA',
+      icon: '⚡',
+      destinatario: 'Ao(À) Médico(a) Neurologista / Neuropediatra',
+      motivo: 'Avaliação especializada para investigação de funções atencionais, controle inibitório, funções executivas e neurodesenvolvimento.',
+      historico: 'Durante as sessões clínicas e análise comportamental, observou-se padrão persistente de desatenção, desorganização na rotina diária, impulsividade, hiperfoco intercalado com desmotivação, sobrecarga sensorial e impacto significativo no rendimento acadêmico/profissional.',
+      hipoteses: 'Investigação clínica para Transtorno de Déficit de Atenção e Hiperatividade - TDAH (CID-10: F90 / CID-11: 6A05) ou investigação do Transtorno do Espectro Autista (TEA).',
+      solicitacao: 'Solicito avaliação neurológica aprofundada e realização de exames complementares para confirmação diagnóstica e eventual alinhamento medicamentoso/neurocognitivo.'
+    },
+    psicopedagogia: {
+      label: 'Psicopedagogia (Dificuldades Escolares)',
+      icon: '📚',
+      destinatario: 'Ao(À) Especialista em Psicopedagogia / Coordenação Pedagógica',
+      motivo: 'Investigação e intervenção especializada para superação de dificuldades no processo de aprendizagem, leitura e raciocínio lógico-matemático.',
+      historico: 'No contexto do atendimento clínico, evidenciaram-se queixas frequentes de bloqueio atencional em ambiente escolar, lentificação na aquisição da escrita/leitura, sentimentos de inadequação e baixa autoeficácia acadêmica.',
+      hipoteses: 'Dificuldade específica de aprendizagem e necessidade de estratégias pedagógicas individualizadas de estimulação cognitiva.',
+      solicitacao: 'Encaminho para avaliação psicopedagógica formal, desenvolvimento de plano de tutoria/estudo personalizado e alinhamento com a equipe escolar.'
+    },
+    nutricao: {
+      label: 'Nutrição (Comportamento Alimentar)',
+      icon: '🥗',
+      destinatario: 'Ao(À) Nutricionista Clínico(a) / Especialista em Comportamento Alimentar',
+      motivo: 'Acompanhamento nutricional especializado e reeducação da relação com a alimentação e autoimagem.',
+      historico: 'Identificou-se padrão recorrente de comer emocional, episódios de compulsão alimentar seguidos de culpa intensa, alternância com restrições severas e distorções cognitivas sobre a percepção corporal.',
+      hipoteses: 'Comportamento alimentar desadaptativo com características de Transtorno de Compulsão Alimentar (CID-10: F50.8) / Relação disfuncional com a comida.',
+      solicitacao: 'Encaminho para elaboração de plano alimentar flexível, com abordagem sem dietas punitivas, trabalhando em consonância com a reestruturação cognitiva das crenças nucleares.'
+    },
+    fonoaudiologia: {
+      label: 'Fonoaudiologia (Comunicação / PAC)',
+      icon: '🗣️',
+      destinatario: 'Ao(À) Fonoaudiólogo(a) Clínico(a)',
+      motivo: 'Avaliação fonoaudiológica e triagem de Processamento Auditivo Central (PAC) e comunicação verbal.',
+      historico: 'Constatou-se insegurança comunicativa, trocas fonêmicas ocasionais, queixa de dificuldade de compreensão em ambientes ruidosos e reflexos na socialização.',
+      hipoteses: 'Necessidade de investigação do processamento auditivo central e intervenção na expressividade verbal.',
+      solicitacao: 'Solicito avaliação fonoaudiológica detalhada e conduta terapêutica correspondente para fortalecimento da comunicação e redução da ansiedade social associada.'
+    },
+    clinica_geral: {
+      label: 'Clínica Geral (Rastreio Orgânico)',
+      icon: '🩺',
+      destinatario: 'Ao(À) Médico(a) Clínico(a) Geral',
+      motivo: 'Investigação de causas orgânicas e metabólicas subjacentes a queixas de fadiga crônica, palpitações e alterações do sono.',
+      historico: 'O(A) paciente relata cansaço extremo constante, desânimo, queixas somáticas difusas e oscilações do padrão de sono e apetite sem causa aparente evidente.',
+      hipoteses: 'Necessidade de rastreio clínico geral (tireoide, dosagens hormonais, vitaminas D/B12, ferro, hemograma) para diagnóstico diferencial com quadros depressivos/ansiosos.',
+      solicitacao: 'Solicito propedêutica clínica e exames laboratoriais pertinentes para afastar etiologias orgânicas.'
+    },
+    personalizado: {
+      label: 'Especialidade Personalizada',
+      icon: '✨',
+      destinatario: 'Aos Cuidados do(a) Profissional de Saúde',
+      motivo: 'Encaminhamento interdisciplinar para avaliação e conduta especializada.',
+      historico: 'O(A) paciente encontra-se em acompanhamento psicoterápico regular, apresentando demandas que se beneficiarão de suporte especializado conjunto.',
+      hipoteses: 'Avaliação clínica complementar necessária.',
+      solicitacao: 'Encaminho o(a) paciente para sua criteriosa avaliação e conduta profissional, mantendo-me à disposição para comunicação interdisciplinar.'
+    }
+  };
+
+  const [encaminhamentoPreset, setEncaminhamentoPreset] = useState<EncaminhamentoPresetKey>('psiquiatria');
+  const [encaminhamentoDestinatario, setEncaminhamentoDestinatario] = useState<string>('Ao(À) Médico(a) Psiquiatra');
+  const [encaminhamentoMotivo, setEncaminhamentoMotivo] = useState<string>('Avaliação clínica especializada com foco em suporte psicofarmacológico para manejo de sintomas de ansiedade aguda e oscilação tímica.');
+  const [encaminhamentoHistorico, setEncaminhamentoHistorico] = useState<string>('O(A) paciente realiza acompanhamento psicoterápico sob meus cuidados. No decurso dos atendimentos, constatou-se a presença de sintomas de ansiedade aguda com manifestações somáticas (taquicardia, tensão muscular, insônia inicial) e episódios de desânimo acentuado com prejuízo funcional em suas atividades cotidianas e laborais.');
+  const [encaminhamentoHipoteses, setEncaminhamentoHipoteses] = useState<string>('Sintomatologia compatível com Transtorno de Ansiedade Generalizada (CID-10: F41.1) e Episódio Depressivo Moderado (CID-10: F32.1).');
+  const [encaminhamentoSolicitacao, setEncaminhamentoSolicitacao] = useState<string>('Encaminho o(a) paciente para avaliação psiquiátrica especializada, diagnóstico diferencial e eventual introdução/ajuste medicamentoso, colocando-me à inteira disposição para discussão e acompanhamento interdisciplinar do caso clínico.');
 
   const [reembolsoMes, setReembolsoMes] = useState<string>('Junho de 2026');
   const [reembolsoPrecoTotal, setReembolsoPrecoTotal] = useState<string>('600,00');
@@ -669,6 +1367,8 @@ Registro Profissional: CRP nº {crp}
         return 'Laudo Psicológico';
       case 'atestado':
         return 'Atestado Psicológico';
+      case 'encaminhamento':
+        return 'Encaminhamento Psicológico';
       case 'reembolso':
         return 'Pedido de Reembolso';
       case 'credenciamento':
@@ -823,6 +1523,39 @@ Por ser a exata expressão técnica e confidencial da verdade, firmo este atesta
 
 Local: _________________________________, Data: _____/_____/_________`;
 
+      case 'encaminhamento':
+        return `ENCAMINHAMENTO PSICOLÓGICO CLÍNICO
+(Em conformidade com a Resolução CFP nº 06/2019 e Código de Ética Profissional)
+
+1. DESTINATÁRIO
+${encaminhamentoDestinatario || 'Ao(À) Profissional Especialista'}
+
+2. IDENTIFICAÇÃO DO(A) PACIENTE
+Nome do(a) Paciente: ${formattedPatient}
+CPF: ${formattedCpf}
+${representativeName ? `Responsável Legal: ${formattedRep} (CPF: ${formattedRepCpf})\n` : ''}
+3. IDENTIFICAÇÃO DO(A) EMISSOR(A)
+Psicólogo(a) Responsável: ${psychologistName}
+Registro Profissional: CRP nº ${psychologistCrp}
+Local de Atendimento: ${consultationCity}
+
+4. HISTÓRICO DO ACOMPANHAMENTO CLÍNICO
+${encaminhamentoHistorico}
+
+5. MOTIVO DO ENCAMINHAMENTO E HIPÓTESES DIAGNÓSTICAS
+${encaminhamentoMotivo}
+${encaminhamentoHipoteses ? `\nHipóteses Diagnósticas / Sintomatologia de Relevo:\n${encaminhamentoHipoteses}` : ''}
+
+6. SOLICITAÇÃO E CONDUTA INTERDISCIPLINAR SUGERIDA
+${encaminhamentoSolicitacao}
+
+7. CONSIDERAÇÕES ÉTICAS E DE SIGILO PROFISSIONAL
+O presente documento tem finalidade estritamente assistencial de cooperação em saúde multiprofissional. As informações aqui contidas foram previamente acordadas e autorizadas pelo(a) paciente (ou responsável legal), resguardando-se o sigilo profissional nos termos do Código de Ética do Psicólogo e da Lei Geral de Proteção de Dados (LGPD).
+
+Coloco-me à disposição para contato direto e discussão interdisciplinar do caso clínico.
+
+${consultationCity}, ${customDate || '_____/_____/_________'}.`;
+
       case 'reembolso':
         return `DECLARAÇÃO DE TRATAMENTO PSICOLÓGICO E PEDIDO DE REEMBOLSO COM DESTAQUE
 
@@ -873,17 +1606,19 @@ Local: _________________________________, Data: _____/_____/_________`;
 
       case 'meus_modelos': {
         const currentTmp = customTemplates.find(t => t.id === selectedCustomTemplateId);
-        if (!currentTmp) return 'Nenhum modelo personalizado selecionado. Por favor, crie ou selecione um modelo na barra lateral.';
+        if (!currentTmp) return 'Nenhum modelo selecionado. Por favor, escolha ou crie um modelo na lista.';
         
         let text = currentTmp.content;
         
-        // Auto-replace variables
+        // Auto-replace dynamic variables
         text = text.replace(/{paciente}/g, formattedPatient);
         text = text.replace(/{cpf}/g, formattedCpf);
         text = text.replace(/{psicologo}/g, psychologistName || '[Nome do Profissional]');
         text = text.replace(/{crp}/g, psychologistCrp || '[CRP nº]');
-        text = text.replace(/{data}/g, '_____/_____/_________');
-        text = text.replace(/{cidade}/g, '___________________________');
+        text = text.replace(/{data}/g, customDate || '_____/_____/_________');
+        text = text.replace(/{cidade}/g, consultationCity || '___________________________');
+        text = text.replace(/{rep_nome}/g, formattedRep || '[Nome do Responsável]');
+        text = text.replace(/{rep_cpf}/g, formattedRepCpf || '[CPF do Responsável]');
         
         return text;
       }
@@ -960,66 +1695,88 @@ Local: _________________________________, Data: _____/_____/_________`;
     const headerTitle = getDocumentCategoryTitle();
     const documentTitle = `${headerTitle} - ${patients.find(p => p.id === selectedPatientId)?.name || 'Paciente'}`;
     
-    const fullHtml = `
-      <!DOCTYPE html>
-      <html>
-      <head>
-        <meta charset="utf-8">
-        <title>${documentTitle}</title>
-        <style>
-          body {
-            margin: 0;
-            padding: 0;
-            background-color: #f3f4f6;
-            display: flex;
-            justify-content: center;
-          }
-          .page {
-            background: white;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-            margin: 20px auto;
-          }
-          @media print {
-            body {
-              background-color: white;
-            }
-            .page {
-              box-shadow: none;
-              margin: 0;
-            }
-            .no-print {
-              display: none !important;
-            }
-          }
-          .btn-print {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            padding: 10px 20px;
-            background-color: #1e293b;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-family: Arial, sans-serif;
-            font-size: 14px;
-            font-weight: bold;
-            cursor: pointer;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            z-index: 9999;
-          }
-          .btn-print:hover {
-            background-color: #0f172a;
-          }
-        </style>
-      </head>
-      <body>
-        <button class="btn-print no-print" onclick="window.print()">🖨️ Imprimir / Salvar PDF</button>
-        <div class="page">
-          ${printContent}
-        </div>
-      </body>
-      </html>
-    `;
+    const fullHtml = `<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>${documentTitle}</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+    }
+    @page {
+      size: A4 portrait;
+      margin: 0;
+    }
+    html, body {
+      margin: 0;
+      padding: 0;
+      background-color: #f1f5f9;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+    @media screen {
+      body {
+        display: flex;
+        justify-content: center;
+        padding: 24px 0;
+      }
+      .page-sheet {
+        background: white;
+        box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+        border-radius: 4px;
+      }
+    }
+    @media print {
+      body {
+        background-color: white;
+        padding: 0;
+        margin: 0;
+      }
+      .page-sheet {
+        box-shadow: none;
+        border-radius: 0;
+        margin: 0;
+      }
+      .no-print {
+        display: none !important;
+      }
+    }
+    .btn-print {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      padding: 12px 24px;
+      background-color: #0f172a;
+      color: #ffffff;
+      border: none;
+      border-radius: 12px;
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 14px;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+      z-index: 99999;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .btn-print:hover {
+      background-color: #1e293b;
+      transform: translateY(-1px);
+    }
+  </style>
+</head>
+<body>
+  <button class="btn-print no-print" onclick="window.print()">🖨️ Imprimir / Salvar PDF</button>
+  <div class="page-sheet">
+    ${printContent}
+  </div>
+</body>
+</html>`;
     
     const blob = new Blob([fullHtml], { type: 'text/html;charset=utf-8' });
     const url = URL.createObjectURL(blob);
@@ -1058,10 +1815,35 @@ Local: _________________________________, Data: _____/_____/_________`;
       const iframeDoc = iframe.contentWindow?.document || iframe.contentDocument;
       if (iframeDoc) {
         iframeDoc.open();
-        iframeDoc.write('<html><head><title>Imprimir Documento</title>');
-        iframeDoc.write('</head><body style="margin:0;padding:0;">');
-        iframeDoc.write(printContent);
-        iframeDoc.write('</body></html>');
+        iframeDoc.write(`<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <title>Imprimir Documento</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+    }
+    @page {
+      size: A4 portrait;
+      margin: 0;
+    }
+    html, body {
+      margin: 0 !important;
+      padding: 0 !important;
+      background: #ffffff !important;
+      color: #000000 !important;
+      width: 210mm;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+  </style>
+</head>
+<body style="margin:0;padding:0;">
+  ${printContent}
+</body>
+</html>`);
         iframeDoc.close();
         
         // Wait for image loading (like customLogo) inside iframe
@@ -1217,8 +1999,10 @@ Content-Location: file:///document.html
 </head>
 <body>
   ${useLogoAsWatermark ? `
-  <div style="position: absolute; top: 120px; left: 0; width: 100%; height: 800px; z-index: -1000; opacity: ${watermarkOpacity}; filter: alpha(opacity=${watermarkOpacity * 100}); text-align: center; vertical-align: middle; pointer-events: none; display: block;">
-    <img src="logo_image.png" style="width: ${watermarkSize}px; opacity: ${watermarkOpacity}; filter: alpha(opacity=${watermarkOpacity * 100}); margin-top: 150px;" />
+  <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; width: 100%; height: 100%; min-height: 850px; z-index: -1000; opacity: ${watermarkOpacity}; filter: alpha(opacity=${watermarkOpacity * 100}); text-align: center; vertical-align: middle; pointer-events: none; display: table;">
+    <div style="display: table-cell; vertical-align: middle; text-align: center; width: 100%; height: 100%;">
+      <img src="logo_image.png" style="width: ${watermarkSize}px; max-width: 80%; max-height: 80%; object-fit: contain; opacity: ${watermarkOpacity}; filter: alpha(opacity=${watermarkOpacity * 100}); margin: 0 auto; display: inline-block; vertical-align: middle;" />
+    </div>
   </div>
   ` : ''}
 
@@ -1626,6 +2410,23 @@ ${logoBase64}
             >
               <ClipboardCheck className="w-4 h-4 shrink-0 text-slate-500" />
               <span>Atestado Terapp</span>
+            </button>
+
+            {/* Category: Encaminhamento */}
+            <button
+              id="tab-btn-encaminhamento"
+              onClick={() => setActiveTab('encaminhamento')}
+              className={`w-full text-left p-3 rounded-2xl flex items-center justify-between transition-all text-xs font-bold cursor-pointer ${
+                activeTab === 'encaminhamento'
+                  ? 'bg-indigo-50 border border-indigo-100 text-indigo-700'
+                  : 'hover:bg-slate-50 text-slate-600'
+              }`}
+            >
+              <div className="flex items-center gap-2.5">
+                <Send className="w-4 h-4 shrink-0 text-indigo-600" />
+                <span>Encaminhamento</span>
+              </div>
+              <span className="px-1.5 py-0.5 text-[8.5px] bg-indigo-100 text-indigo-700 rounded-md font-extrabold uppercase">CFP</span>
             </button>
 
             {/* Category: Reembolso de Convenios */}
@@ -2077,6 +2878,116 @@ ${logoBase64}
                 </div>
               )}
 
+              {/* Encaminhamento Form Section */}
+              {activeTab === 'encaminhamento' && (
+                <div className="bg-slate-50 p-3.5 rounded-2xl border border-slate-100 space-y-3">
+                  <div className="flex items-center justify-between border-b border-slate-150 pb-1.5">
+                    <span className="text-[10px] font-extrabold text-indigo-700 uppercase tracking-widest block">
+                      Encaminhamento Clínico
+                    </span>
+                    <span className="text-[8.5px] bg-indigo-100 text-indigo-800 px-1.5 py-0.5 rounded font-bold">
+                      Res. CFP 06/2019
+                    </span>
+                  </div>
+
+                  {/* Quick Preset Buttons */}
+                  <div>
+                    <label className="block text-[9px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">
+                      Modelos Pré-definidos por Especialidade:
+                    </label>
+                    <div className="grid grid-cols-2 gap-1.5">
+                      {(Object.keys(ENCAMINHAMENTO_PRESETS) as EncaminhamentoPresetKey[]).map((key) => {
+                        const p = ENCAMINHAMENTO_PRESETS[key];
+                        const isSelected = encaminhamentoPreset === key;
+                        return (
+                          <button
+                            key={key}
+                            type="button"
+                            onClick={() => {
+                              setEncaminhamentoPreset(key);
+                              setEncaminhamentoDestinatario(p.destinatario);
+                              setEncaminhamentoMotivo(p.motivo);
+                              setEncaminhamentoHistorico(p.historico);
+                              setEncaminhamentoHipoteses(p.hipoteses);
+                              setEncaminhamentoSolicitacao(p.solicitacao);
+                            }}
+                            className={`p-2 rounded-xl text-left border transition-all text-[10px] font-bold flex items-center gap-1.5 cursor-pointer ${
+                              isSelected
+                                ? 'bg-indigo-600 text-white border-indigo-600 shadow-xs'
+                                : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-100'
+                            }`}
+                          >
+                            <span className="text-xs">{p.icon}</span>
+                            <span className="truncate">{p.label.split(' ')[0]} {p.label.split(' ')[1] || ''}</span>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-[9px] font-bold text-slate-400 uppercase tracking-wider mb-0.5">
+                      1. Destinatário / Colega Profissional
+                    </label>
+                    <input
+                      type="text"
+                      value={encaminhamentoDestinatario}
+                      onChange={(e) => setEncaminhamentoDestinatario(e.target.value)}
+                      placeholder="Ex: Ao(À) Médico(a) Psiquiatra ou Dr. Fulano de Tal"
+                      className="w-full px-2.5 py-1.5 border border-slate-200 bg-white rounded-lg text-xs font-bold text-slate-800 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-[9px] font-bold text-slate-400 uppercase tracking-wider mb-0.5">
+                      2. Motivo do Encaminhamento
+                    </label>
+                    <textarea
+                      rows={2}
+                      value={encaminhamentoMotivo}
+                      onChange={(e) => setEncaminhamentoMotivo(e.target.value)}
+                      className="w-full p-2 border border-slate-200 bg-white rounded-lg text-xs font-medium text-slate-700 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-[9px] font-bold text-slate-400 uppercase tracking-wider mb-0.5">
+                      3. Histórico do Acompanhamento Clínico
+                    </label>
+                    <textarea
+                      rows={3}
+                      value={encaminhamentoHistorico}
+                      onChange={(e) => setEncaminhamentoHistorico(e.target.value)}
+                      className="w-full p-2 border border-slate-200 bg-white rounded-lg text-xs font-medium text-slate-700 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-[9px] font-bold text-slate-400 uppercase tracking-wider mb-0.5">
+                      4. Hipóteses Diagnósticas / Sintomas de Relevo
+                    </label>
+                    <textarea
+                      rows={2}
+                      value={encaminhamentoHipoteses}
+                      onChange={(e) => setEncaminhamentoHipoteses(e.target.value)}
+                      className="w-full p-2 border border-slate-200 bg-white rounded-lg text-xs font-medium text-slate-700 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-[9px] font-bold text-slate-400 uppercase tracking-wider mb-0.5">
+                      5. Solicitação e Conduta Interdisciplinar
+                    </label>
+                    <textarea
+                      rows={2}
+                      value={encaminhamentoSolicitacao}
+                      onChange={(e) => setEncaminhamentoSolicitacao(e.target.value)}
+                      className="w-full p-2 border border-slate-200 bg-white rounded-lg text-xs font-medium text-slate-700 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                    />
+                  </div>
+                </div>
+              )}
+
               {/* Laudo Clinico Customization */}
               {activeTab === 'laudos' && (
                 <div className="bg-slate-50 p-3 rounded-2xl border border-slate-100 space-y-2">
@@ -2209,119 +3120,325 @@ ${logoBase64}
               )}
 
               {/* Meus Modelos variables / Custom Template Editor */}
-              {activeTab === 'meus_modelos' && (
-                <div className="bg-indigo-50/50 p-4 rounded-2xl border border-indigo-100 space-y-3">
-                  <div className="flex gap-1 items-center">
-                    <Sparkles className="w-3.5 h-3.5 text-indigo-600" />
-                    <span className="text-[10px] font-extrabold text-indigo-700 block uppercase tracking-wider">Meus Modelos de Documento</span>
-                  </div>
-                  
-                  {/* Select custom template */}
-                  <div>
-                    <label className="block text-[9px] font-bold text-slate-400 uppercase tracking-wider mb-0.5">
-                      Selecione o Modelo para Usar / Editar
-                    </label>
-                    <div className="flex gap-1.5">
-                      <select
-                        value={selectedCustomTemplateId}
-                        onChange={(e) => setSelectedCustomTemplateId(e.target.value)}
-                        className="w-full px-2.5 py-1.5 border border-indigo-200 bg-white rounded-lg text-xs font-semibold text-slate-800 focus:outline-none focus:ring-1 focus:ring-indigo-500"
-                      >
-                        {customTemplates.map(t => (
-                          <option key={t.id} value={t.id}>{t.title}</option>
-                        ))}
-                      </select>
-                      
-                      {customTemplates.length > 1 && (
+              {activeTab === 'meus_modelos' && (() => {
+                const currentTmp = customTemplates.find(t => t.id === selectedCustomTemplateId);
+                const categoriesList = [
+                  'Todos',
+                  'Encaminhamentos',
+                  'Laudos e Relatórios',
+                  'Atestados e Declarações',
+                  'Contratos e Termos',
+                  'Financeiro e Convênios',
+                  'Personalizados'
+                ];
+
+                const filteredTemplates = customTemplates.filter(t => {
+                  const matchCategory = templateCategoryFilter === 'Todos' || (t.category || 'Personalizados') === templateCategoryFilter;
+                  const matchSearch = !templateSearchQuery.trim() || 
+                    t.title.toLowerCase().includes(templateSearchQuery.toLowerCase()) || 
+                    t.content.toLowerCase().includes(templateSearchQuery.toLowerCase());
+                  return matchCategory && matchSearch;
+                });
+
+                const availableTags = [
+                  { tag: '{paciente}', label: 'Paciente', desc: 'Nome completo do paciente' },
+                  { tag: '{cpf}', label: 'CPF', desc: 'CPF do paciente' },
+                  { tag: '{psicologo}', label: 'Psicólogo(a)', desc: 'Seu nome profissional' },
+                  { tag: '{crp}', label: 'CRP', desc: 'Seu número de CRP' },
+                  { tag: '{cidade}', label: 'Cidade', desc: 'Cidade do atendimento' },
+                  { tag: '{data}', label: 'Data', desc: 'Data de emissão' },
+                  { tag: '{rep_nome}', label: 'Resp. Legal', desc: 'Nome do responsável (menor)' },
+                  { tag: '{rep_cpf}', label: 'CPF Resp.', desc: 'CPF do responsável legal' }
+                ];
+
+                const handleInsertTagAtEnd = (tag: string) => {
+                  if (!currentTmp) return;
+                  const updated = customTemplates.map(t => {
+                    if (t.id === selectedCustomTemplateId) {
+                      return { ...t, content: t.content + ' ' + tag };
+                    }
+                    return t;
+                  });
+                  setCustomTemplates(updated);
+                  showToast(`Marcador ${tag} inserido!`);
+                };
+
+                return (
+                  <div className="bg-indigo-50/60 p-4 rounded-3xl border border-indigo-100/90 space-y-3.5" id="meus-modelos-editor-box">
+                    
+                    {/* Toast Notification Banner */}
+                    {templateActionToast && (
+                      <div className="p-2.5 bg-emerald-600 text-white rounded-xl text-xs font-bold flex items-center justify-between shadow-sm animate-pulse">
+                        <span className="flex items-center gap-1.5">
+                          <Check className="w-4 h-4 shrink-0" />
+                          {templateActionToast}
+                        </span>
+                        <button onClick={() => setTemplateActionToast(null)} className="text-white hover:text-slate-200 text-xs font-black">×</button>
+                      </div>
+                    )}
+
+                    {/* Header with Title & Action shortcuts */}
+                    <div className="flex items-center justify-between">
+                      <div className="flex gap-1.5 items-center">
+                        <Sparkles className="w-4 h-4 text-indigo-600" />
+                        <span className="text-xs font-black text-indigo-900 uppercase tracking-wider">
+                          Central de Modelos Clínicos
+                        </span>
+                      </div>
+                      <span className="text-[10px] font-extrabold px-2 py-0.5 bg-indigo-100 text-indigo-800 rounded-full">
+                        {customTemplates.length} Modelos Disponíveis
+                      </span>
+                    </div>
+
+                    {/* Category Filter Pills */}
+                    <div className="space-y-1">
+                      <label className="block text-[9px] font-bold text-slate-500 uppercase tracking-wider">
+                        Filtrar por Categoria:
+                      </label>
+                      <div className="flex flex-wrap gap-1">
+                        {categoriesList.map(cat => {
+                          const isSelected = templateCategoryFilter === cat;
+                          const count = cat === 'Todos' 
+                            ? customTemplates.length 
+                            : customTemplates.filter(t => (t.category || 'Personalizados') === cat).length;
+                          return (
+                            <button
+                              key={cat}
+                              type="button"
+                              onClick={() => setTemplateCategoryFilter(cat)}
+                              className={`px-2 py-1 rounded-lg text-[10px] font-bold transition-all flex items-center gap-1 cursor-pointer ${
+                                isSelected
+                                  ? 'bg-indigo-600 text-white shadow-xs'
+                                  : 'bg-white text-slate-600 border border-slate-200 hover:bg-indigo-50/50'
+                              }`}
+                            >
+                              <span>{cat}</span>
+                              <span className={`text-[9px] px-1 rounded-full ${isSelected ? 'bg-indigo-700 text-indigo-100' : 'bg-slate-100 text-slate-600'}`}>
+                                {count}
+                              </span>
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+
+                    {/* Search Input */}
+                    <div className="relative">
+                      <Search className="w-3.5 h-3.5 text-slate-400 absolute left-2.5 top-2.5" />
+                      <input
+                        type="text"
+                        placeholder="Buscar modelo por título ou palavras-chave..."
+                        value={templateSearchQuery}
+                        onChange={(e) => setTemplateSearchQuery(e.target.value)}
+                        className="w-full pl-8 pr-7 py-1.5 bg-white border border-indigo-200 rounded-xl text-xs font-medium text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500 placeholder-slate-400"
+                      />
+                      {templateSearchQuery && (
                         <button
                           type="button"
-                          onClick={() => {
-                            const remaining = customTemplates.filter(t => t.id !== selectedCustomTemplateId);
-                            setCustomTemplates(remaining);
-                            setSelectedCustomTemplateId(remaining[0].id);
-                          }}
-                          className="px-2 py-1 bg-red-50 hover:bg-red-100 text-red-600 rounded-lg text-[10px] font-bold transition-all"
-                          title="Excluir este modelo"
+                          onClick={() => setTemplateSearchQuery('')}
+                          className="absolute right-2.5 top-2 text-slate-400 hover:text-slate-600 text-xs font-bold"
                         >
-                          Excluir
+                          ✕
                         </button>
                       )}
                     </div>
-                  </div>
-
-                  {/* Edit Template Title */}
-                  <div>
-                    <label className="block text-[9px] font-bold text-slate-400 uppercase tracking-wider mb-0.5">
-                      Título do Modelo
-                    </label>
-                    <input
-                      type="text"
-                      value={customTemplates.find(t => t.id === selectedCustomTemplateId)?.title || ''}
-                      onChange={(e) => {
-                        const updated = customTemplates.map(t => {
-                          if (t.id === selectedCustomTemplateId) {
-                            return { ...t, title: e.target.value };
-                          }
-                          return t;
-                        });
-                        setCustomTemplates(updated);
-                      }}
-                      className="w-full px-2.5 py-1.5 border border-slate-200 bg-white rounded-lg text-xs font-bold text-slate-800 focus:outline-none focus:ring-1 focus:ring-indigo-500"
-                    />
-                  </div>
-
-                  {/* Edit Template Content */}
-                  <div>
-                    <label className="block text-[9px] font-bold text-slate-400 uppercase tracking-wider mb-0.5">
-                      Texto do Modelo (Substituição Automática)
-                    </label>
-                    <textarea
-                      rows={12}
-                      value={customTemplates.find(t => t.id === selectedCustomTemplateId)?.content || ''}
-                      onChange={(e) => {
-                        const updated = customTemplates.map(t => {
-                          if (t.id === selectedCustomTemplateId) {
-                            return { ...t, content: e.target.value };
-                          }
-                          return t;
-                        });
-                        setCustomTemplates(updated);
-                      }}
-                      className="w-full p-2.5 border border-slate-200 bg-white rounded-lg text-xs font-mono text-slate-700 leading-relaxed focus:outline-none focus:ring-1 focus:ring-indigo-500"
-                    />
-                    <div className="mt-1.5 p-2 bg-indigo-50 hover:bg-indigo-100/60 rounded-lg text-[9px] text-indigo-700 font-sans space-y-0.5 leading-relaxed">
-                      <p className="font-bold">💡 Marcadores:</p>
-                      <p><code className="bg-white/80 px-1 py-0.2 rounded font-semibold text-indigo-900">{`{paciente}`}</code>: Substitui pelo paciente.</p>
-                      <p><code className="bg-white/80 px-1 py-0.2 rounded font-semibold text-indigo-900">{`{cpf}`}</code>: CPF do paciente.</p>
-                      <p><code className="bg-white/80 px-1 py-0.2 rounded font-semibold text-indigo-900">{`{psicologo}`}</code>: Nome do Psicólogo.</p>
-                      <p><code className="bg-white/80 px-1 py-0.2 rounded font-semibold text-indigo-900">{`{crp}`}</code>: Registro do CRP.</p>
-                      <p><code className="bg-white/80 px-1 py-0.2 rounded font-semibold text-indigo-900">{`{cidade}`}</code>: Cidade.</p>
-                      <p><code className="bg-white/80 px-1 py-0.2 rounded font-semibold text-indigo-900">{`{data}`}</code>: Data selecionada.</p>
+                    
+                    {/* Select Model Dropdown */}
+                    <div>
+                      <div className="flex justify-between items-center mb-1">
+                        <label className="block text-[9px] font-bold text-slate-500 uppercase tracking-wider">
+                          Selecionar Modelo ({filteredTemplates.length}):
+                        </label>
+                      </div>
+                      <select
+                        value={selectedCustomTemplateId}
+                        onChange={(e) => setSelectedCustomTemplateId(e.target.value)}
+                        className="w-full px-3 py-2 border border-indigo-200 bg-white rounded-xl text-xs font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500 shadow-2xs"
+                      >
+                        {filteredTemplates.map(t => (
+                          <option key={t.id} value={t.id}>
+                            [{t.category || 'Geral'}] {t.title}
+                          </option>
+                        ))}
+                      </select>
                     </div>
-                  </div>
 
-                  {/* Create New template Button */}
-                  <div className="grid grid-cols-1 gap-2">
-                    <button
-                      type="button"
-                      onClick={() => {
-                        const newId = `custom_template_${Date.now()}`;
-                        const newTemplate: CustomTemplate = {
-                          id: newId,
-                          title: `Novo Modelo ${customTemplates.length + 1}`,
-                          content: `TÍTULO DO MEU NOVO MODELO\n\nPaciente: {paciente}\nCPF: {cpf}\n\nEscreva sua informação clínica ou declaração personalizada aqui...\n\n{cidade}, {data}.\n\n___________________________________________________________\n{psicologo}\nCRP nº {crp}`
-                        };
-                        setCustomTemplates([...customTemplates, newTemplate]);
-                        setSelectedCustomTemplateId(newId);
-                      }}
-                      className="w-full py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-bold transition-all text-center flex items-center justify-center gap-1 cursor-pointer"
-                    >
-                      <Plus className="w-3.5 h-3.5" />
-                      <span>Criar Novo Modelo em Branco</span>
-                    </button>
+                    {/* Quick Management Buttons Row */}
+                    <div className="grid grid-cols-3 gap-1.5 pt-1">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const newId = `custom_template_${Date.now()}`;
+                          const newTemplate: CustomTemplate = {
+                            id: newId,
+                            title: `Novo Modelo Personalizado ${customTemplates.length + 1}`,
+                            category: templateCategoryFilter !== 'Todos' ? templateCategoryFilter : 'Personalizados',
+                            content: `TÍTULO DO DOCUMENTO\n\nPaciente: {paciente}\nCPF: {cpf}\n\nTexto clínico ou declaração livre...\n\n{cidade}, {data}.\n\n___________________________________________________________\n{psicologo}\nCRP nº {crp}`
+                          };
+                          setCustomTemplates([newTemplate, ...customTemplates]);
+                          setSelectedCustomTemplateId(newId);
+                          showToast('Novo modelo em branco criado!');
+                        }}
+                        className="py-1.5 px-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-[10px] font-bold transition-all flex items-center justify-center gap-1 shadow-2xs cursor-pointer"
+                        title="Criar novo modelo em branco"
+                      >
+                        <Plus className="w-3 h-3" />
+                        <span>Novo Modelo</span>
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => handleDuplicateTemplate(selectedCustomTemplateId)}
+                        className="py-1.5 px-2 bg-white hover:bg-slate-100 border border-indigo-200 text-indigo-700 rounded-xl text-[10px] font-bold transition-all flex items-center justify-center gap-1 shadow-2xs cursor-pointer"
+                        title="Duplica este modelo base como uma cópia editável exclusiva"
+                      >
+                        <CopyCheck className="w-3 h-3" />
+                        <span>Duplicar / Clonar</span>
+                      </button>
+
+                      <button
+                        type="button"
+                        disabled={customTemplates.length <= 1}
+                        onClick={() => {
+                          if (confirm(`Deseja realmente remover o modelo "${currentTmp?.title}"?`)) {
+                            const remaining = customTemplates.filter(t => t.id !== selectedCustomTemplateId);
+                            setCustomTemplates(remaining);
+                            if (remaining.length > 0) {
+                              setSelectedCustomTemplateId(remaining[0].id);
+                            }
+                            showToast('Modelo excluído!');
+                          }
+                        }}
+                        className={`py-1.5 px-2 rounded-xl text-[10px] font-bold transition-all flex items-center justify-center gap-1 ${
+                          customTemplates.length <= 1
+                            ? 'bg-slate-100 text-slate-400 cursor-not-allowed'
+                            : 'bg-red-50 hover:bg-red-100 text-red-600 border border-red-200 cursor-pointer'
+                        }`}
+                        title="Excluir o modelo atual"
+                      >
+                        <span>Excluir</span>
+                      </button>
+                    </div>
+
+                    {/* Secondary Actions Bar (Restore Base / Export JSON) */}
+                    <div className="flex items-center justify-between pt-1 border-t border-indigo-100 text-[10px]">
+                      <button
+                        type="button"
+                        onClick={handleRestoreBaseTemplates}
+                        className="text-indigo-700 hover:text-indigo-900 font-bold flex items-center gap-1 hover:underline cursor-pointer"
+                        title="Restaura modelos base que porventura tenham sido removidos"
+                      >
+                        <RefreshCw className="w-3 h-3" />
+                        <span>Restaurar Catálogo Base</span>
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={handleExportTemplatesJson}
+                        className="text-slate-600 hover:text-slate-900 font-bold flex items-center gap-1 hover:underline cursor-pointer"
+                        title="Exportar arquivo JSON com todos os seus modelos"
+                      >
+                        <Download className="w-3 h-3" />
+                        <span>Exportar Backup (JSON)</span>
+                      </button>
+                    </div>
+
+                    {/* Edit Template Title & Category */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-2 pt-1">
+                      <div>
+                        <label className="block text-[9px] font-bold text-slate-500 uppercase tracking-wider mb-0.5">
+                          Título do Modelo
+                        </label>
+                        <input
+                          type="text"
+                          value={currentTmp?.title || ''}
+                          onChange={(e) => {
+                            const updated = customTemplates.map(t => {
+                              if (t.id === selectedCustomTemplateId) {
+                                return { ...t, title: e.target.value };
+                              }
+                              return t;
+                            });
+                            setCustomTemplates(updated);
+                          }}
+                          className="w-full px-2.5 py-1.5 border border-slate-200 bg-white rounded-lg text-xs font-bold text-slate-800 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-[9px] font-bold text-slate-500 uppercase tracking-wider mb-0.5">
+                          Categoria
+                        </label>
+                        <select
+                          value={currentTmp?.category || 'Personalizados'}
+                          onChange={(e) => {
+                            const updated = customTemplates.map(t => {
+                              if (t.id === selectedCustomTemplateId) {
+                                return { ...t, category: e.target.value };
+                              }
+                              return t;
+                            });
+                            setCustomTemplates(updated);
+                          }}
+                          className="w-full px-2.5 py-1.5 border border-slate-200 bg-white rounded-lg text-xs font-bold text-slate-800 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                        >
+                          {categoriesList.filter(c => c !== 'Todos').map(c => (
+                            <option key={c} value={c}>{c}</option>
+                          ))}
+                        </select>
+                      </div>
+                    </div>
+
+                    {/* Interactive Tag Inserter Chips */}
+                    <div>
+                      <div className="flex items-center justify-between mb-1">
+                        <label className="block text-[9px] font-bold text-slate-500 uppercase tracking-wider">
+                          🏷️ Inserir Marcadores Dinâmicos (Clique para adicionar):
+                        </label>
+                      </div>
+                      <div className="flex flex-wrap gap-1">
+                        {availableTags.map(item => (
+                          <button
+                            key={item.tag}
+                            type="button"
+                            onClick={() => handleInsertTagAtEnd(item.tag)}
+                            className="px-2 py-0.5 bg-white hover:bg-indigo-100/70 text-indigo-800 border border-indigo-200 rounded-md text-[10px] font-mono font-bold transition-all cursor-pointer shadow-2xs hover:scale-102"
+                            title={`${item.label}: ${item.desc}`}
+                          >
+                            {item.tag}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Edit Template Content */}
+                    <div>
+                      <div className="flex items-center justify-between mb-0.5">
+                        <label className="block text-[9px] font-bold text-slate-500 uppercase tracking-wider">
+                          Texto do Modelo (Edição Livre)
+                        </label>
+                        <span className="text-[9px] font-semibold text-emerald-600">
+                          ✓ Salvo automaticamente
+                        </span>
+                      </div>
+                      <textarea
+                        rows={13}
+                        value={currentTmp?.content || ''}
+                        onChange={(e) => {
+                          const updated = customTemplates.map(t => {
+                            if (t.id === selectedCustomTemplateId) {
+                              return { ...t, content: e.target.value };
+                            }
+                            return t;
+                          });
+                          setCustomTemplates(updated);
+                        }}
+                        className="w-full p-3 border border-slate-200 bg-white rounded-xl text-xs font-mono text-slate-700 leading-relaxed focus:outline-none focus:ring-2 focus:ring-indigo-500 shadow-2xs"
+                      />
+                    </div>
 
                     {/* Drag-and-drop or file selector to import documents */}
-                    <div className={`border border-dashed rounded-xl p-3 text-center relative group transition-all cursor-pointer ${isImporting ? 'bg-indigo-50/30 border-indigo-400' : 'bg-white border-indigo-200 hover:border-indigo-400'}`}>
+                    <div className={`border border-dashed rounded-2xl p-3 text-center relative group transition-all cursor-pointer ${isImporting ? 'bg-indigo-50/30 border-indigo-400' : 'bg-white border-indigo-200 hover:border-indigo-400'}`}>
                       <input
                         type="file"
                         accept=".txt,.md,.pdf"
@@ -2341,12 +3458,13 @@ ${logoBase64}
                                   const newTemplate: CustomTemplate = {
                                     id: newId,
                                     title: fileNameWithoutExt,
+                                    category: 'Personalizados',
                                     content: text
                                   };
-                                  const updated = [...customTemplates, newTemplate];
+                                  const updated = [newTemplate, ...customTemplates];
                                   setCustomTemplates(updated);
                                   setSelectedCustomTemplateId(newId);
-                                  localStorage.setItem('clinic_user_custom_templates', JSON.stringify(updated));
+                                  showToast(`Documento "${fileNameWithoutExt}" importado com sucesso!`);
                                 }
                               };
                               reader.readAsText(file);
@@ -2366,14 +3484,15 @@ ${logoBase64}
                           <div className="p-1 px-2 bg-indigo-50 rounded-lg group-hover:scale-105 transition-transform flex items-center justify-center">
                             <Upload className="w-3.5 h-3.5 text-indigo-600" />
                           </div>
-                          <span className="text-[10px] font-black text-slate-700">Importar (.txt, .md, .pdf)</span>
-                          <span className="text-[8px] text-slate-400">Arraste ou clique para carregar o modelo de texto</span>
+                          <span className="text-[10px] font-black text-slate-700">Importar Modelo de Arquivo (.txt, .md, .pdf)</span>
+                          <span className="text-[8px] text-slate-400">Arraste ou clique para carregar o seu documento</span>
                         </div>
                       )}
                     </div>
+
                   </div>
-                </div>
-              )}
+                );
+              })()}
 
               <div>
                 <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">
@@ -2516,9 +3635,22 @@ ${logoBase64}
 
           {/* Elegant Display Box containing Timbrado (Letterhead Mockup) */}
           <div className="bg-slate-50 p-6 rounded-3xl border border-slate-200/60 shadow-inner flex flex-col items-center">
-            <span className="text-[10px] font-bold text-slate-400 mb-3 block text-center uppercase tracking-widest">
-              Visualização Prévia (Papel Timbrado Clínico)
-            </span>
+            <div className="w-full flex flex-wrap items-center justify-between gap-2 mb-3">
+              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+                Visualização Prévia (Papel Timbrado Clínico)
+              </span>
+              {activeTab !== 'meus_modelos' && (
+                <button
+                  type="button"
+                  onClick={handleSaveCurrentDocAsCustomModel}
+                  className="px-3 py-1 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200 rounded-xl text-[10.5px] font-bold flex items-center gap-1.5 transition-all shadow-2xs cursor-pointer"
+                  title="Copia este documento para 'Meus Modelos' para que você possa editá-lo livremente"
+                >
+                  <Sparkles className="w-3.5 h-3.5 text-indigo-600" />
+                  <span>Personalizar em "Meus Modelos"</span>
+                </button>
+              )}
+            </div>
 
             {/* Letterhead Sheet Layout */}
             <div 
@@ -2530,23 +3662,30 @@ ${logoBase64}
                 paddingRight: '20mm',
                 paddingBottom: '20mm',
                 paddingLeft: '30mm',
-                boxSizing: 'border-box'
+                boxSizing: 'border-box',
+                position: 'relative'
               }}
               className="bg-white border border-slate-200 shadow-md rounded-2xl font-sans text-slate-800 leading-relaxed text-xs overflow-y-auto max-h-[85vh] text-left workspace-paper relative"
             >
-              {/* Watermark Background */}
+              {/* Watermark Background - Perfectly centered on sheet */}
               {customLogo && useLogoAsWatermark && (
                 <div 
-                  className="pointer-events-none flex items-center justify-center select-none"
+                  className="pointer-events-none select-none"
                   style={{ 
                     position: 'absolute',
-                    top: '50%',
+                    top: '148.5mm',
                     left: '50%',
                     transform: 'translate(-50%, -50%)',
+                    width: `${watermarkSize}px`,
+                    height: `${watermarkSize}px`,
+                    maxWidth: '170mm',
+                    maxHeight: '230mm',
                     zIndex: 0,
                     opacity: watermarkOpacity,
-                    width: '100%',
-                    height: '100%'
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    overflow: 'hidden'
                   }}
                 >
                   <img 
@@ -2554,10 +3693,12 @@ ${logoBase64}
                     alt="Watermark" 
                     className="object-contain"
                     style={{
-                      width: `${watermarkSize}px`,
-                      height: `${watermarkSize}px`,
-                      maxWidth: '85%',
-                      maxHeight: '85%'
+                      width: '100%',
+                      height: '100%',
+                      maxWidth: '100%',
+                      maxHeight: '100%',
+                      display: 'block',
+                      margin: 'auto'
                     }}
                     referrerPolicy="no-referrer"
                   />
@@ -2661,44 +3802,59 @@ ${logoBase64}
         <style dangerouslySetInnerHTML={{__html: `
           @media print {
             @page {
-              size: A4;
+              size: A4 portrait;
               margin: 0;
             }
-            body {
-              margin: 0;
-              padding: 0;
-              background: white;
-              color: black;
-              -webkit-print-color-adjust: exact;
-              print-color-adjust: exact;
+            * {
+              box-sizing: border-box !important;
+              -webkit-print-color-adjust: exact !important;
+              print-color-adjust: exact !important;
+            }
+            html, body {
+              margin: 0 !important;
+              padding: 0 !important;
+              background: white !important;
+              color: black !important;
+              width: 210mm !important;
             }
           }
         `}} />
         <div style={{ padding: '30mm 20mm 20mm 30mm', width: '210mm', minHeight: '297mm', boxSizing: 'border-box', margin: '0 auto', fontFamily: 'Arial, Helvetica, sans-serif', color: '#000000', backgroundColor: '#ffffff', position: 'relative' }}>
           
-          {/* Print Watermark */}
+          {/* Print Watermark - Perfectly centered on A4 page */}
           {customLogo && useLogoAsWatermark && (
             <div 
               style={{
                 position: 'absolute',
-                top: '50%',
-                left: '50%',
+                top: '148.5mm',
+                left: '105mm',
                 transform: 'translate(-50%, -50%)',
-                width: '100%',
-                height: '100%',
+                width: `${watermarkSize}px`,
+                height: `${watermarkSize}px`,
+                maxWidth: '170mm',
+                maxHeight: '230mm',
                 pointerEvents: 'none',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
                 opacity: watermarkOpacity,
                 zIndex: 0,
-                userSelect: 'none'
+                userSelect: 'none',
+                overflow: 'hidden'
               }}
             >
               <img 
                 src={customLogo} 
                 alt="Watermark" 
-                style={{ width: `${watermarkSize}px`, height: `${watermarkSize}px`, objectFit: 'contain' }}
+                style={{ 
+                  width: '100%', 
+                  height: '100%', 
+                  maxWidth: '100%', 
+                  maxHeight: '100%', 
+                  objectFit: 'contain',
+                  display: 'block',
+                  margin: 'auto'
+                }}
                 referrerPolicy="no-referrer"
               />
             </div>
