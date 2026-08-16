@@ -1451,7 +1451,11 @@ Este contrato vigora por prazo indefinido enquanto se mantiver a necessidade dia
 
 Por ser esta a plena expressão de concordância e entendimento de obrigações mútuas, afirmam as partes o presente pacto legal.
 
-Local: _________________________________, Data: _____/_____/_________`;
+${consultationCity}, ${customDate || '_____/_____/_________'}
+
+___________________________________          ___________________________________
+${psychologistName}                          ${representativeName ? formattedRep : formattedPatient}
+Psicóloga Clínica: CRP ${formatCrpDisplay(psychologistCrp)}       Paciente / Responsável Legal`;
 
       case 'recibos':
         return `RECIBO DE PAGAMENTO DE HONORÁRIOS DE PSICOLOGIA
@@ -1462,12 +1466,16 @@ DATAS DAS CONSULTAS DE REFERÊNCIA: ${sessionDatesString}
 
 Para clareza e fins legais de comprovação de quitação regular e comprovação perante a utilidade tributária correspondente, emito o presente recibo.
 
-Local: _________________________________, Data: _____/_____/_________`;
+${consultationCity}, ${customDate || '_____/_____/_________'}
+
+___________________________________________________________
+${psychologistName}
+Psicóloga Clínica: CRP ${formatCrpDisplay(psychologistCrp)}`;
 
       case 'termos':
         return `TERMO DE CONSENTIMENTO LIVRE E ESCLARECIDO PARA ATENDIMENTO DE MENOR
 
-Eu, ${formattedRep || '[Nome Completo do Responsável Legal]'}, portador(a) do CPF nº ${formattedRepCpf || '_________________'} na qualidade genuína de legítimo representante legal do paciente menor de idade ${formattedPatient}, nascido(a) em ____/____/______, autorizo explicitamente e formalizo por meio deste documento o atendimento e acompanhamento clínico psicológico do menor sob a coordenação técnica de ${psychologistName}, CRP nº ${psychologistCrp}.
+Eu, ${formattedRep || '[Nome Completo do Responsável Legal]'}, portador(a) do CPF nº ${formattedRepCpf || '_________________'} na qualidade genuína de legítimo representante legal do paciente menor de idade ${formattedPatient}, nascido(a) em ____/____/______, autorizo explicitamente e formalizo por meio deste documento o atendimento e acompanhamento clínico psicológico do menor sob a coordenação técnica de ${psychologistName}, CRP nº ${formatCrpDisplay(psychologistCrp)}.
 
 Desta forma, declaro-me amplamente cientificado sobre as seguintes diretrizes operacionais de atendimento a menores de idade:
 1. O processo terapêutico ocorre no âmbito de ambiente privado e acolhedor, voltado puramente para a saúde e estabilização emocional da criança / do adolescente.
@@ -1476,10 +1484,10 @@ Desta forma, declaro-me amplamente cientificado sobre as seguintes diretrizes op
 
 Por estar ciente de todas as condições e termos normativos do Conselho Federal de Psicologia (CFP), assino o presente.
 
-Local: _________________________________, Data: _____/_____/_________;
+${consultationCity}, ${customDate || '_____/_____/_________'}
 
 ___________________________________________________________
-Assinatura do Pai, Mãe ou Tutor Responsável legal`;
+${formattedRep || 'Assinatura do Pai, Mãe ou Responsável Legal'}`;
 
       case 'presenca':
         return `DECLARAÇÃO DE COMPARECIMENTO CLINICO
@@ -1490,14 +1498,18 @@ Observou-se o comparecimento correspondente à consulta das ${startTime} horas �
 
 Justifica-se, por meio desta, o seu afastamento para comparecimento exclusivamente referente ao horário marcado.
 
-Local: _________________________________, Data: _____/_____/_________`;
+${consultationCity}, ${customDate || '_____/_____/_________'}
+
+___________________________________________________________
+${psychologistName}
+Psicóloga Clínica: CRP ${formatCrpDisplay(psychologistCrp)}`;
 
       case 'laudos':
         return `LAUDO PSICOLÓGICO CLÍNICO
 (Conforme as Normas da Resolução CFP nº 06/2019)
 
 1. IDENTIFICAÇÃO DO PROCESSO
-Emissor/Autor: ${psychologistName} (Inscrição Profissional Ativa CRP nº ${psychologistCrp})
+Emissor/Autor: ${psychologistName} (Inscrição Profissional Ativa CRP nº ${formatCrpDisplay(psychologistCrp)})
 Interessado: Realizado sob os dados clínicos de ${formattedPatient}
 Solicitante: ${laudoSolicitante}
 Finalidade de Emissão: ${laudoFinalidade}
@@ -1517,7 +1529,11 @@ ${laudoConclusao}
 
 Este documento não possui utilidade de caráter permanente, devendo as suas conclusões clínicas serem analisadas com reserva contextual.
 
-Local: _________________________________, Data: _____/_____/_________`;
+${consultationCity}, ${customDate || '_____/_____/_________'}
+
+___________________________________________________________
+${psychologistName}
+Psicóloga Clínica: CRP ${formatCrpDisplay(psychologistCrp)}`;
 
       case 'atestado':
         return `ATESTADO PSICOLÓGICO CLÍNICO
@@ -1532,7 +1548,11 @@ ${atestadoMotivo}
 
 Por ser a exata expressão técnica e confidencial da verdade, firmo este atestado de meu próprio punho.
 
-Local: _________________________________, Data: _____/_____/_________`;
+${consultationCity}, ${customDate || '_____/_____/_________'}
+
+___________________________________________________________
+${psychologistName}
+Psicóloga Clínica: CRP ${formatCrpDisplay(psychologistCrp)}`;
 
       case 'encaminhamento':
         return `ENCAMINHAMENTO PSICOLÓGICO CLÍNICO
@@ -1547,7 +1567,7 @@ CPF: ${formattedCpf}
 ${representativeName ? `Responsável Legal: ${formattedRep} (CPF: ${formattedRepCpf})\n` : ''}
 3. IDENTIFICAÇÃO DO(A) EMISSOR(A)
 Psicólogo(a) Responsável: ${psychologistName}
-Registro Profissional: CRP nº ${psychologistCrp}
+Registro Profissional: CRP nº ${formatCrpDisplay(psychologistCrp)}
 Local de Atendimento: ${consultationCity}
 
 4. HISTÓRICO DO ACOMPANHAMENTO CLÍNICO
@@ -1565,7 +1585,11 @@ O presente documento tem finalidade estritamente assistencial de cooperação em
 
 Coloco-me à disposição para contato direto e discussão interdisciplinar do caso clínico.
 
-${consultationCity}, ${customDate || '_____/_____/_________'}.`;
+${consultationCity}, ${customDate || '_____/_____/_________'}
+
+___________________________________________________________
+${psychologistName}
+Psicóloga Clínica: CRP ${formatCrpDisplay(psychologistCrp)}`;
 
       case 'reembolso':
         return `DECLARAÇÃO DE TRATAMENTO PSICOLÓGICO E PEDIDO DE REEMBOLSO COM DESTAQUE
@@ -1578,7 +1602,7 @@ Prezados Senhores,
 Por meio da presente, venho atestar e comprovar tecnicamente que o(a) paciente beneficiário(a) ${formattedPatient}, portador(a) do CPF nº ${formattedCpf}, realiza tratamento terapêutico de reabilitação psicológica regular e regularizado em meu consultório profissional.
 
 Comprovamos com clareza as especificidades complementares operacionais do tratamento:
-- Psicólogo(a) Assistente: ${psychologistName}, portador(a) do CRP nº ${psychologistCrp}.
+- Psicólogo(a) Assistente: ${psychologistName}, portador(a) do CRP nº ${formatCrpDisplay(psychologistCrp)}.
 - Frequência dos Atendimentos: Assistência continuada com ${sessionsCount} sessões clínicas de 50 minutos.
 - Período correspondente faturado: Mês de ${reembolsoMes}.
 - Investimento Financeiro Total Realizado: R$ ${reembolsoPrecoTotal} (referente aos pagamentos já liquidados integralmente).
@@ -1587,7 +1611,11 @@ Salienta-se que os cuidados e atendimentos em saúde descritos encontram inteira
 
 Sem mais para o momento, firmo a declaração.
 
-Local: _________________________________, Data: _____/_____/_________`;
+${consultationCity}, ${customDate || '_____/_____/_________'}
+
+___________________________________________________________
+${psychologistName}
+Psicóloga Clínica: CRP ${formatCrpDisplay(psychologistCrp)}`;
 
       case 'credenciamento':
         return `SOLICITAÇÃO FORMAL DE CREDENCIAMENTO PROFISSIONAL EM OPERADORA DE SAÚDE
@@ -1602,7 +1630,7 @@ Seguem abaixo as principais credenciais e habilidades para pronta apreciação c
 
 DADOS DO PROFISSIONAL EMISSOR:
 - Nome Completo: ${psychologistName}
-- Conselho Regional: CRP nº ${psychologistCrp}
+- Conselho Regional: CRP nº ${formatCrpDisplay(psychologistCrp)}
 - Especialidades Clínicas e Diferenciais: ${credenciamentoEspecialidades}
 - Contato Telefônico: ${credenciamentoContato}
 - E-mail Corporativo de Atendimento: ${credenciamentoEmail}
@@ -1613,7 +1641,11 @@ Na expectativa de obtermos uma receptividade promissora para o enriquecimento da
 
 Cordialmente,
 
-Local: _________________________________, Data: _____/_____/_________`;
+${consultationCity}, ${customDate || '_____/_____/_________'}
+
+___________________________________________________________
+${psychologistName}
+Psicóloga Clínica: CRP ${formatCrpDisplay(psychologistCrp)}`;
 
       case 'meus_modelos': {
         const currentTmp = customTemplates.find(t => t.id === selectedCustomTemplateId);
@@ -1668,11 +1700,13 @@ Local: _________________________________, Data: _____/_____/_________`;
 
       const isListItem = cleanLine.startsWith('-') || cleanLine.startsWith('*') || /^\d+\./.test(cleanLine);
       const isCenteredHeader = (cleanLine === cleanLine.toUpperCase() && cleanLine.length < 80) || cleanLine.startsWith('#');
-      const isSignatureLine = cleanLine.includes('______') || cleanLine.includes(psychologistName);
       const isMetadataOrField = 
         /^(paciente|nome|idade|cpf|rg|respons[aá]vel|data|nascimento|endere[cç]o|telefone|contato|encaminhamento|solicitante|finalidade|diagn[oó]stico|assunto|ref|local|emissor|autor|interessado|profissional|registro|psic[oó]log[oa]|t[ií]tulo)/i.test(cleanLine) ||
-        cleanLine.split('\n').some(l => /^(paciente|nome|idade|cpf|rg|respons[aá]vel|data|endere[cç]o|telefone|solicitante|finalidade):/i.test(l.trim()));
+        cleanLine.split('\n').some(l => /^(paciente|nome|idade|cpf|rg|respons[aá]vel|data|endere[cç]o|telefone|solicitante|finalidade|registro|psic[oó]log[oa]):/i.test(l.trim()));
       const isDateLocationLine = /^[A-Za-zÀ-ÿ\s]+,\s*(\d{1,2}\s+de\s+[A-Za-zÀ-ÿ]+\s+de\s+\d{4}|\d{2}\/\d{2}\/\d{4}|_{2,})/i.test(cleanLine);
+      const isSignatureLine = 
+        (cleanLine.includes('______') && !cleanLine.includes('Local:')) ||
+        (!isListItem && !isMetadataOrField && !isDateLocationLine && cleanLine.includes(psychologistName));
 
       // Signature block handling: ensure underscore line is present directly above the name
       if (isSignatureLine) {
@@ -2102,11 +2136,13 @@ Content-Location: file:///document.html
         
         const isListItem = cleanLine.startsWith('-') || cleanLine.startsWith('*') || /^\d+\./.test(cleanLine);
         const isCenteredHeader = (cleanLine === cleanLine.toUpperCase() && cleanLine.length < 80) || cleanLine.startsWith('#');
-        const isSignatureLine = cleanLine.includes('______') || cleanLine.includes(psychologistName);
         const isMetadataOrField = 
           /^(paciente|nome|idade|cpf|rg|respons[aá]vel|data|nascimento|endere[cç]o|telefone|contato|encaminhamento|solicitante|finalidade|diagn[oó]stico|assunto|ref|local|emissor|autor|interessado|profissional|registro|psic[oó]log[oa]|t[ií]tulo)/i.test(cleanLine) ||
-          cleanLine.split('\n').some(l => /^(paciente|nome|idade|cpf|rg|respons[aá]vel|data|endere[cç]o|telefone|solicitante|finalidade):/i.test(l.trim()));
+          cleanLine.split('\n').some(l => /^(paciente|nome|idade|cpf|rg|respons[aá]vel|data|endere[cç]o|telefone|solicitante|finalidade|registro|psic[oó]log[oa]):/i.test(l.trim()));
         const isDateLocationLine = /^[A-Za-zÀ-ÿ\s]+,\s*(\d{1,2}\s+de\s+[A-Za-zÀ-ÿ]+\s+de\s+\d{4}|\d{2}\/\d{2}\/\d{4}|_{2,})/i.test(cleanLine);
+        const isSignatureLine = 
+          (cleanLine.includes('______') && !cleanLine.includes('Local:')) ||
+          (!isListItem && !isMetadataOrField && !isDateLocationLine && cleanLine.includes(psychologistName));
         
         let pStyle = 'font-family: Arial, sans-serif; font-size: 12pt; line-height: 1.5; text-align: justify; margin-bottom: 12pt; word-break: break-word;';
         if (isCenteredHeader) {
@@ -2232,11 +2268,13 @@ ${logoBase64}
                 
                 const isListItem = cleanLine.startsWith('-') || cleanLine.startsWith('*') || /^\d+\./.test(cleanLine);
                 const isCenteredHeader = (cleanLine === cleanLine.toUpperCase() && cleanLine.length < 80) || cleanLine.startsWith('#');
-                const isSignatureLine = cleanLine.includes('______') || cleanLine.includes(psychologistName);
                 const isMetadataOrField = 
                   /^(paciente|nome|idade|cpf|rg|respons[aá]vel|data|nascimento|endere[cç]o|telefone|contato|encaminhamento|solicitante|finalidade|diagn[oó]stico|assunto|ref|local|emissor|autor|interessado|profissional|registro|psic[oó]log[oa]|t[ií]tulo)/i.test(cleanLine) ||
-                  cleanLine.split('\n').some(l => /^(paciente|nome|idade|cpf|rg|respons[aá]vel|data|endere[cç]o|telefone|solicitante|finalidade):/i.test(l.trim()));
+                  cleanLine.split('\n').some(l => /^(paciente|nome|idade|cpf|rg|respons[aá]vel|data|endere[cç]o|telefone|solicitante|finalidade|registro|psic[oó]log[oa]):/i.test(l.trim()));
                 const isDateLocationLine = /^[A-Za-zÀ-ÿ\s]+,\s*(\d{1,2}\s+de\s+[A-Za-zÀ-ÿ]+\s+de\s+\d{4}|\d{2}\/\d{2}\/\d{4}|_{2,})/i.test(cleanLine);
+                const isSignatureLine = 
+                  (cleanLine.includes('______') && !cleanLine.includes('Local:')) ||
+                  (!isListItem && !isMetadataOrField && !isDateLocationLine && cleanLine.includes(psychologistName));
                 
                 let pStyle = 'font-family: Arial, sans-serif; font-size: 12pt; line-height: 1.5; text-align: justify; margin-bottom: 12pt; word-break: break-word;';
                 if (isCenteredHeader) {
