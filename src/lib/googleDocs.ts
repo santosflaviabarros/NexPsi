@@ -43,6 +43,15 @@ export const createGoogleDoc = async (title: string, textContent: string, option
     googleAccessToken = token;
   }
 
+  const formatCrp = (crp?: string) => {
+    if (!crp) return 'MG 04/IS01654';
+    let clean = crp.trim().replace(/^CRP\s*(nº|n°|:)?\s*/i, '').trim();
+    if (!clean.toUpperCase().includes('MG') && (clean.startsWith('04/') || clean.startsWith('04-') || clean.startsWith('04 '))) {
+      return `MG ${clean}`;
+    }
+    return clean;
+  };
+
   // Build the Header layout if requested
   let headerHtml = '';
   if (options.includeHeader) {
@@ -58,21 +67,26 @@ export const createGoogleDoc = async (title: string, textContent: string, option
       headerHtml += `
         <div style="text-align: center;">
           <p style="margin: 0; font-size: 13pt; font-weight: bold; text-transform: uppercase; color: #111111; letter-spacing: 1px;">${options.psychologistName || 'Dra. Flávia Barros'}</p>
-          <p style="margin: 3px 0 0 0; font-size: 9pt; color: #555555; font-weight: bold; text-transform: uppercase;">Psicóloga Clínica • CRP ${options.psychologistCrp || '04/194852'}</p>
+          <p style="margin: 3px 0 0 0; font-size: 9pt; color: #555555; font-weight: bold; text-transform: uppercase;">Psicóloga Clínica • CRP ${formatCrp(options.psychologistCrp)}</p>
         </div>
       `;
     }
     headerHtml += '</div>';
   }
 
+  // Check if text already contains signature
+  const rawText = textContent || '';
+  const textHasSignature = rawText.toLowerCase().includes((options.psychologistName || 'flávia').toLowerCase()) || 
+                           rawText.slice(-300).toLowerCase().includes('crp');
+
   // Build the Signature Box if requested
   let signatureHtml = '';
-  if (options.includeSignBox) {
+  if (options.includeSignBox && !textHasSignature) {
     signatureHtml += `
-      <div style="margin-top: 50px; padding-top: 20px; border-top: 1px solid #cccccc; text-align: center; font-size: 11pt; color: #555555;">
-        <p style="margin-bottom: 40px; color: #cccccc;">____________________________________________________________________________________</p>
-        <p style="font-weight: bold; margin: 0;">${options.psychologistName || 'Dra. Flávia Barros'}</p>
-        <p style="margin: 3px 0 0 0; font-size: 9pt;">Inscrição Consular Regional de Psicologia: CRP nº ${options.psychologistCrp || '04/194852'}</p>
+      <div style="margin-top: 40px; text-align: center; font-size: 11pt; color: #333333; font-family: Arial, sans-serif;">
+        <div style="width: 280px; margin: 0 auto 8px auto; border-top: 1px solid #111111;"></div>
+        <p style="font-weight: bold; margin: 0; font-size: 11pt; color: #111111;">${options.psychologistName || 'Dra. Flávia Barros'}</p>
+        <p style="margin: 3px 0 0 0; font-size: 9pt; color: #444444;">Psicóloga Clínica: CRP ${formatCrp(options.psychologistCrp)}</p>
       </div>
     `;
   }

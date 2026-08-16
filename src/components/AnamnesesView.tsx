@@ -71,11 +71,22 @@ export default function AnamnesesView({ patients, profile }: AnamnesesViewProps)
     return localStorage.getItem('clinic_psychologist_name') || 'Dra. Flávia Barros';
   });
   const [psychologistCrp, setPsychologistCrp] = useState<string>(() => {
-    return localStorage.getItem('clinic_psychologist_crp') || '04/194852';
+    return localStorage.getItem('clinic_psychologist_crp') || '04/IS01654';
   });
   const [consultationCity, setConsultationCity] = useState<string>(() => {
     return localStorage.getItem('clinic_consultation_city') || 'Belo Horizonte';
   });
+
+  // Helper to format CRP as requested: "Psicóloga Clínica: CRP MG 04/IS01654"
+  const formatCrpDisplay = (crp?: string) => {
+    if (!crp) return 'MG 04/IS01654';
+    let clean = crp.trim();
+    clean = clean.replace(/^CRP\s*(nº|n°|:)?\s*/i, '').trim();
+    if (!clean.toUpperCase().includes('MG') && (clean.startsWith('04/') || clean.startsWith('04-') || clean.startsWith('04 '))) {
+      return `MG ${clean}`;
+    }
+    return clean;
+  };
 
   // Custom footer state (address, phone, name etc.)
   const [customFooter, setCustomFooter] = useState<string>(() => {
@@ -1614,11 +1625,14 @@ Local: _________________________________, Data: _____/_____/_________`;
         text = text.replace(/{paciente}/g, formattedPatient);
         text = text.replace(/{cpf}/g, formattedCpf);
         text = text.replace(/{psicologo}/g, psychologistName || '[Nome do Profissional]');
-        text = text.replace(/{crp}/g, psychologistCrp || '[CRP nº]');
+        text = text.replace(/{crp}/g, formatCrpDisplay(psychologistCrp));
         text = text.replace(/{data}/g, customDate || '_____/_____/_________');
         text = text.replace(/{cidade}/g, consultationCity || '___________________________');
         text = text.replace(/{rep_nome}/g, formattedRep || '[Nome do Responsável]');
         text = text.replace(/{rep_cpf}/g, formattedRepCpf || '[CPF do Responsável]');
+        
+        // Normalize any legacy/unwanted wording if present
+        text = text.replace(/Inscrição Consular Regional de Psicologia:\s*CRP\s*(nº|n°)?/gi, 'Psicóloga Clínica: CRP');
         
         return text;
       }
@@ -1628,17 +1642,69 @@ Local: _________________________________, Data: _____/_____/_________`;
     }
   };
 
+  // Helper to test if text itself already ends with a signature block
+  const textHasSignature = (text: string) => {
+    if (!text) return false;
+    const lastChunk = text.slice(-400).toLowerCase();
+    return lastChunk.includes(psychologistName.toLowerCase()) || 
+           lastChunk.includes('crp') || 
+           lastChunk.includes('psicólog') || 
+           lastChunk.includes('psicolog');
+  };
+
   const currentGeneratedText = getDocumentContent();
 
   const renderAbntParagraphs = (text: string, isPrint: boolean = false) => {
     if (!text) return null;
     const paragraphs = text.split(/\n\n+/);
     return paragraphs.map((p, index) => {
-      const cleanLine = p.trim();
+      let cleanLine = p.trim();
       if (!cleanLine) return null;
       
+      // Auto-clean any legacy wording
+      cleanLine = cleanLine.replace(/Inscrição Consular Regional de Psicologia:\s*CRP\s*(nº|n°)?/gi, 'Psicóloga Clínica: CRP');
+      cleanLine = cleanLine.replace(/Psicólogo\(a\)\s+Clínico\(a\)\s+[•·-]\s+CRP\s*(nº|n°|:)?/gi, 'Psicóloga Clínica: CRP');
+      cleanLine = cleanLine.replace(/Psicóloga\s+Clínica\s+[•·-]\s+CRP\s*(nº|n°|:)?/gi, 'Psicóloga Clínica: CRP');
+
       const isListItem = cleanLine.startsWith('-') || cleanLine.startsWith('*') || /^\d+\./.test(cleanLine);
       const isCenteredHeader = cleanLine === cleanLine.toUpperCase() && cleanLine.length < 80;
+      
+      // Check for raw standalone underscore line
+      const isPureUnderscore = /^[_—\s-]{5,}$/.test(cleanLine);
+      if (isPureUnderscore) {
+        return (
+          <div key={index} style={{ width: isPrint ? '260px' : '220px', margin: isPrint ? '24px auto 6px auto' : '18px auto 4px auto', borderTop: isPrint ? '1px solid #111111' : '1px solid #94a3b8' }} />
+        );
+      }
+
+      // If cleanLine combines underscore bar with signature text on lines
+      if (cleanLine.startsWith('____') || cleanLine.includes('\n____')) {
+        const parts = cleanLine.split(/\n/);
+        return (
+          <div key={index} style={{ textAlign: 'center', marginBottom: isPrint ? '16px' : '12px', fontFamily: 'Arial, Helvetica, sans-serif' }}>
+            {parts.map((part, pIdx) => {
+              const trimmedPart = part.trim();
+              if (!trimmedPart) return null;
+              if (/^[_—\s-]{5,}$/.test(trimmedPart)) {
+                return (
+                  <div key={pIdx} style={{ width: isPrint ? '260px' : '220px', margin: isPrint ? '24px auto 6px auto' : '18px auto 4px auto', borderTop: isPrint ? '1px solid #111111' : '1px solid #94a3b8' }} />
+                );
+              }
+              return (
+                <p key={pIdx} style={{ 
+                  margin: '2px 0', 
+                  fontSize: isPrint ? (pIdx === 1 ? '11pt' : '9.5pt') : (pIdx === 1 ? '11px' : '9.5px'),
+                  fontWeight: pIdx === 1 ? 'bold' : 'normal',
+                  color: isPrint ? '#111111' : '#334155'
+                }}>
+                  {trimmedPart}
+                </p>
+              );
+            })}
+          </div>
+        );
+      }
+
       const isSignatureLine = cleanLine.includes('______') || cleanLine.includes(psychologistName);
       
       const pStyle: CSSProperties = {
@@ -1661,7 +1727,7 @@ Local: _________________________________, Data: _____/_____/_________`;
 
       return (
         <p key={index} style={pStyle}>
-          {p}
+          {cleanLine}
         </p>
       );
     });
@@ -2045,11 +2111,12 @@ Content-Location: file:///document.html
     })()}
   </div>
   
-  ${includeSignBox ? `
+  ${includeSignBox && !textHasSignature(currentGeneratedText) ? `
   <br/><br/>
-  <div class="signature-box">
-    <p>___________________________________________________________</p>
-    <p><strong>${psychologistName}</strong><br/>Psicóloga Clínica • CRP: ${psychologistCrp}</p>
+  <div class="signature-box" style="margin-top: 35px; text-align: center; font-family: Arial, sans-serif;">
+    <div style="width: 280px; margin: 0 auto 6px auto; border-top: 1px solid #111111;"></div>
+    <p style="margin: 0; font-weight: bold; font-size: 11pt;">${psychologistName}</p>
+    <p style="margin: 2px 0 0 0; font-size: 9pt; color: #444444;">Psicóloga Clínica: CRP ${formatCrpDisplay(psychologistCrp)}</p>
   </div>
   ` : ''}
   
@@ -2168,11 +2235,12 @@ ${logoBase64}
             })()}
           </div>
           
-          ${includeSignBox ? `
+          ${includeSignBox && !textHasSignature(currentGeneratedText) ? `
           <br/><br/>
-          <div class="signature-box">
-            <p>___________________________________________________________</p>
-            <p><strong>${psychologistName}</strong><br/>Psicóloga Clínica • CRP: ${psychologistCrp}</p>
+          <div class="signature-box" style="margin-top: 35px; text-align: center; font-family: Arial, sans-serif;">
+            <div style="width: 280px; margin: 0 auto 6px auto; border-top: 1px solid #111111;"></div>
+            <p style="margin: 0; font-weight: bold; font-size: 11pt;">${psychologistName}</p>
+            <p style="margin: 2px 0 0 0; font-size: 9pt; color: #444444;">Psicóloga Clínica: CRP ${formatCrpDisplay(psychologistCrp)}</p>
           </div>
           ` : ''}
           
@@ -3757,11 +3825,11 @@ ${logoBase64}
                 )}
 
                 {/* Print Sign Box representation visually */}
-                {includeSignBox && (
-                  <div className="mt-8 pt-4 border-t border-slate-100 text-center font-sans">
-                    <p className="text-slate-300">___________________________________________________________</p>
-                    <p className="text-[10px] font-black text-slate-700 mt-1">{psychologistName}</p>
-                    <p className="text-[8px] text-slate-400 font-bold">Psicóloga Clínica • CRP {psychologistCrp}</p>
+                {includeSignBox && !textHasSignature(currentGeneratedText) && (
+                  <div className="mt-8 text-center font-sans">
+                    <div className="w-56 mx-auto mb-2 border-t border-slate-400" />
+                    <p className="text-[11px] font-black text-slate-800 mt-1">{psychologistName}</p>
+                    <p className="text-[9px] text-slate-500 font-bold">Psicóloga Clínica: CRP {formatCrpDisplay(psychologistCrp)}</p>
                   </div>
                 )}
 
@@ -3782,7 +3850,7 @@ ${logoBase64}
                       ) : (
                         <>
                           <p className="font-bold text-slate-600">Confidencial • Emitido sob o Código de Ética do CFP e de acordo com a LGPD.</p>
-                          <p className="text-[8px] text-slate-400">Emissor: {psychologistName} • CRP {psychologistCrp}</p>
+                          <p className="text-[8px] text-slate-400">Emissor: {psychologistName} • CRP {formatCrpDisplay(psychologistCrp)}</p>
                         </>
                       )}
                     </div>
@@ -3875,7 +3943,7 @@ ${logoBase64}
                 {showHeaderName && (
                   <div style={{ textAlign: 'center' }}>
                     <p style={{ margin: '0 0 2px 0', fontSize: '12pt', fontWeight: 'bold', textTransform: 'uppercase', color: '#111111', letterSpacing: '1px' }}>{psychologistName}</p>
-                    <p style={{ margin: '0', fontSize: '9px', color: '#555555', fontWeight: 'bold', textTransform: 'uppercase' }}>Psicóloga Clínica • CRP {psychologistCrp}</p>
+                    <p style={{ margin: '0', fontSize: '9px', color: '#555555', fontWeight: 'bold', textTransform: 'uppercase' }}>Psicóloga Clínica • CRP {formatCrpDisplay(psychologistCrp)}</p>
                   </div>
                 )}
               </div>
@@ -3887,11 +3955,11 @@ ${logoBase64}
             </div>
 
             {/* Print Sign Box */}
-            {includeSignBox && (
-              <div style={{ marginTop: '50px', paddingTop: '20px', borderTop: '1px solid #cccccc', textAlign: 'center', fontSize: '11px', color: '#666666' }}>
-                <p style={{ marginBottom: '40px' }}>____________________________________________________________________________________</p>
-                <p style={{ fontWeight: 'bold', margin: '0' }}>{psychologistName}</p>
-                <p style={{ margin: '3px 0 0 0' }}>Inscrição Consular Regional de Psicologia: CRP nº {psychologistCrp}</p>
+            {includeSignBox && !textHasSignature(currentGeneratedText) && (
+              <div style={{ marginTop: '40px', textAlign: 'center', fontSize: '11px', color: '#111111', fontFamily: 'Arial, Helvetica, sans-serif' }}>
+                <div style={{ width: '280px', margin: '0 auto 8px auto', borderTop: '1px solid #111111' }} />
+                <p style={{ fontWeight: 'bold', margin: '0', fontSize: '11pt', color: '#111111' }}>{psychologistName}</p>
+                <p style={{ margin: '3px 0 0 0', fontSize: '9pt', color: '#444444' }}>Psicóloga Clínica: CRP {formatCrpDisplay(psychologistCrp)}</p>
               </div>
             )}
 
@@ -3917,7 +3985,7 @@ ${logoBase64}
                         ) : (
                           <>
                             <p style={{ margin: 0, fontWeight: 'bold' }}>Confidencial • Documento clínico emitido sob o Código de Ética do CFP e LGPD.</p>
-                            <p style={{ margin: '3px 0 0 0', fontSize: '8px', color: '#9ca3af' }}>Conselho Federal de Psicologia • Emissor: {psychologistName} (CRP: {psychologistCrp})</p>
+                            <p style={{ margin: '3px 0 0 0', fontSize: '8px', color: '#9ca3af' }}>Conselho Federal de Psicologia • Emissor: {psychologistName} (CRP: {formatCrpDisplay(psychologistCrp)})</p>
                           </>
                         )}
                       </td>
