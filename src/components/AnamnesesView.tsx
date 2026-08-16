@@ -265,7 +265,11 @@ Constatou-se evolução favorável do paciente no período recente, com aquisiç
 
 O acompanhamento clínico prossegue conforme recomendado profissionalmente.
 
-{cidade}, {data}.`
+{cidade}, {data}.
+
+___________________________________________________________
+{psicologo}
+Psicólogo(a) Clínico(a) • CRP nº {crp}`
     },
     {
       id: 'template_entrevista_inicial',
@@ -291,7 +295,11 @@ __________________________________________________________________
 
 Encaminhamento e observação clínica continuará no consultório.
 
-{cidade}, {data}.`
+{cidade}, {data}.
+
+___________________________________________________________
+{psicologo}
+Psicólogo(a) Clínico(a) • CRP nº {crp}`
     },
 
     // 2. ENCAMINHAMENTOS (CFP 06/2019)
@@ -783,7 +791,13 @@ Psicólogo(a) Clínico(a) • CRP nº {crp}`
     if (saved) {
       try {
         const parsed = JSON.parse(saved) as CustomTemplate[];
-        const merged = [...parsed];
+        const merged = parsed.map(p => {
+          const matchingDefault = defaultCustomTemplates.find(d => d.id === p.id);
+          if (matchingDefault && !p.content.includes('____') && matchingDefault.content.includes('____')) {
+            return matchingDefault;
+          }
+          return p;
+        });
         defaultCustomTemplates.forEach(def => {
           if (!merged.some(m => m.id === def.id)) {
             merged.push(def);
