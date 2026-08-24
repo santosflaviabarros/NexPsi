@@ -1,0 +1,1139 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="h-full scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conversa Para a Vida — Boas Companhias e Limites</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts: Cormorant Garamond & Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        serif: ['"Cormorant Garamond"', 'serif'],
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                    },
+                    colors: {
+                        warm: {
+                            50: '#fdfbf7',
+                            100: '#f7f2ea',
+                            200: '#ebdccb',
+                            300: '#dec2a7',
+                            400: '#cca180',
+                            500: '#b8825e',
+                            600: '#9e6747',
+                            700: '#7d4e36',
+                            800: '#633e2d',
+                            900: '#4e3327',
+                            950: '#2c1a13',
+                        },
+                        stonebg: '#12100e',
+                        cardbg: '#1a1714',
+                        goldaccent: '#d4af37',
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 0.6s ease-out forwards',
+                        'float': 'float 6s ease-in-out infinite',
+                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: '0', transform: 'translateY(12px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        },
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0px)' },
+                            '50%': { transform: 'translateY(-8px)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Custom scrollbars */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #12100e;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #4e3327;
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #b8825e;
+        }
+        
+        .glass-card {
+            background: rgba(26, 23, 20, 0.75);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(212, 175, 55, 0.12);
+        }
+        
+        .glass-card-hover {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .glass-card-hover:hover {
+            border-color: rgba(212, 175, 55, 0.35);
+            transform: translateY(-2px);
+            box-shadow: 0 12px 30px -10px rgba(0, 0, 0, 0.5);
+        }
+
+        .gold-gradient-text {
+            background: linear-gradient(135deg, #fef3c7 0%, #d4af37 50%, #b8825e 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .slide-transition {
+            transition: opacity 0.4s ease, transform 0.4s ease;
+        }
+    </style>
+</head>
+
+<body class="bg-stonebg text-stone-200 font-sans min-h-full flex flex-col justify-between selection:bg-warm-600 selection:text-white overflow-x-hidden">
+
+    <!-- Top Navigation Bar -->
+    <header class="fixed top-0 left-0 right-0 z-50 glass-card border-b border-warm-900/40 px-4 md:px-8 py-3 flex items-center justify-between">
+        <div class="flex items-center space-x-3">
+            <div class="w-8 h-8 rounded-full bg-gradient-to-tr from-warm-700 to-amber-500 flex items-center justify-center text-stone-900 font-bold text-xs shadow-md">
+                FB
+            </div>
+            <div>
+                <span class="font-serif text-lg tracking-wide text-amber-100 font-semibold block leading-tight">CONVERSA PARA A VIDA</span>
+                <span class="text-[10px] tracking-widest uppercase text-warm-400 font-medium block">Boas Companhias e Limites</span>
+            </div>
+        </div>
+
+        <!-- Controls Header Right -->
+        <div class="flex items-center space-x-2 md:space-x-4">
+            <!-- Mode Toggle -->
+            <button id="view-mode-btn" onclick="toggleViewMode()" class="px-3 py-1.5 rounded-full text-xs font-medium border border-warm-700/60 hover:bg-warm-800/40 text-warm-200 transition flex items-center gap-2">
+                <i class="fa-solid fa-scroll text-amber-400" id="mode-icon"></i>
+                <span id="mode-text" class="hidden sm:inline">Modo Editorial</span>
+            </button>
+
+            <!-- Slide Menu Grid Toggle -->
+            <button onclick="toggleGridModal()" class="p-2 rounded-full hover:bg-warm-800/40 text-warm-300 transition" title="Índice de Slides">
+                <i class="fa-solid fa-grid-2-plus text-base"></i>
+                <i class="fa-solid fa-th-large text-base"></i>
+            </button>
+
+            <!-- Fullscreen Button -->
+            <button onclick="toggleFullscreen()" class="p-2 rounded-full hover:bg-warm-800/40 text-warm-300 transition hidden sm:block" title="Tela Cheia">
+                <i class="fa-solid fa-expand text-base"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- MAIN PRESENTATION CANVAS -->
+    <main class="flex-grow pt-20 pb-20 min-h-screen flex items-center justify-center px-4 md:px-8 relative">
+        
+        <!-- Subtle Ambient Background Glows -->
+        <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-warm-800/10 rounded-full filter blur-3xl pointer-events-none animate-pulse-slow"></div>
+        <div class="absolute bottom-1/4 right-1/4 w-96 h-96 bg-amber-700/10 rounded-full filter blur-3xl pointer-events-none animate-pulse-slow" style="animation-delay: 2s;"></div>
+
+        <!-- SLIDE DECK CONTAINER (Slide Mode View) -->
+        <div id="slide-deck" class="w-full max-w-5xl mx-auto min-h-[580px] flex items-center justify-center relative">
+
+            <!-- SLIDE 01: CAPA -->
+            <div class="slide-item active-slide w-full opacity-100 transition-all duration-500" data-slide="1">
+                <div class="glass-card rounded-3xl p-8 md:p-14 text-center border border-amber-500/20 shadow-2xl relative overflow-hidden">
+                    <div class="absolute -top-12 -right-12 w-40 h-40 bg-amber-500/10 rounded-full blur-2xl"></div>
+                    
+                    <span class="inline-block px-4 py-1.5 rounded-full bg-warm-900/60 border border-amber-500/30 text-amber-300 text-xs tracking-widest uppercase mb-6 font-medium">
+                        Slide 01 — Capa
+                    </span>
+
+                    <h1 class="font-serif text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight text-amber-100 mb-4 leading-tight">
+                        CONVERSA PARA A VIDA
+                    </h1>
+                    
+                    <p class="font-serif italic text-2xl md:text-3xl gold-gradient-text mb-8">
+                        Boas companhias e limites
+                    </p>
+
+                    <div class="max-w-2xl mx-auto my-8 p-6 rounded-2xl bg-warm-950/60 border-l-4 border-amber-500 text-stone-300 italic text-lg md:text-xl font-serif">
+                        "Escolher bem não é se afastar de todo mundo. É não se afastar de quem você é."
+                    </div>
+
+                    <div class="pt-6 border-t border-warm-800/50 flex flex-col sm:flex-row items-center justify-center gap-2 text-stone-400 text-sm">
+                        <span class="font-medium text-warm-300">Tema:</span>
+                        <span>Uma conversa sobre respeito, autonomia e proteção</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SLIDE 02: COMEÇO -->
+            <div class="slide-item hidden w-full opacity-0 transition-all duration-500" data-slide="2">
+                <div class="glass-card rounded-3xl p-6 md:p-10 border border-amber-500/20 shadow-2xl">
+                    <div class="flex items-center justify-between mb-6">
+                        <span class="px-3 py-1 rounded-full bg-warm-900/60 border border-amber-500/30 text-amber-300 text-xs tracking-widest uppercase">
+                            Slide 02 — Começo
+                        </span>
+                        <i class="fa-solid fa-compass text-amber-400 text-xl"></i>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center mb-6">
+                        <div class="lg:col-span-4 h-56 lg:h-full rounded-2xl overflow-hidden border border-warm-800/60 shadow-lg">
+                            <img src="https://images.unsplash.com/photo-1506784983877-45594efa4cbe?auto=format&fit=crop&w=800&q=80" 
+                                 alt="Pessoa reflexiva caminhando ao pôr do sol" 
+                                 class="w-full h-full object-cover"
+                                 onerror="this.onerror=null; this.src='https://placehold.co/600x800/2c1a13/d4af37?text=Reflexao';" />
+                        </div>
+
+                        <div class="lg:col-span-8">
+                            <h2 class="font-serif text-3xl md:text-4xl font-bold text-amber-100 mb-2">
+                                COMEÇO
+                            </h2>
+                            
+                            <p class="text-lg md:text-xl text-amber-300 font-serif italic mb-6">
+                                Provocação: Quem está influenciando as suas escolhas?
+                            </p>
+
+                            <div class="p-5 rounded-2xl bg-warm-900/40 border border-warm-800/60 mb-6">
+                                <p class="text-stone-300 font-serif italic text-base md:text-lg leading-relaxed">
+                                    "As pessoas ao nosso redor não determinam quem somos, mas podem mudar o nosso caminho."
+                                </p>
+                            </div>
+
+                            <div class="p-5 rounded-2xl bg-amber-950/30 border border-amber-500/30 flex items-center gap-4 text-left">
+                                <div class="w-12 h-12 rounded-full bg-amber-900/50 flex items-center justify-center flex-shrink-0">
+                                    <i class="fa-solid fa-heart-pulse text-amber-400 text-xl animate-pulse"></i>
+                                </div>
+                                <div>
+                                    <span class="text-amber-300 text-xs uppercase font-bold tracking-wider block">Pense em silêncio:</span>
+                                    <p class="text-lg font-serif text-amber-100 italic">"Isso me fortalece ou me diminui?"</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-center">
+                        <div class="p-4 rounded-xl bg-stone-900/50 border border-warm-800/40">
+                            <i class="fa-solid fa-users text-amber-400 mb-2"></i>
+                            <p class="text-xs md:text-sm text-stone-300">Pertencer é importante.</p>
+                        </div>
+                        <div class="p-4 rounded-xl bg-stone-900/50 border border-warm-800/40">
+                            <i class="fa-solid fa-shield-halved text-amber-400 mb-2"></i>
+                            <p class="text-xs md:text-sm text-stone-300">Ser aceito não pode custar sua paz.</p>
+                        </div>
+                        <div class="p-4 rounded-xl bg-stone-900/50 border border-warm-800/40">
+                            <i class="fa-solid fa-user-shield text-amber-400 mb-2"></i>
+                            <p class="text-xs md:text-sm text-stone-300">Escolher também é se proteger.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SLIDE 03: 01 RECONHECER -->
+            <div class="slide-item hidden w-full opacity-0 transition-all duration-500" data-slide="3">
+                <div class="glass-card rounded-3xl p-8 md:p-12 border border-amber-500/20 shadow-2xl">
+                    <div class="flex items-center justify-between mb-6">
+                        <span class="px-3 py-1 rounded-full bg-warm-900/60 border border-amber-500/30 text-amber-300 text-xs tracking-widest uppercase">
+                            Slide 03 — 01 Reconhecer
+                        </span>
+                        <i class="fa-solid fa-seedling text-emerald-400 text-xl"></i>
+                    </div>
+
+                    <h2 class="font-serif text-3xl md:text-5xl font-bold text-amber-100 mb-2">
+                        01 RECONHECER
+                    </h2>
+                    
+                    <p class="text-xl text-amber-300 font-serif italic mb-6">
+                        Como são as boas companhias?
+                    </p>
+
+                    <div class="p-4 rounded-xl bg-emerald-950/30 border border-emerald-500/30 text-emerald-200 mb-8 flex items-center gap-3">
+                        <i class="fa-solid fa-circle-info text-emerald-400 text-lg flex-shrink-0"></i>
+                        <span class="text-sm md:text-base"><strong>Conceito:</strong> Não são pessoas perfeitas. São pessoas que fazem espaço para você ser você.</span>
+                    </div>
+
+                    <!-- Pilares -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                        <div class="glass-card-hover p-6 rounded-2xl bg-stone-900/60 border border-warm-800/60">
+                            <div class="w-10 h-10 rounded-full bg-emerald-900/40 border border-emerald-500/30 flex items-center justify-center text-emerald-400 font-bold mb-4">
+                                <i class="fa-solid fa-hand"></i>
+                            </div>
+                            <h3 class="font-semibold text-lg text-amber-100 mb-2">Respeitam</h3>
+                            <p class="text-sm text-stone-300 leading-relaxed">Aceitam um "não" sem pressionar ou humilhar.</p>
+                        </div>
+
+                        <div class="glass-card-hover p-6 rounded-2xl bg-stone-900/60 border border-warm-800/60">
+                            <div class="w-10 h-10 rounded-full bg-amber-900/40 border border-amber-500/30 flex items-center justify-center text-amber-400 font-bold mb-4">
+                                <i class="fa-solid fa-star"></i>
+                            </div>
+                            <h3 class="font-semibold text-lg text-amber-100 mb-2">Torcem por você</h3>
+                            <p class="text-sm text-stone-300 leading-relaxed">Celebram suas conquistas e incentivam seus objetivos.</p>
+                        </div>
+
+                        <div class="glass-card-hover p-6 rounded-2xl bg-stone-900/60 border border-warm-800/60">
+                            <div class="w-10 h-10 rounded-full bg-blue-900/40 border border-blue-500/30 flex items-center justify-center text-blue-400 font-bold mb-4">
+                                <i class="fa-solid fa-comments"></i>
+                            </div>
+                            <h3 class="font-semibold text-lg text-amber-100 mb-2">Falam a verdade</h3>
+                            <p class="text-sm text-stone-300 leading-relaxed">Aconselham com cuidado, sem controlar a sua vida.</p>
+                        </div>
+                    </div>
+
+                    <div class="p-5 rounded-2xl bg-gradient-to-r from-warm-900/80 to-stone-900/80 border border-amber-500/30 text-center">
+                        <p class="font-serif italic text-lg md:text-xl text-amber-200">
+                            "Amigo de verdade não exige que você se destrua para provar lealdade."
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SLIDE 04: 02 FICAR ATENTO -->
+            <div class="slide-item hidden w-full opacity-0 transition-all duration-500" data-slide="4">
+                <div class="glass-card rounded-3xl p-8 md:p-12 border border-rose-500/20 shadow-2xl">
+                    <div class="flex items-center justify-between mb-6">
+                        <span class="px-3 py-1 rounded-full bg-rose-950/60 border border-rose-500/40 text-rose-300 text-xs tracking-widest uppercase">
+                            Slide 04 — 02 Ficar Atento
+                        </span>
+                        <i class="fa-solid fa-triangle-exclamation text-rose-400 text-xl"></i>
+                    </div>
+
+                    <h2 class="font-serif text-3xl md:text-5xl font-bold text-amber-100 mb-1">
+                        02 FICAR ATENTO
+                    </h2>
+                    <p class="text-lg text-rose-300 font-serif italic mb-6">
+                        Quando uma companhia começa a fazer mal
+                    </p>
+
+                    <div class="p-4 rounded-xl bg-rose-950/40 border border-rose-500/30 text-rose-200 mb-6 flex items-start gap-3">
+                        <i class="fa-solid fa-bell text-rose-400 text-lg mt-0.5 flex-shrink-0"></i>
+                        <p class="text-sm md:text-base">
+                            <strong>Alerta:</strong> Um sinal repetido merece atenção — especialmente quando você sente 
+                            <span class="underline decoration-rose-400 decoration-2 font-semibold">medo</span>, 
+                            <span class="underline decoration-rose-400 decoration-2 font-semibold">culpa</span> ou 
+                            <span class="underline decoration-rose-400 decoration-2 font-semibold">vergonha</span>.
+                        </p>
+                    </div>
+
+                    <!-- Sinais de alerta grid -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+                        <div class="p-4 rounded-xl bg-stone-900/80 border border-rose-900/40 flex items-start gap-3">
+                            <span class="w-8 h-8 rounded-lg bg-rose-950 flex items-center justify-center text-rose-400 flex-shrink-0 font-bold">1</span>
+                            <div>
+                                <h4 class="text-amber-200 font-semibold text-sm">Controla</h4>
+                                <p class="text-xs text-stone-300 mt-1">Quer decidir com quem você fala ou o que você faz.</p>
+                            </div>
+                        </div>
+
+                        <div class="p-4 rounded-xl bg-stone-900/80 border border-rose-900/40 flex items-start gap-3">
+                            <span class="w-8 h-8 rounded-lg bg-rose-950 flex items-center justify-center text-rose-400 flex-shrink-0 font-bold">2</span>
+                            <div>
+                                <h4 class="text-amber-200 font-semibold text-sm">Pressiona</h4>
+                                <p class="text-xs text-stone-300 mt-1">Diz que você precisa provar a amizade.</p>
+                            </div>
+                        </div>
+
+                        <div class="p-4 rounded-xl bg-stone-900/80 border border-rose-900/40 flex items-start gap-3">
+                            <span class="w-8 h-8 rounded-lg bg-rose-950 flex items-center justify-center text-rose-400 flex-shrink-0 font-bold">3</span>
+                            <div>
+                                <h4 class="text-amber-200 font-semibold text-sm">Humilha</h4>
+                                <p class="text-xs text-stone-300 mt-1">Faz piadas sobre você e chama isso de brincadeira.</p>
+                            </div>
+                        </div>
+
+                        <div class="p-4 rounded-xl bg-stone-900/80 border border-rose-900/40 flex items-start gap-3">
+                            <span class="w-8 h-8 rounded-lg bg-rose-950 flex items-center justify-center text-rose-400 flex-shrink-0 font-bold">4</span>
+                            <div>
+                                <h4 class="text-amber-200 font-semibold text-sm">Expõe</h4>
+                                <p class="text-xs text-stone-300 mt-1">Compartilha fotos, conversas ou segredos sem autorização.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="p-5 rounded-2xl bg-rose-950/30 border border-rose-500/30 text-center">
+                        <p class="font-serif italic text-lg text-rose-100">
+                            "Uma brincadeira só é brincadeira quando todo mundo se diverte."
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SLIDE 05: 03 SE POSICIONAR -->
+            <div class="slide-item hidden w-full opacity-0 transition-all duration-500" data-slide="5">
+                <div class="glass-card rounded-3xl p-6 md:p-10 border border-amber-500/20 shadow-2xl">
+                    <div class="flex items-center justify-between mb-4">
+                        <span class="px-3 py-1 rounded-full bg-warm-900/60 border border-amber-500/30 text-amber-300 text-xs tracking-widest uppercase">
+                            Slide 05 — 03 Se Posicionar
+                        </span>
+                        <i class="fa-solid fa-hand-holding-heart text-amber-400 text-xl"></i>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center mb-6">
+                        <div class="lg:col-span-4 h-48 lg:h-full rounded-2xl overflow-hidden border border-warm-700/50 shadow-md">
+                            <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=800&q=80" 
+                                 alt="Pessoa convicta e autêntica" 
+                                 class="w-full h-full object-cover"
+                                 onerror="this.onerror=null; this.src='https://placehold.co/600x400/2c1a13/d4af37?text=Se+Posicionar';" />
+                        </div>
+
+                        <div class="lg:col-span-8">
+                            <h2 class="font-serif text-3xl md:text-4xl font-bold text-amber-100 mb-2">
+                                03 SE POSICIONAR
+                            </h2>
+
+                            <div class="p-4 rounded-2xl bg-warm-900/40 border border-amber-500/30 text-left">
+                                <p class="font-serif text-xl text-amber-200 italic mb-1">
+                                    "Limite não é grosseria. É cuidado."
+                                </p>
+                                <p class="text-xs text-stone-300">
+                                    <strong>O que é limite:</strong> Deixar claro o que você aceita, o que não aceita e como quer ser tratado.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h3 class="text-xs font-semibold uppercase tracking-wider text-amber-400 mb-3">Exemplos práticos no dia a dia:</h3>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-4">
+                        <div class="p-3.5 rounded-xl bg-stone-900/70 border border-warm-800/60">
+                            <span class="text-[11px] font-semibold text-amber-400 block mb-0.5">Nas amizades</span>
+                            <p class="text-stone-200 font-serif italic text-sm">"Não quero participar disso."</p>
+                        </div>
+
+                        <div class="p-3.5 rounded-xl bg-stone-900/70 border border-warm-800/60">
+                            <span class="text-[11px] font-semibold text-amber-400 block mb-0.5">Nos relacionamentos</span>
+                            <p class="text-stone-200 font-serif italic text-sm">"Não gostei. Pare, por favor."</p>
+                        </div>
+
+                        <div class="p-3.5 rounded-xl bg-stone-900/70 border border-warm-800/60">
+                            <span class="text-[11px] font-semibold text-amber-400 block mb-0.5">Na internet</span>
+                            <p class="text-stone-200 font-serif italic text-sm">"Não autorizo compartilhar essa foto."</p>
+                        </div>
+
+                        <div class="p-3.5 rounded-xl bg-amber-950/40 border border-amber-500/30">
+                            <span class="text-[11px] font-semibold text-amber-300 block mb-0.5">Quando insistem</span>
+                            <p class="text-amber-100 font-serif italic text-sm font-semibold">"Minha resposta continua sendo não."</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SLIDE 06: 04 LIDAR COM PRESSÃO -->
+            <div class="slide-item hidden w-full opacity-0 transition-all duration-500" data-slide="6">
+                <div class="glass-card rounded-3xl p-6 md:p-10 border border-amber-500/20 shadow-2xl">
+                    <div class="flex items-center justify-between mb-4">
+                        <span class="px-3 py-1 rounded-full bg-warm-900/60 border border-amber-500/30 text-amber-300 text-xs tracking-widest uppercase">
+                            Slide 06 — 04 Lidar com Pressão
+                        </span>
+                        <i class="fa-solid fa-gauge-high text-amber-400 text-xl"></i>
+                    </div>
+
+                    <div class="flex flex-col lg:flex-row gap-6 items-center mb-6">
+                        <div class="flex-1">
+                            <h2 class="font-serif text-3xl md:text-4xl font-bold text-amber-100 mb-1">
+                                04 LIDAR COM PRESSÃO
+                            </h2>
+                            <p class="text-lg text-amber-300 font-serif italic">
+                                Você não precisa decidir no impulso.
+                            </p>
+                        </div>
+                        <div class="w-full lg:w-48 h-28 rounded-2xl overflow-hidden border border-amber-500/30 flex-shrink-0">
+                            <img src="https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&w=800&q=80" 
+                                 alt="Momento de pausa e respiração" 
+                                 class="w-full h-full object-cover"
+                                 onerror="this.onerror=null; this.src='https://placehold.co/600x400/2c1a13/d4af37?text=Pausar';" />
+                        </div>
+                    </div>
+
+                    <!-- Passo a Passo -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                        <div class="relative p-5 rounded-2xl bg-stone-900/80 border border-warm-800/60 text-center group hover:border-amber-500/50 transition">
+                            <div class="w-12 h-12 mx-auto rounded-full bg-amber-900/40 border border-amber-500/30 flex items-center justify-center text-amber-300 font-bold text-lg mb-3">
+                                1
+                            </div>
+                            <h3 class="text-lg font-bold text-amber-100 mb-1">PAUSAR</h3>
+                            <p class="text-xs text-stone-300">Respire. Ganhe tempo.</p>
+                        </div>
+
+                        <div class="relative p-5 rounded-2xl bg-stone-900/80 border border-warm-800/60 text-center group hover:border-amber-500/50 transition">
+                            <div class="w-12 h-12 mx-auto rounded-full bg-amber-900/40 border border-amber-500/30 flex items-center justify-center text-amber-300 font-bold text-lg mb-3">
+                                2
+                            </div>
+                            <h3 class="text-lg font-bold text-amber-100 mb-1">RECUSAR</h3>
+                            <p class="text-xs text-stone-300">Diga um não claro.</p>
+                        </div>
+
+                        <div class="relative p-5 rounded-2xl bg-stone-900/80 border border-warm-800/60 text-center group hover:border-amber-500/50 transition">
+                            <div class="w-12 h-12 mx-auto rounded-full bg-amber-900/40 border border-amber-500/30 flex items-center justify-center text-amber-300 font-bold text-lg mb-3">
+                                3
+                            </div>
+                            <h3 class="text-lg font-bold text-amber-100 mb-1">SAIR</h3>
+                            <p class="text-xs text-stone-300">Afaste-se e procure apoio.</p>
+                        </div>
+                    </div>
+
+                    <div class="p-5 rounded-2xl bg-rose-950/20 border border-rose-500/30 text-center">
+                        <p class="font-serif italic text-lg text-rose-200">
+                            " 'Todo mundo faz' não é argumento. É pressão."
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SLIDE 07: DINÂMICA INTERATIVA -->
+            <div class="slide-item hidden w-full opacity-0 transition-all duration-500" data-slide="7">
+                <div class="glass-card rounded-3xl p-6 md:p-10 border border-amber-500/20 shadow-2xl">
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="px-3 py-1 rounded-full bg-amber-900/60 border border-amber-500/40 text-amber-300 text-xs tracking-widest uppercase">
+                            Slide 07 — Dinâmica
+                        </span>
+                        <i class="fa-solid fa-gamepad text-amber-400 text-xl"></i>
+                    </div>
+
+                    <h2 class="font-serif text-2xl md:text-3xl font-bold text-amber-100 mb-1">
+                        DINÂMICA PRÁTICA
+                    </h2>
+                    
+                    <p class="text-sm md:text-base text-amber-300 font-medium mb-4">
+                        Pergunta: <span class="italic text-stone-200">Eu aceito, estabeleço limite ou peço ajuda?</span>
+                    </p>
+
+                    <div class="space-y-2.5 mb-4">
+                        <!-- Situation A -->
+                        <div class="p-3.5 rounded-xl bg-stone-900/80 border border-warm-800/60 hover:border-amber-500/40 transition">
+                            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                                <p class="text-xs md:text-sm text-stone-200">
+                                    <strong class="text-amber-400">A)</strong> Um amigo respeita quando você diz que não quer sair.
+                                </p>
+                                <button onclick="handleQuizAnswer(this, 'correto', 'Situação saudável! O respeito mútuo fortalece a amizade.')" class="px-3 py-1 rounded-lg bg-emerald-950 border border-emerald-500/40 text-emerald-300 text-xs hover:bg-emerald-900 transition flex-shrink-0">
+                                    Aceitar / Valorizar
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Situation B -->
+                        <div class="p-3.5 rounded-xl bg-stone-900/80 border border-warm-800/60 hover:border-amber-500/40 transition">
+                            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                                <p class="text-xs md:text-sm text-stone-200">
+                                    <strong class="text-amber-400">B)</strong> Um grupo exige sua senha para provar confiança.
+                                </p>
+                                <button onclick="handleQuizAnswer(this, 'alerta', 'Sinal de abuso e controle! Estabeleça limites e não compartilhe senhas.')" class="px-3 py-1 rounded-lg bg-amber-950 border border-amber-500/40 text-amber-300 text-xs hover:bg-amber-900 transition flex-shrink-0">
+                                    Estabelecer Limite
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Situation C -->
+                        <div class="p-3.5 rounded-xl bg-stone-900/80 border border-warm-800/60 hover:border-amber-500/40 transition">
+                            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                                <p class="text-xs md:text-sm text-stone-200">
+                                    <strong class="text-amber-400">C)</strong> Alguém compartilha uma foto sua sem autorização.
+                                </p>
+                                <button onclick="handleQuizAnswer(this, 'perigo', 'Violação grave! Peça ajuda imediatamente a um adulto de confiança.')" class="px-3 py-1 rounded-lg bg-rose-950 border border-rose-500/40 text-rose-300 text-xs hover:bg-rose-900 transition flex-shrink-0">
+                                    Peço Ajuda
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Situation D -->
+                        <div class="p-3.5 rounded-xl bg-stone-900/80 border border-warm-800/60 hover:border-amber-500/40 transition">
+                            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                                <p class="text-xs md:text-sm text-stone-200">
+                                    <strong class="text-amber-400">D)</strong> Seus amigos incentivam seus estudos e objetivos.
+                                </p>
+                                <button onclick="handleQuizAnswer(this, 'correto', 'Excelente! Companhia segura que te impulsiona para frente.')" class="px-3 py-1 rounded-lg bg-emerald-950 border border-emerald-500/40 text-emerald-300 text-xs hover:bg-emerald-900 transition flex-shrink-0">
+                                    Aceitar / Manter
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Feedback Output Container -->
+                    <div id="quiz-feedback" class="hidden p-3 rounded-xl bg-stone-950 border border-amber-500/30 text-xs mb-3 animate-fade-in"></div>
+
+                    <div class="p-3 rounded-xl bg-warm-950/60 border-l-4 border-amber-500 text-center">
+                        <span class="text-[10px] uppercase tracking-widest text-amber-400 block mb-0.5">Pergunta-chave para levar consigo:</span>
+                        <p class="font-serif italic text-base text-amber-100">
+                            "Eu faria isso se ninguém estivesse me pressionando?"
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SLIDE 08: 05 NO MUNDO DIGITAL -->
+            <div class="slide-item hidden w-full opacity-0 transition-all duration-500" data-slide="8">
+                <div class="glass-card rounded-3xl p-6 md:p-10 border border-sky-500/20 shadow-2xl">
+                    <div class="flex items-center justify-between mb-4">
+                        <span class="px-3 py-1 rounded-full bg-sky-950/60 border border-sky-500/40 text-sky-300 text-xs tracking-widest uppercase">
+                            Slide 08 — 05 No Mundo Digital
+                        </span>
+                        <i class="fa-solid fa-laptop-code text-sky-400 text-xl"></i>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center mb-6">
+                        <div class="lg:col-span-8">
+                            <h2 class="font-serif text-3xl md:text-4xl font-bold text-amber-100 mb-1">
+                                05 NO MUNDO DIGITAL
+                            </h2>
+                            <p class="text-base text-sky-300 font-serif italic mb-4">
+                                Limites também existem online.
+                            </p>
+                            <div class="p-3.5 rounded-xl bg-sky-950/30 border border-sky-500/30 text-sky-200 text-xs md:text-sm">
+                                <strong>Conceito:</strong> O que acontece na tela também pode machucar fora dela.
+                            </div>
+                        </div>
+
+                        <div class="lg:col-span-4 h-36 lg:h-full rounded-2xl overflow-hidden border border-sky-500/30 shadow-md">
+                            <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=800&q=80" 
+                                 alt="Smartphone e conexão digital com segurança" 
+                                 class="w-full h-full object-cover"
+                                 onerror="this.onerror=null; this.src='https://placehold.co/600x400/2c1a13/d4af37?text=Mundo+Digital';" />
+                        </div>
+                    </div>
+
+                    <!-- Ações no Digital -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4">
+                        <div class="p-4 rounded-xl bg-stone-900/80 border border-sky-900/40 hover:border-sky-500/40 transition">
+                            <div class="flex items-center gap-2 mb-1">
+                                <i class="fa-solid fa-key text-sky-400 text-sm"></i>
+                                <h3 class="font-semibold text-amber-100 text-sm">Proteja</h3>
+                            </div>
+                            <p class="text-xs text-stone-300">Suas senhas e privacidade são individuais. Nunca entregue por pressão.</p>
+                        </div>
+
+                        <div class="p-4 rounded-xl bg-stone-900/80 border border-sky-900/40 hover:border-sky-500/40 transition">
+                            <div class="flex items-center gap-2 mb-1">
+                                <i class="fa-solid fa-brain text-sky-400 text-sm"></i>
+                                <h3 class="font-semibold text-amber-100 text-sm">Pense</h3>
+                            </div>
+                            <p class="text-xs text-stone-300">Antes de publicar ou enviar qualquer arquivo, reflita sobre as consequências.</p>
+                        </div>
+
+                        <div class="p-4 rounded-xl bg-stone-900/80 border border-sky-900/40 hover:border-sky-500/40 transition">
+                            <div class="flex items-center gap-2 mb-1">
+                                <i class="fa-solid fa-folder-bookmark text-sky-400 text-sm"></i>
+                                <h3 class="font-semibold text-amber-100 text-sm">Guarde</h3>
+                            </div>
+                            <p class="text-xs text-stone-300">Guarde provas de ameaças, difamação ou exposição (prints/mensagens).</p>
+                        </div>
+
+                        <div class="p-4 rounded-xl bg-stone-900/80 border border-sky-900/40 hover:border-sky-500/40 transition">
+                            <div class="flex items-center gap-2 mb-1">
+                                <i class="fa-solid fa-user-shield text-sky-400 text-sm"></i>
+                                <h3 class="font-semibold text-amber-100 text-sm">Procure</h3>
+                            </div>
+                            <p class="text-xs text-stone-300">Um adulto de confiança sem medo de julgamentos.</p>
+                        </div>
+                    </div>
+
+                    <div class="p-4 rounded-2xl bg-sky-950/40 border border-sky-500/30 text-center">
+                        <p class="font-serif italic text-base text-sky-100">
+                            "Nenhuma chantagem precisa ser enfrentada sozinho."
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SLIDE 09: 06 PEDIR AJUDA -->
+            <div class="slide-item hidden w-full opacity-0 transition-all duration-500" data-slide="9">
+                <div class="glass-card rounded-3xl p-6 md:p-10 border border-amber-500/20 shadow-2xl">
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="px-3 py-1 rounded-full bg-warm-900/60 border border-amber-500/30 text-amber-300 text-xs tracking-widest uppercase">
+                            Slide 09 — 06 Pedir Ajuda
+                        </span>
+                        <i class="fa-solid fa-hands-holding-child text-amber-400 text-xl"></i>
+                    </div>
+
+                    <div class="flex flex-col lg:flex-row gap-6 items-center mb-4">
+                        <div class="flex-1">
+                            <h2 class="font-serif text-3xl md:text-4xl font-bold text-amber-100 mb-1">
+                                06 PEDIR AJUDA
+                            </h2>
+                            <p class="text-base text-amber-300 font-serif italic mb-1">
+                                Coragem também é chamar alguém.
+                            </p>
+                            <p class="text-xs text-stone-300 italic">
+                                "Quando algo parecer pesado demais, você não precisa resolver sozinho."
+                            </p>
+                        </div>
+                        <div class="w-full lg:w-48 h-28 rounded-2xl overflow-hidden border border-amber-500/30 flex-shrink-0">
+                            <img src="https://images.unsplash.com/photo-1582213782179-e0d53f98f2ca?auto=format&fit=crop&w=800&q=80" 
+                                 alt="Mãos dadas representando união e suporte" 
+                                 class="w-full h-full object-cover"
+                                 onerror="this.onerror=null; this.src='https://placehold.co/600x400/2c1a13/d4af37?text=Rede+de+Apoio';" />
+                        </div>
+                    </div>
+
+                    <!-- Interactive Radial Support Network -->
+                    <div class="relative max-w-2xl mx-auto p-4 rounded-2xl bg-stone-900/60 border border-warm-800/60 mb-4">
+                        <div class="text-center text-[11px] uppercase tracking-widest text-amber-400 mb-3 font-semibold">Rede de Apoio</div>
+                        
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <div class="sm:col-span-2 text-center p-2 rounded-xl bg-amber-500/20 border border-amber-500/40 font-bold text-amber-200 text-xs">
+                                <i class="fa-solid fa-user-check mr-2"></i> VOCÊ NO CENTRO
+                            </div>
+
+                            <div class="p-2.5 rounded-xl bg-stone-950 border border-warm-800 text-xs">
+                                <div class="font-bold text-amber-300 mb-0.5"><i class="fa-solid fa-house-user mr-1"></i> Família</div>
+                                <span class="text-stone-300 text-[11px]">Alguém que escuta e acolhe com segurança.</span>
+                            </div>
+
+                            <div class="p-2.5 rounded-xl bg-stone-950 border border-warm-800 text-xs">
+                                <div class="font-bold text-amber-300 mb-0.5"><i class="fa-solid fa-school mr-1"></i> Escola</div>
+                                <span class="text-stone-300 text-[11px]">Professor, coordenação, orientação pedagógica.</span>
+                            </div>
+
+                            <div class="p-2.5 rounded-xl bg-stone-950 border border-warm-800 text-xs">
+                                <div class="font-bold text-amber-300 mb-0.5"><i class="fa-solid fa-user-group mr-1"></i> Amigo Seguro</div>
+                                <span class="text-stone-300 text-[11px]">Alguém maduro, leal e respeitoso.</span>
+                            </div>
+
+                            <div class="p-2.5 rounded-xl bg-stone-950 border border-warm-800 text-xs">
+                                <div class="font-bold text-amber-300 mb-0.5"><i class="fa-solid fa-building-shield mr-1"></i> Rede de Proteção</div>
+                                <span class="text-stone-300 text-[11px]">Conselho Tutelar, Disque 100, CRAS/CREAS/SUS.</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="p-3.5 rounded-2xl bg-amber-950/40 border border-amber-500/30 text-center">
+                        <p class="font-serif italic text-sm md:text-base text-amber-200">
+                            "Pedir ajuda cedo pode evitar que o problema cresça."
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SLIDE 10: PARA LEVAR -->
+            <div class="slide-item hidden w-full opacity-0 transition-all duration-500" data-slide="10">
+                <div class="glass-card rounded-3xl p-6 md:p-10 border border-emerald-500/20 shadow-2xl">
+                    <div class="flex items-center justify-between mb-4">
+                        <span class="px-3 py-1 rounded-full bg-emerald-950/60 border border-emerald-500/40 text-emerald-300 text-xs tracking-widest uppercase">
+                            Slide 10 — Para Levar
+                        </span>
+                        <i class="fa-solid fa-box-archive text-emerald-400 text-xl"></i>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center mb-6">
+                        <div class="lg:col-span-8">
+                            <h2 class="font-serif text-3xl md:text-4xl font-bold text-amber-100 mb-1">
+                                PARA LEVAR
+                            </h2>
+                            <p class="text-base text-emerald-300 font-serif italic">
+                                Uma escolha pequena pode proteger um grande futuro.
+                            </p>
+                        </div>
+                        <div class="lg:col-span-4 h-28 rounded-2xl overflow-hidden border border-emerald-500/30">
+                            <img src="https://images.unsplash.com/photo-1490730141103-6cac27aaab94?auto=format&fit=crop&w=800&q=80" 
+                                 alt="Horizonte luminoso de liberdade e futuro" 
+                                 class="w-full h-full object-cover"
+                                 onerror="this.onerror=null; this.src='https://placehold.co/600x400/2c1a13/d4af37?text=Futuro';" />
+                        </div>
+                    </div>
+
+                    <!-- Interactive Checklist -->
+                    <div class="space-y-2.5 mb-6">
+                        <div onclick="toggleCheck(this)" class="cursor-pointer p-3.5 rounded-xl bg-stone-900/80 border border-warm-800/60 hover:border-emerald-500/50 transition flex items-center justify-between group">
+                            <span class="text-stone-200 text-xs md:text-sm font-medium">Valorizar quem me respeita</span>
+                            <div class="w-6 h-6 rounded-lg border-2 border-emerald-500 flex items-center justify-center text-emerald-400 bg-emerald-950/40">
+                                <i class="fa-solid fa-check text-xs"></i>
+                            </div>
+                        </div>
+
+                        <div onclick="toggleCheck(this)" class="cursor-pointer p-3.5 rounded-xl bg-stone-900/80 border border-warm-800/60 hover:border-emerald-500/50 transition flex items-center justify-between group">
+                            <span class="text-stone-200 text-xs md:text-sm font-medium">Dizer não sem culpa</span>
+                            <div class="w-6 h-6 rounded-lg border-2 border-emerald-500 flex items-center justify-center text-emerald-400 bg-emerald-950/40">
+                                <i class="fa-solid fa-check text-xs"></i>
+                            </div>
+                        </div>
+
+                        <div onclick="toggleCheck(this)" class="cursor-pointer p-3.5 rounded-xl bg-stone-900/80 border border-warm-800/60 hover:border-emerald-500/50 transition flex items-center justify-between group">
+                            <span class="text-stone-200 text-xs md:text-sm font-medium">Não pressionar ninguém</span>
+                            <div class="w-6 h-6 rounded-lg border-2 border-emerald-500 flex items-center justify-center text-emerald-400 bg-emerald-950/40">
+                                <i class="fa-solid fa-check text-xs"></i>
+                            </div>
+                        </div>
+
+                        <div onclick="toggleCheck(this)" class="cursor-pointer p-3.5 rounded-xl bg-stone-900/80 border border-warm-800/60 hover:border-emerald-500/50 transition flex items-center justify-between group">
+                            <span class="text-stone-200 text-xs md:text-sm font-medium">Pedir ajuda quando precisar</span>
+                            <div class="w-6 h-6 rounded-lg border-2 border-emerald-500 flex items-center justify-center text-emerald-400 bg-emerald-950/40">
+                                <i class="fa-solid fa-check text-xs"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Highlight Box -->
+                    <div class="p-5 rounded-2xl bg-gradient-to-r from-amber-950/80 via-warm-900/80 to-amber-950/80 border-2 border-amber-500/50 text-center shadow-lg">
+                        <p class="font-serif font-bold text-xl md:text-2xl text-amber-200 tracking-wider mb-0.5">
+                            NÃO É NÃO.
+                        </p>
+                        <p class="text-stone-300 font-serif text-sm italic">
+                            E respeito vale para todos.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SLIDE 11: PARA ENCERRAR -->
+            <div class="slide-item hidden w-full opacity-0 transition-all duration-500" data-slide="11">
+                <div class="glass-card rounded-3xl p-6 md:p-10 border border-amber-500/20 shadow-2xl text-center">
+                    <span class="inline-block px-3 py-1 rounded-full bg-warm-900/60 border border-amber-500/30 text-amber-300 text-xs tracking-widest uppercase mb-4">
+                        Slide 11 — Para Encerrar
+                    </span>
+
+                    <h2 class="font-serif text-3xl md:text-4xl font-bold text-amber-100 mb-4">
+                        PARA ENCERRAR
+                    </h2>
+
+                    <!-- Final Reflection Block -->
+                    <div class="max-w-2xl mx-auto p-5 rounded-2xl bg-warm-950/80 border-l-4 border-amber-500 text-left mb-6 shadow-inner">
+                        <p class="font-serif italic text-base md:text-lg text-stone-200 leading-relaxed mb-3">
+                            "Pertencer é importante.<br>
+                            Mas pertencer a qualquer custo pode custar caro demais."
+                        </p>
+                        <p class="font-serif italic text-base md:text-lg text-amber-200 leading-relaxed">
+                            "Escolha companhias que respeitem seus limites — e seja também uma companhia segura para alguém."
+                        </p>
+                    </div>
+
+                    <p class="font-serif text-2xl md:text-3xl font-bold text-amber-100 tracking-wider mb-1">OBRIGADA!</p>
+                    <p class="text-stone-400 text-xs mb-6">Perguntas & Diálogo</p>
+
+                    <!-- Professional Contact Card with photo -->
+                    <div class="max-w-md mx-auto p-5 rounded-2xl bg-stone-900/90 border border-warm-800 flex flex-col items-center">
+                        <div class="w-20 h-20 rounded-full overflow-hidden border-2 border-amber-500 mb-3 shadow-md">
+                            <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=400&q=80" 
+                                 alt="Flávia Barros - Psicóloga" 
+                                 class="w-full h-full object-cover"
+                                 onerror="this.onerror=null; this.src='https://placehold.co/200x200/2c1a13/d4af37?text=Flavia+Barros';" />
+                        </div>
+                        <h3 class="font-serif text-xl font-bold text-amber-100">Flávia Barros</h3>
+                        <p class="text-amber-400 text-[10px] font-semibold uppercase tracking-widest mb-0.5">Psicóloga</p>
+                        <p class="text-stone-400 text-xs mb-4">CRP 04/IS01654</p>
+
+                        <div class="w-full pt-3 border-t border-stone-800 flex flex-col gap-2 text-xs">
+                            <a href="https://wa.me/5538998376426" target="_blank" class="p-2.5 rounded-xl bg-emerald-950/60 border border-emerald-500/40 text-emerald-300 hover:bg-emerald-900/60 transition flex items-center justify-center gap-2">
+                                <i class="fa-brands fa-whatsapp text-base"></i>
+                                <span>(38) 99837-6426</span>
+                            </a>
+                            
+                            <a href="mailto:fbspsico@proton.me" class="p-2.5 rounded-xl bg-stone-800 border border-warm-700/50 text-stone-300 hover:bg-stone-700/60 transition flex items-center justify-center gap-2">
+                                <i class="fa-regular fa-envelope text-base"></i>
+                                <span>fbspsico@proton.me</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+
+    <!-- BOTTOM CONTROLS & PROGRESS BAR -->
+    <footer id="bottom-controls" class="fixed bottom-0 left-0 right-0 z-50 glass-card border-t border-warm-900/40 px-4 md:px-8 py-3 flex items-center justify-between">
+        
+        <!-- Previous Button -->
+        <button id="prev-btn" onclick="prevSlide()" class="px-4 py-2 rounded-xl bg-stone-900 border border-warm-800 hover:border-amber-500/50 text-stone-300 hover:text-amber-300 transition flex items-center gap-2 text-sm disabled:opacity-30 disabled:pointer-events-none">
+            <i class="fa-solid fa-arrow-left"></i>
+            <span class="hidden sm:inline">Anterior</span>
+        </button>
+
+        <!-- Progress Indicator -->
+        <div class="flex flex-col items-center gap-1">
+            <span id="slide-indicator" class="text-xs font-semibold text-amber-300 tracking-wider font-mono">
+                SLIDE <span id="current-num">01</span> / <span id="total-num">11</span>
+            </span>
+            <div class="w-32 md:w-48 h-1.5 bg-stone-900 rounded-full overflow-hidden border border-warm-900">
+                <div id="progress-bar" class="h-full bg-gradient-to-r from-amber-600 to-amber-400 transition-all duration-300" style="width: 9.09%;"></div>
+            </div>
+        </div>
+
+        <!-- Next Button -->
+        <button id="next-btn" onclick="nextSlide()" class="px-5 py-2 rounded-xl bg-gradient-to-r from-warm-700 to-amber-600 hover:from-warm-600 hover:to-amber-500 text-stone-900 font-semibold shadow-md transition flex items-center gap-2 text-sm">
+            <span class="hidden sm:inline">Próximo</span>
+            <i class="fa-solid fa-arrow-right"></i>
+        </button>
+    </footer>
+
+    <!-- SLIDE GRID OVERVIEW MODAL -->
+    <div id="grid-modal" class="fixed inset-0 z-50 bg-stonebg/95 backdrop-blur-xl hidden flex-col p-6 overflow-y-auto">
+        <div class="max-w-6xl mx-auto w-full">
+            <div class="flex items-center justify-between mb-8 pb-4 border-b border-warm-800">
+                <div>
+                    <h3 class="font-serif text-2xl font-bold text-amber-100">Índice da Apresentação</h3>
+                    <p class="text-xs text-stone-400">Selecione qualquer slide para ir diretamente</p>
+                </div>
+                <button onclick="toggleGridModal()" class="w-10 h-10 rounded-full bg-stone-900 border border-warm-800 text-stone-300 hover:text-amber-300 flex items-center justify-center transition">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+
+            <!-- Grid Thumbnails -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4" id="modal-grid-container">
+                <!-- Dynamically generated or static slide thumbnails -->
+            </div>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT APP LOGIC -->
+    <script>
+        // State variables
+        let currentSlide = 1;
+        const totalSlides = 11;
+        let isEditorialMode = false;
+
+        const slideTitles = [
+            "Capa — Boas Companhias e Limites",
+            "Começo — Provocação e Reflexão",
+            "01 Reconhecer — Boas Companhias",
+            "02 Ficar Atento — Sinais de Alerta",
+            "03 Se Posicionar — O que é Limite",
+            "04 Lidar com Pressão — Passo a Passo",
+            "Dinâmica Prática — Situações e Decisão",
+            "05 No Mundo Digital — Proteção Online",
+            "06 Pedir Ajuda — Rede de Apoio",
+            "Para Levar — Checklist de Atitudes",
+            "Para Encerrar — Mensagem & Contato"
+        ];
+
+        // On document load
+        document.addEventListener('DOMContentLoaded', () => {
+            updateSlideView();
+            buildModalGrid();
+            setupKeyboardAndTouch();
+        });
+
+        // Slide Navigation
+        function goToSlide(n) {
+            if (n < 1 || n > totalSlides) return;
+            currentSlide = n;
+            updateSlideView();
+        }
+
+        function nextSlide() {
+            if (currentSlide < totalSlides) {
+                currentSlide++;
+                updateSlideView();
+            }
+        }
+
+        function prevSlide() {
+            if (currentSlide > 1) {
+                currentSlide--;
+                updateSlideView();
+            }
+        }
+
+        function updateSlideView() {
+            if (isEditorialMode) return;
+
+            const slides = document.querySelectorAll('.slide-item');
+            slides.forEach((slide, idx) => {
+                const slideNum = idx + 1;
+                if (slideNum === currentSlide) {
+                    slide.classList.remove('hidden');
+                    setTimeout(() => {
+                        slide.classList.remove('opacity-0');
+                        slide.classList.add('opacity-100');
+                    }, 20);
+                } else {
+                    slide.classList.add('opacity-0');
+                    slide.classList.remove('opacity-100');
+                    slide.classList.add('hidden');
+                }
+            });
+
+            // Update Header & Footer Indicators
+            document.getElementById('current-num').innerText = String(currentSlide).padStart(2, '0');
+            document.getElementById('total-num').innerText = String(totalSlides).padStart(2, '0');
+            
+            const progressPercent = (currentSlide / totalSlides) * 100;
+            document.getElementById('progress-bar').style.width = `${progressPercent}%`;
+
+            // Button States
+            const prevBtn = document.getElementById('prev-btn');
+            const nextBtn = document.getElementById('next-btn');
+
+            if (currentSlide === 1) {
+                prevBtn.disabled = true;
+            } else {
+                prevBtn.disabled = false;
+            }
+
+            if (currentSlide === totalSlides) {
+                nextBtn.innerHTML = '<span>Início</span> <i class="fa-solid fa-rotate-right"></i>';
+                nextBtn.onclick = () => goToSlide(1);
+            } else {
+                nextBtn.innerHTML = '<span class="hidden sm:inline">Próximo</span> <i class="fa-solid fa-arrow-right"></i>';
+                nextBtn.onclick = nextSlide;
+            }
+
+            // Scroll to top of slide canvas
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Toggle Editorial Mode vs Slide Deck Mode
+        function toggleViewMode() {
+            isEditorialMode = !isEditorialMode;
+            const deck = document.getElementById('slide-deck');
+            const bottomControls = document.getElementById('bottom-controls');
+            const modeIcon = document.getElementById('mode-icon');
+            const modeText = document.getElementById('mode-text');
+
+            if (isEditorialMode) {
+                // Show all slides continuously as editorial scroll page
+                const slides = document.querySelectorAll('.slide-item');
+                slides.forEach(slide => {
+                    slide.classList.remove('hidden', 'opacity-0');
+                    slide.classList.add('opacity-100', 'mb-12');
+                });
+                bottomControls.classList.add('hidden');
+                modeIcon.className = "fa-solid fa-slideshare text-amber-400";
+                modeText.innerText = "Modo Apresentação";
+            } else {
+                // Return to slideshow mode
+                const slides = document.querySelectorAll('.slide-item');
+                slides.forEach(slide => slide.classList.remove('mb-12'));
+                bottomControls.classList.remove('hidden');
+                modeIcon.className = "fa-solid fa-scroll text-amber-400";
+                modeText.innerText = "Modo Editorial";
+                updateSlideView();
+            }
+        }
+
+        // Build Index Grid Modal
+        function buildModalGrid() {
+            const container = document.getElementById('modal-grid-container');
+            container.innerHTML = '';
+
+            for (let i = 1; i <= totalSlides; i++) {
+                const card = document.createElement('div');
+                card.className = `p-4 rounded-xl border cursor-pointer transition flex flex-col justify-between h-32 ${
+                    i === currentSlide ? 'bg-amber-950/60 border-amber-500/80 text-amber-200' : 'bg-stone-900/80 border-warm-800 text-stone-300 hover:border-amber-500/40'
+                }`;
+                card.onclick = () => {
+                    if (isEditorialMode) toggleViewMode();
+                    goToSlide(i);
+                    toggleGridModal();
+                };
+
+                card.innerHTML = `
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-mono font-bold text-amber-400">SLIDE ${String(i).padStart(2, '0')}</span>
+                        <i class="fa-solid fa-chevron-right text-xs text-stone-500"></i>
+                    </div>
+                    <p class="font-serif text-sm font-semibold line-clamp-2">${slideTitles[i-1]}</p>
+                `;
+                container.appendChild(card);
+            }
+        }
+
+        function toggleGridModal() {
+            const modal = document.getElementById('grid-modal');
+            modal.classList.toggle('hidden');
+            modal.classList.toggle('flex');
+            if (!modal.classList.contains('hidden')) {
+                buildModalGrid();
+            }
+        }
+
+        // Keyboard & Touch Gesture Controls
+        function setupKeyboardAndTouch() {
+            document.addEventListener('keydown', (e) => {
+                if (isEditorialMode) return;
+                if (e.key === 'ArrowRight' || e.key === ' ') {
+                    nextSlide();
+                } else if (e.key === 'ArrowLeft') {
+                    prevSlide();
+                } else if (e.key === 'Escape') {
+                    const modal = document.getElementById('grid-modal');
+                    if (!modal.classList.contains('hidden')) toggleGridModal();
+                }
+            });
+
+            // Swipe Detection for Mobile
+            let touchStartX = 0;
+            let touchEndX = 0;
+
+            document.addEventListener('touchstart', (e) => {
+                touchStartX = e.changedTouches[0].screenX;
+            }, false);
+
+            document.addEventListener('touchend', (e) => {
+                if (isEditorialMode) return;
+                touchEndX = e.changedTouches[0].screenX;
+                handleSwipe();
+            }, false);
+
+            function handleSwipe() {
+                const swipeThreshold = 50;
+                if (touchEndX < touchStartX - swipeThreshold) {
+                    nextSlide(); // Swipe Left -> Next
+                }
+                if (touchEndX > touchStartX + swipeThreshold) {
+                    prevSlide(); // Swipe Right -> Prev
+                }
+            }
+        }
+
+        // Interactive Quiz Feedback
+        function handleQuizAnswer(btn, type, msg) {
+            const feedback = document.getElementById('quiz-feedback');
+            feedback.classList.remove('hidden');
+
+            let colorClasses = "bg-stone-900 border-amber-500/40 text-amber-200";
+            if (type === 'correto') {
+                colorClasses = "bg-emerald-950/80 border-emerald-500/50 text-emerald-200";
+            } else if (type === 'alerta') {
+                colorClasses = "bg-amber-950/80 border-amber-500/50 text-amber-200";
+            } else if (type === 'perigo') {
+                colorClasses = "bg-rose-950/80 border-rose-500/50 text-rose-200";
+            }
+
+            feedback.className = `p-4 rounded-xl text-sm mb-4 border ${colorClasses}`;
+            feedback.innerHTML = `<i class="fa-solid fa-circle-check mr-2"></i> <strong>Orientação:</strong> ${msg}`;
+        }
+
+        // Toggle Checklist Item
+        function toggleCheck(el) {
+            const icon = el.querySelector('i');
+            const box = el.querySelector('div');
+            
+            if (icon.classList.contains('fa-check')) {
+                icon.className = 'fa-solid fa-circle text-xs text-stone-600';
+                box.className = 'w-7 h-7 rounded-lg border border-stone-700 flex items-center justify-center bg-stone-900';
+                el.classList.add('opacity-60');
+            } else {
+                icon.className = 'fa-solid fa-check text-sm';
+                box.className = 'w-7 h-7 rounded-lg border-2 border-emerald-500 flex items-center justify-center text-emerald-400 bg-emerald-950/40';
+                el.classList.remove('opacity-60');
+            }
+        }
+
+        // Fullscreen Toggle
+        function toggleFullscreen() {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().catch(err => {
+                    console.log(`Error attempting to enable fullscreen: ${err.message}`);
+                });
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                }
+            }
+        }
+    </script>
+</body>
+</html>
