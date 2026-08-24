@@ -239,6 +239,29 @@ Evite jargões promocionais. Seja estritamente clínico, empático e realista.`;
     }
   });
 
+  // Serve static slide presentations directly (slide1 and slide2)
+  const slide1Path = path.join(process.cwd(), 'public', 'slide1', 'index.html');
+  const slide2Path = path.join(process.cwd(), 'public', 'slide2', 'index.html');
+
+  app.use('/slide1', express.static(path.join(process.cwd(), 'public', 'slide1')));
+  app.use('/slide2', express.static(path.join(process.cwd(), 'public', 'slide2')));
+
+  app.get(/^\/slide1(\/.*)?$/, (req, res) => {
+    res.sendFile(slide1Path);
+  });
+
+  app.get(/^\/slide2(\/.*)?$/, (req, res) => {
+    res.sendFile(slide2Path);
+  });
+
+  app.get(/^\/src\/slide1(\/.*)?$/, (req, res) => {
+    res.sendFile(slide1Path);
+  });
+
+  app.get(/^\/src\/slide2(\/.*)?$/, (req, res) => {
+    res.sendFile(slide2Path);
+  });
+
   // Serve static UI / Vite integration
   if (process.env.NODE_ENV !== "production") {
     const vite = await createViteServer({
