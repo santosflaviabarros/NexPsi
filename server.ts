@@ -240,51 +240,46 @@ Evite jargões promocionais. Seja estritamente clínico, empático e realista.`;
   });
 
   // Serve static presentations directly from public/slides
-  const sexualidadePath = path.join(process.cwd(), 'public', 'slides', 'sexualidade', 'sexualidade.html');
-  const companhiasPath = path.join(process.cwd(), 'public', 'slides', 'companhias', 'companhias.html');
-  const desenvolvimentoPath = path.join(process.cwd(), 'public', 'slides', 'desenvolvimento', 'desenvolvimento.html');
+  const slidesRootPath = path.join(process.cwd(), 'public', 'slides');
+  const slidesIndexPath = path.join(slidesRootPath, 'index.html');
+  const sexualidadePath = path.join(slidesRootPath, 'sexualidade', 'sexualidade.html');
+  const companhiasPath = path.join(slidesRootPath, 'companhias', 'companhias.html');
+  const desenvolvimentoPath = path.join(slidesRootPath, 'desenvolvimento', 'desenvolvimento.html');
 
-  // Serve static assets from /slides and aliases
-  app.use('/slides', express.static(path.join(process.cwd(), 'public', 'slides')));
-  app.use('/sexualidade', express.static(path.join(process.cwd(), 'public', 'slides', 'sexualidade')));
-  app.use('/companhias', express.static(path.join(process.cwd(), 'public', 'slides', 'companhias')));
-  app.use('/desenvolvimento', express.static(path.join(process.cwd(), 'public', 'slides', 'desenvolvimento')));
+  // Serve static assets from /slides
+  app.use('/slides', express.static(slidesRootPath));
 
-  // Direct routes for slides
-  app.get(['/slides/sexualidade', '/slides/sexualidade.html', '/sexualidade', '/sexualidade.html'], (req, res) => {
-    res.sendFile(sexualidadePath);
-  });
-
-  app.get(/^\/slides\/sexualidade(\/.*)?$/, (req, res) => {
-    res.sendFile(sexualidadePath);
-  });
-
+  // Redirect legacy /sexualidade to canonical /slides/sexualidade/
   app.get(/^\/sexualidade(\/.*)?$/, (req, res) => {
+    res.redirect(301, '/slides/sexualidade/');
+  });
+
+  // Redirect legacy /companhias to canonical /slides/companhias/
+  app.get(/^\/companhias(\/.*)?$/, (req, res) => {
+    res.redirect(301, '/slides/companhias/');
+  });
+
+  // Redirect legacy /desenvolvimento to canonical /slides/desenvolvimento/
+  app.get(/^\/desenvolvimento(\/.*)?$/, (req, res) => {
+    res.redirect(301, '/slides/desenvolvimento/');
+  });
+
+  // Canonical presentation endpoints
+  app.get(['/slides/sexualidade', '/slides/sexualidade/', '/slides/sexualidade/index.html', '/slides/sexualidade/sexualidade.html'], (req, res) => {
     res.sendFile(sexualidadePath);
   });
 
-  app.get(['/slides/companhias', '/slides/companhias.html', '/companhias', '/companhias.html'], (req, res) => {
+  app.get(['/slides/companhias', '/slides/companhias/', '/slides/companhias/index.html', '/slides/companhias/companhias.html'], (req, res) => {
     res.sendFile(companhiasPath);
   });
 
-  app.get(/^\/slides\/companhias(\/.*)?$/, (req, res) => {
-    res.sendFile(companhiasPath);
-  });
-
-  app.get(/^\/companhias(\/.*)?$/, (req, res) => {
-    res.sendFile(companhiasPath);
-  });
-
-  app.get(['/slides/desenvolvimento', '/slides/desenvolvimento.html', '/desenvolvimento', '/desenvolvimento.html'], (req, res) => {
+  app.get(['/slides/desenvolvimento', '/slides/desenvolvimento/', '/slides/desenvolvimento/index.html', '/slides/desenvolvimento/desenvolvimento.html'], (req, res) => {
     res.sendFile(desenvolvimentoPath);
   });
 
-  app.get(/^\/slides\/desenvolvimento(\/.*)?$/, (req, res) => {
-    res.sendFile(desenvolvimentoPath);
-  });
-
-  app.get(/^\/desenvolvimento(\/.*)?$/, (req, res) => {
-    res.sendFile(desenvolvimentoPath);
+  // Slides central hub
+  app.get(['/slides', '/slides/'], (req, res) => {
+    res.sendFile(slidesIndexPath);
   });
 
   // Serve static UI / Vite integration

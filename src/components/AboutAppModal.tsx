@@ -64,7 +64,7 @@ export default function AboutAppModal({ isOpen, onClose }: AboutAppModalProps) {
             </p>
             <div className="pt-2 grid grid-cols-1 sm:grid-cols-3 gap-2 text-[11px]">
               <a 
-                href="/slides/sexualidade" 
+                href="/slides/sexualidade/" 
                 target="_blank" 
                 rel="noopener noreferrer" 
                 className="p-2 bg-white rounded-xl border border-indigo-100/80 hover:border-indigo-300 flex items-center gap-2 text-indigo-950 font-semibold transition hover:shadow-xs"
@@ -73,7 +73,7 @@ export default function AboutAppModal({ isOpen, onClose }: AboutAppModalProps) {
                 <span>Slide Sexualidade</span>
               </a>
               <a 
-                href="/slides/companhias" 
+                href="/slides/companhias/" 
                 target="_blank" 
                 rel="noopener noreferrer" 
                 className="p-2 bg-white rounded-xl border border-indigo-100/80 hover:border-indigo-300 flex items-center gap-2 text-indigo-950 font-semibold transition hover:shadow-xs"
@@ -82,7 +82,7 @@ export default function AboutAppModal({ isOpen, onClose }: AboutAppModalProps) {
                 <span>Slide Companhias</span>
               </a>
               <a 
-                href="/slides/desenvolvimento" 
+                href="/slides/desenvolvimento/" 
                 target="_blank" 
                 rel="noopener noreferrer" 
                 className="p-2 bg-white rounded-xl border border-indigo-100/80 hover:border-indigo-300 flex items-center gap-2 text-indigo-950 font-semibold transition hover:shadow-xs"
