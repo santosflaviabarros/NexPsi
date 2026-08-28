@@ -243,6 +243,8 @@ Evite jargões promocionais. Seja estritamente clínico, empático e realista.`;
   const slidesRootPath = path.join(process.cwd(), 'public', 'slides');
   const slidesIndexPath = path.join(slidesRootPath, 'index.html');
   const sexualidadePath = path.join(slidesRootPath, 'sexualidade', 'sexualidade.html');
+  const sexualidade2Path = path.join(slidesRootPath, 'sexualidade2', 'sexualidade2.html');
+  const sexualidade3Path = path.join(slidesRootPath, 'sexualidade3', 'sexualidade3.html');
   const companhiasPath = path.join(slidesRootPath, 'companhias', 'companhias.html');
   const desenvolvimentoPath = path.join(slidesRootPath, 'desenvolvimento', 'desenvolvimento.html');
 
@@ -250,6 +252,14 @@ Evite jargões promocionais. Seja estritamente clínico, empático e realista.`;
   app.use('/slides', express.static(slidesRootPath));
 
   // Redirect legacy /sexualidade to canonical /slides/sexualidade/
+  app.get(/^\/sexualidade3(\/.*)?$/, (req, res) => {
+    res.redirect(301, '/slides/sexualidade3/');
+  });
+
+  app.get(/^\/sexualidade2(\/.*)?$/, (req, res) => {
+    res.redirect(301, '/slides/sexualidade2/');
+  });
+
   app.get(/^\/sexualidade(\/.*)?$/, (req, res) => {
     res.redirect(301, '/slides/sexualidade/');
   });
@@ -267,6 +277,14 @@ Evite jargões promocionais. Seja estritamente clínico, empático e realista.`;
   // Canonical presentation endpoints
   app.get(['/slides/sexualidade', '/slides/sexualidade/', '/slides/sexualidade/index.html', '/slides/sexualidade/sexualidade.html'], (req, res) => {
     res.sendFile(sexualidadePath);
+  });
+
+  app.get(['/slides/sexualidade2', '/slides/sexualidade2/', '/slides/sexualidade2/index.html', '/slides/sexualidade2/sexualidade2.html'], (req, res) => {
+    res.sendFile(sexualidade2Path);
+  });
+
+  app.get(['/slides/sexualidade3', '/slides/sexualidade3/', '/slides/sexualidade3/index.html', '/slides/sexualidade3/sexualidade3.html'], (req, res) => {
+    res.sendFile(sexualidade3Path);
   });
 
   app.get(['/slides/companhias', '/slides/companhias/', '/slides/companhias/index.html', '/slides/companhias/companhias.html'], (req, res) => {

@@ -62,33 +62,51 @@ export default function AboutAppModal({ isOpen, onClose }: AboutAppModalProps) {
             <p className="text-xs text-slate-600 leading-relaxed">
               A versão <strong>v1.2</strong> consolida a central de apresentações educativas e psicoeducação clínica, além de aprimorar a estabilidade de rotas e o módulo do copiloto inteligente.
             </p>
-            <div className="pt-2 grid grid-cols-1 sm:grid-cols-3 gap-2 text-[11px]">
+            <div className="pt-2 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2 text-[11px]">
               <a 
                 href="/slides/sexualidade/" 
                 target="_blank" 
                 rel="noopener noreferrer" 
-                className="p-2 bg-white rounded-xl border border-indigo-100/80 hover:border-indigo-300 flex items-center gap-2 text-indigo-950 font-semibold transition hover:shadow-xs"
+                className="p-2 bg-white rounded-xl border border-indigo-100/80 hover:border-indigo-300 flex items-center gap-1.5 text-indigo-950 font-semibold transition hover:shadow-xs"
               >
-                <Presentation className="w-3.5 h-3.5 text-rose-500" />
-                <span>Slide Sexualidade</span>
+                <Presentation className="w-3.5 h-3.5 text-rose-500 shrink-0" />
+                <span className="truncate">Sexualidade 1</span>
+              </a>
+              <a 
+                href="/slides/sexualidade2/" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="p-2 bg-white rounded-xl border border-indigo-100/80 hover:border-indigo-300 flex items-center gap-1.5 text-indigo-950 font-semibold transition hover:shadow-xs"
+              >
+                <Presentation className="w-3.5 h-3.5 text-purple-500 shrink-0" />
+                <span className="truncate">Sexualidade 2</span>
+              </a>
+              <a 
+                href="/slides/sexualidade3/" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="p-2 bg-white rounded-xl border border-indigo-100/80 hover:border-indigo-300 flex items-center gap-1.5 text-indigo-950 font-semibold transition hover:shadow-xs"
+              >
+                <Presentation className="w-3.5 h-3.5 text-pink-500 shrink-0" />
+                <span className="truncate">Sexualidade 3</span>
               </a>
               <a 
                 href="/slides/companhias/" 
                 target="_blank" 
                 rel="noopener noreferrer" 
-                className="p-2 bg-white rounded-xl border border-indigo-100/80 hover:border-indigo-300 flex items-center gap-2 text-indigo-950 font-semibold transition hover:shadow-xs"
+                className="p-2 bg-white rounded-xl border border-indigo-100/80 hover:border-indigo-300 flex items-center gap-1.5 text-indigo-950 font-semibold transition hover:shadow-xs"
               >
-                <Presentation className="w-3.5 h-3.5 text-amber-500" />
-                <span>Slide Companhias</span>
+                <Presentation className="w-3.5 h-3.5 text-amber-500 shrink-0" />
+                <span className="truncate">Companhias</span>
               </a>
               <a 
                 href="/slides/desenvolvimento/" 
                 target="_blank" 
                 rel="noopener noreferrer" 
-                className="p-2 bg-white rounded-xl border border-indigo-100/80 hover:border-indigo-300 flex items-center gap-2 text-indigo-950 font-semibold transition hover:shadow-xs"
+                className="p-2 bg-white rounded-xl border border-indigo-100/80 hover:border-indigo-300 flex items-center gap-1.5 text-indigo-950 font-semibold transition hover:shadow-xs"
               >
-                <Presentation className="w-3.5 h-3.5 text-emerald-500" />
-                <span>Slide Desenvolvimento</span>
+                <Presentation className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
+                <span className="truncate">Desenvolvimento</span>
               </a>
             </div>
           </div>
