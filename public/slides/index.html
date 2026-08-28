@@ -49,81 +49,128 @@
         </p>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
         
-        <!-- Card 1: Sexualidade -->
-        <a href="/slides/sexualidade/" class="group block p-6 rounded-3xl bg-slate-900/80 hover:bg-slate-900 border border-slate-800 hover:border-rose-500/40 transition-all duration-300 transform hover:-translate-y-1 shadow-xl hover:shadow-rose-950/20 flex flex-col justify-between">
+        <!-- Card Unificado: Eixo Sexualidade & Neurociência com as 3 opções divididas -->
+        <div class="p-6 rounded-3xl bg-slate-900/90 border border-slate-800 hover:border-rose-500/30 transition-all duration-300 shadow-xl flex flex-col justify-between">
           <div>
-            <div class="w-12 h-12 rounded-2xl bg-rose-500/10 border border-rose-500/20 flex items-center justify-center text-rose-400 mb-4 group-hover:scale-110 transition">
-              <i data-lucide="heart" class="w-6 h-6"></i>
+            <div class="flex items-center justify-between mb-4">
+              <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-rose-500/20 via-purple-500/20 to-pink-500/20 border border-rose-500/30 flex items-center justify-center text-rose-400">
+                <i data-lucide="layers" class="w-6 h-6"></i>
+              </div>
+              <span class="text-[10px] font-bold text-rose-400 uppercase tracking-wider bg-rose-500/10 px-2.5 py-1 rounded-full border border-rose-500/20">
+                3 Módulos / Versões
+              </span>
             </div>
-            <span class="text-[11px] font-bold text-rose-400 uppercase tracking-wider">Apresentação 01</span>
-            <h3 class="text-lg font-bold text-white mt-1 group-hover:text-rose-300 transition">
-              Sexualidade na Adolescência
-            </h3>
-            <p class="text-xs text-slate-400 mt-2 leading-relaxed">
-              Conversa para a vida: desenvolvimento, cuidados, afeto, limites e prevenção informada.
-            </p>
-          </div>
-          <div class="mt-6 pt-4 border-t border-slate-800/80 flex items-center justify-between text-xs font-semibold text-rose-400">
-            <span>Abrir Apresentação</span>
-            <i data-lucide="arrow-right" class="w-4 h-4 group-hover:translate-x-1 transition"></i>
-          </div>
-        </a>
 
-        <!-- Card 2: Sexualidade 2 (Neurociência) -->
-        <a href="/slides/sexualidade2/" class="group block p-6 rounded-3xl bg-slate-900/80 hover:bg-slate-900 border border-slate-800 hover:border-purple-500/40 transition-all duration-300 transform hover:-translate-y-1 shadow-xl hover:shadow-purple-950/20 flex flex-col justify-between">
-          <div>
-            <div class="w-12 h-12 rounded-2xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center text-purple-400 mb-4 group-hover:scale-110 transition">
-              <i data-lucide="brain" class="w-6 h-6"></i>
+            <h3 class="text-xl font-bold text-white tracking-tight">
+              Eixo Sexualidade & Neurociência
+            </h3>
+            <p class="text-xs text-slate-400 mt-1.5 leading-relaxed">
+              Materiais progressivos cobrindo aspectos biopsicossociais, conexões neurais e experiências imersivas.
+            </p>
+
+            <!-- 3 Opções Divididas dentro da mesma Box -->
+            <div class="mt-5 space-y-2.5">
+              
+              <!-- Opção 1: Sexualidade 1 -->
+              <a href="/slides/sexualidade/" class="group/opt block p-3 rounded-2xl bg-slate-950/70 hover:bg-slate-800/80 border border-slate-800/90 hover:border-rose-500/40 transition-all duration-200">
+                <div class="flex items-start justify-between gap-2">
+                  <div class="flex items-start gap-2.5">
+                    <div class="w-7 h-7 rounded-lg bg-rose-500/10 border border-rose-500/20 flex items-center justify-center text-rose-400 shrink-0 mt-0.5 group-hover/opt:scale-105 transition">
+                      <i data-lucide="heart" class="w-3.5 h-3.5"></i>
+                    </div>
+                    <div>
+                      <div class="flex items-center gap-1.5">
+                        <span class="text-xs font-bold text-slate-200 group-hover/opt:text-rose-300 transition">1. Adolescência & Afeto</span>
+                        <span class="text-[9px] font-semibold text-rose-400 bg-rose-500/10 px-1.5 py-0.5 rounded">Geral</span>
+                      </div>
+                      <p class="text-[11px] text-slate-400 mt-0.5 leading-tight">
+                        Desenvolvimento, cuidados, limites e prevenção informada.
+                      </p>
+                    </div>
+                  </div>
+                  <i data-lucide="arrow-right" class="w-4 h-4 text-slate-500 group-hover/opt:text-rose-400 group-hover/opt:translate-x-0.5 transition shrink-0 mt-1"></i>
+                </div>
+              </a>
+
+              <!-- Opção 2: Sexualidade 2 -->
+              <a href="/slides/sexualidade2/" class="group/opt block p-3 rounded-2xl bg-slate-950/70 hover:bg-slate-800/80 border border-slate-800/90 hover:border-purple-500/40 transition-all duration-200">
+                <div class="flex items-start justify-between gap-2">
+                  <div class="flex items-start gap-2.5">
+                    <div class="w-7 h-7 rounded-lg bg-purple-500/10 border border-purple-500/20 flex items-center justify-center text-purple-400 shrink-0 mt-0.5 group-hover/opt:scale-105 transition">
+                      <i data-lucide="brain" class="w-3.5 h-3.5"></i>
+                    </div>
+                    <div>
+                      <div class="flex items-center gap-1.5">
+                        <span class="text-xs font-bold text-slate-200 group-hover/opt:text-purple-300 transition">2. Neurociência (Ed. 1)</span>
+                        <span class="text-[9px] font-semibold text-purple-400 bg-purple-500/10 px-1.5 py-0.5 rounded">Biológico</span>
+                      </div>
+                      <p class="text-[11px] text-slate-400 mt-0.5 leading-tight">
+                        O cérebro como palco da intimidade, hormônios e maturação.
+                      </p>
+                    </div>
+                  </div>
+                  <i data-lucide="arrow-right" class="w-4 h-4 text-slate-500 group-hover/opt:text-purple-400 group-hover/opt:translate-x-0.5 transition shrink-0 mt-1"></i>
+                </div>
+              </a>
+
+              <!-- Opção 3: Sexualidade 3 -->
+              <a href="/slides/sexualidade3/" class="group/opt block p-3 rounded-2xl bg-slate-950/70 hover:bg-slate-800/80 border border-slate-800/90 hover:border-pink-500/40 transition-all duration-200">
+                <div class="flex items-start justify-between gap-2">
+                  <div class="flex items-start gap-2.5">
+                    <div class="w-7 h-7 rounded-lg bg-pink-500/10 border border-pink-500/20 flex items-center justify-center text-pink-400 shrink-0 mt-0.5 group-hover/opt:scale-105 transition">
+                      <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
+                    </div>
+                    <div>
+                      <div class="flex items-center gap-1.5">
+                        <span class="text-xs font-bold text-slate-200 group-hover/opt:text-pink-300 transition">3. Masterclass & Sinapses</span>
+                        <span class="text-[9px] font-semibold text-pink-400 bg-pink-500/10 px-1.5 py-0.5 rounded">Interativo</span>
+                      </div>
+                      <p class="text-[11px] text-slate-400 mt-0.5 leading-tight">
+                        Edição imersiva com sinapses dinâmicas e Web Audio.
+                      </p>
+                    </div>
+                  </div>
+                  <i data-lucide="arrow-right" class="w-4 h-4 text-slate-500 group-hover/opt:text-pink-400 group-hover/opt:translate-x-0.5 transition shrink-0 mt-1"></i>
+                </div>
+              </a>
+
             </div>
-            <span class="text-[11px] font-bold text-purple-400 uppercase tracking-wider">Apresentação 02</span>
-            <h3 class="text-lg font-bold text-white mt-1 group-hover:text-purple-300 transition">
-              Sexualidade & Neurociência (Ed. 1)
-            </h3>
-            <p class="text-xs text-slate-400 mt-2 leading-relaxed">
-              O cérebro como palco da intimidade: conexões neurais, hormônios, neurobiologia e maturidade.
-            </p>
           </div>
-          <div class="mt-6 pt-4 border-t border-slate-800/80 flex items-center justify-between text-xs font-semibold text-purple-400">
-            <span>Abrir Apresentação</span>
-            <i data-lucide="arrow-right" class="w-4 h-4 group-hover:translate-x-1 transition"></i>
+          <div class="mt-5 pt-3.5 border-t border-slate-800/80 text-[11px] text-slate-400 flex items-center justify-between">
+            <span>Selecione uma das 3 versões acima</span>
+            <i data-lucide="mouse-pointer-click" class="w-3.5 h-3.5 text-rose-400"></i>
           </div>
-        </a>
+        </div>
 
-        <!-- Card 3: Sexualidade 3 (Neurociência Masterclass) -->
-        <a href="/slides/sexualidade3/" class="group block p-6 rounded-3xl bg-slate-900/80 hover:bg-slate-900 border border-slate-800 hover:border-pink-500/40 transition-all duration-300 transform hover:-translate-y-1 shadow-xl hover:shadow-pink-950/20 flex flex-col justify-between">
-          <div>
-            <div class="w-12 h-12 rounded-2xl bg-pink-500/10 border border-pink-500/20 flex items-center justify-center text-pink-400 mb-4 group-hover:scale-110 transition">
-              <i data-lucide="sparkles" class="w-6 h-6"></i>
-            </div>
-            <span class="text-[11px] font-bold text-pink-400 uppercase tracking-wider">Apresentação 03</span>
-            <h3 class="text-lg font-bold text-white mt-1 group-hover:text-pink-300 transition">
-              Sexualidade 3: Masterclass & Sinapses
-            </h3>
-            <p class="text-xs text-slate-400 mt-2 leading-relaxed">
-              Edição expandida: sinapses interativas em tempo real, molduras visuais refinadas e síntese com Web Audio.
-            </p>
-          </div>
-          <div class="mt-6 pt-4 border-t border-slate-800/80 flex items-center justify-between text-xs font-semibold text-pink-400">
-            <span>Abrir Apresentação</span>
-            <i data-lucide="arrow-right" class="w-4 h-4 group-hover:translate-x-1 transition"></i>
-          </div>
-        </a>
-
-        <!-- Card 4: Companhias -->
-        <a href="/slides/companhias/" class="group block p-6 rounded-3xl bg-slate-900/80 hover:bg-slate-900 border border-slate-800 hover:border-amber-500/40 transition-all duration-300 transform hover:-translate-y-1 shadow-xl hover:shadow-amber-950/20 flex flex-col justify-between">
+        <!-- Card: Companhias e Relações -->
+        <a href="/slides/companhias/" class="group block p-6 rounded-3xl bg-slate-900/80 hover:bg-slate-900 border border-slate-800 hover:border-amber-500/40 transition-all duration-300 transform hover:-translate-y-1 shadow-xl hover:shadow-amber-950/20 flex flex-col justify-between h-full min-h-[380px]">
           <div>
             <div class="w-12 h-12 rounded-2xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400 mb-4 group-hover:scale-110 transition">
               <i data-lucide="users" class="w-6 h-6"></i>
             </div>
-            <span class="text-[11px] font-bold text-amber-400 uppercase tracking-wider">Apresentação 04</span>
-            <h3 class="text-lg font-bold text-white mt-1 group-hover:text-amber-300 transition">
+            <span class="text-[11px] font-bold text-amber-400 uppercase tracking-wider">Apresentação</span>
+            <h3 class="text-xl font-bold text-white mt-1 group-hover:text-amber-300 transition">
               Companhias e Relações
             </h3>
-            <p class="text-xs text-slate-400 mt-2 leading-relaxed">
-              Dinâmicas de convivência, influências de pares, amizades saudáveis e inteligência socioemocional.
+            <p class="text-xs text-slate-400 mt-2.5 leading-relaxed">
+              Dinâmicas de convivência, influências de pares, amizades saudáveis, pressão social e inteligência socioemocional para jovens e adultos.
             </p>
+            <div class="mt-6 space-y-2 text-xs text-slate-400">
+              <div class="flex items-center gap-2">
+                <i data-lucide="check-circle-2" class="w-3.5 h-3.5 text-amber-400"></i>
+                <span>Pressão de grupo e individualidade</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <i data-lucide="check-circle-2" class="w-3.5 h-3.5 text-amber-400"></i>
+                <span>Comunicação assertiva e limites</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <i data-lucide="check-circle-2" class="w-3.5 h-3.5 text-amber-400"></i>
+                <span>Relações de confiança e apoio mútuo</span>
+              </div>
+            </div>
           </div>
           <div class="mt-6 pt-4 border-t border-slate-800/80 flex items-center justify-between text-xs font-semibold text-amber-400">
             <span>Abrir Apresentação</span>
@@ -131,19 +178,33 @@
           </div>
         </a>
 
-        <!-- Card 5: Desenvolvimento -->
-        <a href="/slides/desenvolvimento/" class="group block p-6 rounded-3xl bg-slate-900/80 hover:bg-slate-900 border border-slate-800 hover:border-emerald-500/40 transition-all duration-300 transform hover:-translate-y-1 shadow-xl hover:shadow-emerald-950/20 flex flex-col justify-between">
+        <!-- Card: Desenvolvimento e Autocuidado -->
+        <a href="/slides/desenvolvimento/" class="group block p-6 rounded-3xl bg-slate-900/80 hover:bg-slate-900 border border-slate-800 hover:border-emerald-500/40 transition-all duration-300 transform hover:-translate-y-1 shadow-xl hover:shadow-emerald-950/20 flex flex-col justify-between h-full min-h-[380px]">
           <div>
             <div class="w-12 h-12 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 mb-4 group-hover:scale-110 transition">
               <i data-lucide="activity" class="w-6 h-6"></i>
             </div>
-            <span class="text-[11px] font-bold text-emerald-400 uppercase tracking-wider">Apresentação 05</span>
-            <h3 class="text-lg font-bold text-white mt-1 group-hover:text-emerald-300 transition">
+            <span class="text-[11px] font-bold text-emerald-400 uppercase tracking-wider">Apresentação</span>
+            <h3 class="text-xl font-bold text-white mt-1 group-hover:text-emerald-300 transition">
               Desenvolvimento e Autocuidado
             </h3>
-            <p class="text-xs text-slate-400 mt-2 leading-relaxed">
-              Maturação física, higiene, hábitos de preservação da saúde mental e canais de acolhimento.
+            <p class="text-xs text-slate-400 mt-2.5 leading-relaxed">
+              Maturação física e emocional, higiene do sono e rotina, hábitos de preservação da saúde mental e canais de acolhimento.
             </p>
+            <div class="mt-6 space-y-2 text-xs text-slate-400">
+              <div class="flex items-center gap-2">
+                <i data-lucide="check-circle-2" class="w-3.5 h-3.5 text-emerald-400"></i>
+                <span>Mudanças corporais e emocionais</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <i data-lucide="check-circle-2" class="w-3.5 h-3.5 text-emerald-400"></i>
+                <span>Autocuidado e higiene integral</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <i data-lucide="check-circle-2" class="w-3.5 h-3.5 text-emerald-400"></i>
+                <span>Redes de apoio e autocompaixão</span>
+              </div>
+            </div>
           </div>
           <div class="mt-6 pt-4 border-t border-slate-800/80 flex items-center justify-between text-xs font-semibold text-emerald-400">
             <span>Abrir Apresentação</span>
