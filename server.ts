@@ -239,27 +239,42 @@ Evite jargões promocionais. Seja estritamente clínico, empático e realista.`;
     }
   });
 
-  // Serve static slide presentations directly (slide1 and slide2)
-  const slide1Path = path.join(process.cwd(), 'public', 'slide1', 'index.html');
-  const slide2Path = path.join(process.cwd(), 'public', 'slide2', 'index.html');
+  // Serve static presentations directly (sexualidade, companhias, deszenvolvimento)
+  const sexualidadePath = path.join(process.cwd(), 'public', 'sexualidade', 'sexualidade.html');
+  const companhiasPath = path.join(process.cwd(), 'public', 'companhias', 'companhias.html');
+  const deszenvolvimentoPath = path.join(process.cwd(), 'public', 'deszenvolvimento', 'deszenvolvimento.html');
 
-  app.use('/slide1', express.static(path.join(process.cwd(), 'public', 'slide1')));
-  app.use('/slide2', express.static(path.join(process.cwd(), 'public', 'slide2')));
+  app.use('/sexualidade', express.static(path.join(process.cwd(), 'public', 'sexualidade')));
+  app.use('/companhias', express.static(path.join(process.cwd(), 'public', 'companhias')));
+  app.use('/deszenvolvimento', express.static(path.join(process.cwd(), 'public', 'deszenvolvimento')));
+  app.use('/desenvolvimento', express.static(path.join(process.cwd(), 'public', 'desenvolvimento')));
 
-  app.get(/^\/slide1(\/.*)?$/, (req, res) => {
-    res.sendFile(slide1Path);
+  app.get(['/sexualidade', '/sexualidade.html'], (req, res) => {
+    res.sendFile(sexualidadePath);
   });
 
-  app.get(/^\/slide2(\/.*)?$/, (req, res) => {
-    res.sendFile(slide2Path);
+  app.get(/^\/sexualidade(\/.*)?$/, (req, res) => {
+    res.sendFile(sexualidadePath);
   });
 
-  app.get(/^\/src\/slide1(\/.*)?$/, (req, res) => {
-    res.sendFile(slide1Path);
+  app.get(['/companhias', '/companhias.html'], (req, res) => {
+    res.sendFile(companhiasPath);
   });
 
-  app.get(/^\/src\/slide2(\/.*)?$/, (req, res) => {
-    res.sendFile(slide2Path);
+  app.get(/^\/companhias(\/.*)?$/, (req, res) => {
+    res.sendFile(companhiasPath);
+  });
+
+  app.get(['/deszenvolvimento', '/deszenvolvimento.html', '/desenvolvimento', '/desenvolvimento.html'], (req, res) => {
+    res.sendFile(deszenvolvimentoPath);
+  });
+
+  app.get(/^\/deszenvolvimento(\/.*)?$/, (req, res) => {
+    res.sendFile(deszenvolvimentoPath);
+  });
+
+  app.get(/^\/desenvolvimento(\/.*)?$/, (req, res) => {
+    res.sendFile(deszenvolvimentoPath);
   });
 
   // Serve static UI / Vite integration

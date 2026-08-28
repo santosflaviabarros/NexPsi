@@ -1,0 +1,1253 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conversa para a Vida - Sexualidade na Adolescência</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        serif: ['"Cormorant Garamond"', 'serif'],
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#fdf4f7',
+                            100: '#fbe8f0',
+                            200: '#f8d5e3',
+                            300: '#f3b4cc',
+                            400: '#eb86aa',
+                            500: '#e05988',
+                            600: '#cb3a6d',
+                            700: '#ab2953',
+                            800: '#8e2546',
+                            900: '#77233f',
+                            950: '#460e21',
+                        },
+                        violetbrand: {
+                            50: '#f5f3ff',
+                            400: '#a78bfa',
+                            500: '#8b5cf6',
+                            800: '#5b21b6',
+                            900: '#4c1d95',
+                            950: '#2e1065',
+                        },
+                        darkbg: '#0B0F17'
+                    },
+                    animation: {
+                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'float': 'float 6s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0px)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #0B0F17;
+            color: #F3F4F6;
+            overflow-x: hidden;
+        }
+
+        .slide-container {
+            scroll-snap-type: y mandatory;
+            scroll-behavior: smooth;
+        }
+
+        .slide-item {
+            scroll-snap-align: start;
+            scroll-snap-stop: always;
+        }
+
+        .glass-panel {
+            background: rgba(18, 24, 38, 0.75);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .glass-panel-interactive {
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .glass-panel-interactive:hover {
+            border-color: rgba(224, 89, 136, 0.3);
+            box-shadow: 0 10px 30px -10px rgba(224, 89, 136, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, #FFF 30%, #F3B4CC 70%, #A78BFA 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .accent-gradient {
+            background: linear-gradient(135deg, #e05988 0%, #8b5cf6 100%);
+        }
+
+        .image-card-hover {
+            overflow: hidden;
+        }
+        .image-card-hover img {
+            transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .image-card-hover:hover img {
+            transform: scale(1.06);
+        }
+
+        /* Hide scrollbars for slick presentation mode */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        /* Slide Transition Animations */
+        .fade-in-up {
+            animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body class="h-full antialiased selection:bg-brand-500 selection:text-white">
+
+    <!-- Top Navigation Bar -->
+    <header class="fixed top-0 left-0 right-0 z-50 px-6 py-4 flex justify-between items-center bg-slate-950/60 backdrop-blur-md border-b border-white/5">
+        <div class="flex items-center space-x-3">
+            <div class="w-9 h-9 rounded-full accent-gradient flex items-center justify-center text-white shadow-lg shadow-brand-500/20 font-bold font-serif text-lg">
+                C
+            </div>
+            <div>
+                <h1 class="text-sm font-semibold tracking-wide text-white uppercase">Conversa para a Vida</h1>
+                <p class="text-xs text-slate-400 hidden sm:block">Sexualidade na Adolescência</p>
+            </div>
+        </div>
+
+        <div class="flex items-center space-x-2 sm:space-x-4">
+            <!-- Navigation Indicator -->
+            <span id="slide-counter" class="text-xs font-medium px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-slate-300">
+                Slide <span id="current-slide-num" class="text-brand-400 font-bold">1</span> de 10
+            </span>
+
+            <!-- Mode Toggle (Slide Deck vs Continuous Scroll) -->
+            <button id="mode-toggle-btn" title="Alternar Modo de Exibição" class="p-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-slate-300 hover:text-white transition">
+                <i data-lucide="layout-list" class="w-4 h-4"></i>
+            </button>
+
+            <!-- Menu Drawer Button for Quick Jump -->
+            <button id="menu-toggle-btn" class="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-brand-500/20 hover:bg-brand-500/30 border border-brand-500/30 text-brand-300 hover:text-white transition text-xs font-medium">
+                <i data-lucide="menu" class="w-4 h-4"></i>
+                <span class="hidden sm:inline">Tópicos</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Slide Index Side Navigation Drawer -->
+    <div id="drawer-menu" class="fixed inset-y-0 right-0 w-80 bg-slate-900/95 backdrop-blur-2xl z-50 transform translate-x-full transition-transform duration-300 ease-in-out border-l border-white/10 p-6 flex flex-col justify-between">
+        <div>
+            <div class="flex justify-between items-center pb-6 border-b border-white/10">
+                <h3 class="font-serif text-xl font-bold text-white">Índice da Apresentação</h3>
+                <button id="close-drawer" class="p-2 text-slate-400 hover:text-white">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+            <nav class="mt-6 flex flex-col space-y-2 overflow-y-auto max-h-[calc(100vh-180px)] pr-2">
+                <button onclick="goToSlide(0)" class="nav-item-btn text-left p-3 rounded-lg hover:bg-white/5 transition flex items-center space-x-3 text-slate-300 hover:text-white text-sm">
+                    <span class="w-6 text-xs text-brand-400 font-mono">00</span>
+                    <span>Abertura</span>
+                </button>
+                <button onclick="goToSlide(1)" class="nav-item-btn text-left p-3 rounded-lg hover:bg-white/5 transition flex items-center space-x-3 text-slate-300 hover:text-white text-sm">
+                    <span class="w-6 text-xs text-brand-400 font-mono">--</span>
+                    <span>Antes de Começar</span>
+                </button>
+                <button onclick="goToSlide(2)" class="nav-item-btn text-left p-3 rounded-lg hover:bg-white/5 transition flex items-center space-x-3 text-slate-300 hover:text-white text-sm">
+                    <span class="w-6 text-xs text-brand-400 font-mono">01</span>
+                    <span>Entender</span>
+                </button>
+                <button onclick="goToSlide(3)" class="nav-item-btn text-left p-3 rounded-lg hover:bg-white/5 transition flex items-center space-x-3 text-slate-300 hover:text-white text-sm">
+                    <span class="w-6 text-xs text-brand-400 font-mono">02</span>
+                    <span>Escolher</span>
+                </button>
+                <button onclick="goToSlide(4)" class="nav-item-btn text-left p-3 rounded-lg hover:bg-white/5 transition flex items-center space-x-3 text-slate-300 hover:text-white text-sm">
+                    <span class="w-6 text-xs text-brand-400 font-mono">03</span>
+                    <span>Relacionar</span>
+                </button>
+                <button onclick="goToSlide(5)" class="nav-item-btn text-left p-3 rounded-lg hover:bg-white/5 transition flex items-center space-x-3 text-slate-300 hover:text-white text-sm">
+                    <span class="w-6 text-xs text-brand-400 font-mono">04</span>
+                    <span>Cuidar</span>
+                </button>
+                <button onclick="goToSlide(6)" class="nav-item-btn text-left p-3 rounded-lg hover:bg-white/5 transition flex items-center space-x-3 text-slate-300 hover:text-white text-sm">
+                    <span class="w-6 text-xs text-brand-400 font-mono">05</span>
+                    <span>Proteger</span>
+                </button>
+                <button onclick="goToSlide(7)" class="nav-item-btn text-left p-3 rounded-lg hover:bg-white/5 transition flex items-center space-x-3 text-slate-300 hover:text-white text-sm">
+                    <span class="w-6 text-xs text-brand-400 font-mono">06</span>
+                    <span>Romper Mitos</span>
+                </button>
+                <button onclick="goToSlide(8)" class="nav-item-btn text-left p-3 rounded-lg hover:bg-white/5 transition flex items-center space-x-3 text-slate-300 hover:text-white text-sm">
+                    <span class="w-6 text-xs text-brand-400 font-mono">07</span>
+                    <span>Pedir Ajuda</span>
+                </button>
+                <button onclick="goToSlide(9)" class="nav-item-btn text-left p-3 rounded-lg hover:bg-white/5 transition flex items-center space-x-3 text-slate-300 hover:text-white text-sm">
+                    <span class="w-6 text-xs text-brand-400 font-mono">--</span>
+                    <span>Dinâmica & Para Levar</span>
+                </button>
+            </nav>
+        </div>
+        <div class="pt-4 border-t border-white/10 text-xs text-slate-400 text-center">
+            Ambiente Seguro & Acolhedor
+        </div>
+    </div>
+    <div id="drawer-overlay" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 hidden"></div>
+
+    <!-- Main Presentation Container -->
+    <main id="slides-wrapper" class="slide-container h-screen w-full overflow-y-scroll no-scrollbar pt-16 pb-20">
+        
+        <!-- SLIDE 00: COVER / HERO -->
+        <section class="slide-item min-h-[calc(100vh-5rem)] w-full flex items-center justify-center p-6 relative overflow-hidden">
+            <!-- Background Image with Dark Vignette Overlay -->
+            <div class="absolute inset-0 z-0 opacity-25">
+                <img src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=1600&q=80" alt="Jovens reunidos conversando" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='https://placehold.co/1600x900/1e1b2e/e05988?text=Conversa+para+a+Vida';"/>
+                <div class="absolute inset-0 bg-gradient-to-t from-[#0B0F17] via-[#0B0F17]/80 to-transparent"></div>
+            </div>
+
+            <!-- Glowing ambient background lights -->
+            <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-brand-500/15 rounded-full blur-3xl pointer-events-none animate-pulse-slow"></div>
+            <div class="absolute bottom-1/4 right-1/4 w-96 h-96 bg-violetbrand-500/15 rounded-full blur-3xl pointer-events-none"></div>
+
+            <div class="max-w-4xl w-full text-center relative z-10 space-y-8">
+                <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-panel border-brand-500/30 text-brand-300 text-xs sm:text-sm font-medium uppercase tracking-widest animate-float">
+                    <i data-lucide="sparkles" class="w-4 h-4 text-brand-400"></i>
+                    <span>Informação • Respeito • Escolhas</span>
+                </div>
+
+                <div class="space-y-4">
+                    <p class="text-brand-400 font-mono text-sm tracking-widest uppercase">Apresentação Guia</p>
+                    <h1 class="font-serif text-5xl sm:text-7xl md:text-8xl font-bold tracking-tight text-white leading-tight">
+                        CONVERSA PARA A <span class="gradient-text italic font-normal">VIDA</span>
+                    </h1>
+                    <p class="text-xl sm:text-2xl text-slate-300 font-serif font-light max-w-2xl mx-auto italic">
+                        Sexualidade na adolescência
+                    </p>
+                </div>
+
+                <div class="pt-4 max-w-xl mx-auto">
+                    <div class="glass-panel p-6 rounded-2xl border-white/10 shadow-2xl relative">
+                        <div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-brand-500/20 px-3 py-0.5 rounded-full text-[11px] text-brand-300 uppercase tracking-wider font-semibold border border-brand-500/30">
+                            Espaço Seguro
+                        </div>
+                        <p class="text-slate-300 text-base sm:text-lg leading-relaxed pt-1">
+                            "Uma conversa segura, sem vergonha e sem julgamentos."
+                        </p>
+                    </div>
+                </div>
+
+                <div class="pt-8 flex flex-col sm:flex-row gap-4 justify-center items-center">
+                    <button onclick="goToSlide(1)" class="w-full sm:w-auto px-8 py-4 rounded-xl accent-gradient text-white font-semibold flex items-center justify-center gap-3 shadow-lg shadow-brand-500/25 hover:opacity-95 transition transform hover:scale-105">
+                        <span>Iniciar Apresentação</span>
+                        <i data-lucide="arrow-right" class="w-5 h-5"></i>
+                    </button>
+                    <a href="#ajuda-rapida" onclick="openHelpModal()" class="w-full sm:w-auto px-6 py-4 rounded-xl glass-panel text-slate-300 hover:text-white font-medium flex items-center justify-center gap-2 hover:bg-white/10 transition">
+                        <i data-lucide="shield-alert" class="w-4 h-4 text-brand-400"></i>
+                        <span>Canais de Apoio</span>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 01: ANTES DE COMEÇAR -->
+        <section class="slide-item min-h-[calc(100vh-5rem)] w-full flex items-center justify-center p-6 relative">
+            <div class="max-w-5xl w-full">
+                <div class="text-center space-y-3 mb-8">
+                    <span class="text-xs uppercase tracking-widest text-brand-400 font-mono font-semibold">Introdução</span>
+                    <h2 class="font-serif text-3xl sm:text-5xl font-bold text-white">ANTES DE COMEÇAR</h2>
+                    <div class="w-16 h-1 accent-gradient mx-auto rounded-full"></div>
+                </div>
+
+                <div class="glass-panel p-6 sm:p-8 rounded-3xl space-y-6 relative overflow-hidden border-white/10">
+                    <div class="text-center max-w-3xl mx-auto space-y-2">
+                        <p class="text-xl sm:text-2xl font-serif text-slate-100 italic">
+                            "Sexualidade é mais do que sexo. É sobre conhecer, respeitar e cuidar."
+                        </p>
+                        <p class="text-slate-400 text-sm sm:text-base">
+                            Cada pessoa tem seu tempo, corpo, história e jeito de sentir.
+                        </p>
+                    </div>
+
+                    <!-- 3 Core Pillars with Visual Images -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-2">
+                        <div class="glass-panel rounded-2xl glass-panel-interactive border-white/5 space-y-3 image-card-hover overflow-hidden flex flex-col">
+                            <div class="h-36 relative overflow-hidden">
+                                <img src="https://images.unsplash.com/photo-1518611012118-696072aa579a?auto=format&fit=crop&w=600&q=80" alt="Corpo e Movimento" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='https://placehold.co/600x400/1e1b2e/e05988?text=Corpo';"/>
+                                <div class="absolute inset-0 bg-gradient-to-t from-slate-950/90 to-transparent"></div>
+                                <div class="absolute bottom-3 left-4 flex items-center gap-2 text-brand-400">
+                                    <i data-lucide="heart-pulse" class="w-5 h-5"></i>
+                                    <h3 class="font-bold text-lg text-white">Corpo</h3>
+                                </div>
+                            </div>
+                            <p class="text-xs text-slate-300 leading-relaxed p-4 pt-1 flex-1">
+                                Mudanças físicas, saúde corporal e práticas de autocuidado contínuo.
+                            </p>
+                        </div>
+
+                        <div class="glass-panel rounded-2xl glass-panel-interactive border-white/5 space-y-3 image-card-hover overflow-hidden flex flex-col">
+                            <div class="h-36 relative overflow-hidden">
+                                <img src="https://images.unsplash.com/photo-1499209974431-9dac3ada00d7?auto=format&fit=crop&w=600&q=80" alt="Sentimentos e Reflexão" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='https://placehold.co/600x400/1e1b2e/a78bfa?text=Sentimentos';"/>
+                                <div class="absolute inset-0 bg-gradient-to-t from-slate-950/90 to-transparent"></div>
+                                <div class="absolute bottom-3 left-4 flex items-center gap-2 text-violetbrand-400">
+                                    <i data-lucide="smile" class="w-5 h-5"></i>
+                                    <h3 class="font-bold text-lg text-white">Sentimentos</h3>
+                                </div>
+                            </div>
+                            <p class="text-xs text-slate-300 leading-relaxed p-4 pt-1 flex-1">
+                                Afeto, desejos, dúvidas, emoções e construção da própria identidade.
+                            </p>
+                        </div>
+
+                        <div class="glass-panel rounded-2xl glass-panel-interactive border-white/5 space-y-3 image-card-hover overflow-hidden flex flex-col">
+                            <div class="h-36 relative overflow-hidden">
+                                <img src="https://images.unsplash.com/photo-1511632765486-a01980e01a18?auto=format&fit=crop&w=600&q=80" alt="Relações e Amizade" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='https://placehold.co/600x400/1e1b2e/38bdf8?text=Relacoes';"/>
+                                <div class="absolute inset-0 bg-gradient-to-t from-slate-950/90 to-transparent"></div>
+                                <div class="absolute bottom-3 left-4 flex items-center gap-2 text-blue-400">
+                                    <i data-lucide="users" class="w-5 h-5"></i>
+                                    <h3 class="font-bold text-lg text-white">Relações</h3>
+                                </div>
+                            </div>
+                            <p class="text-xs text-slate-300 leading-relaxed p-4 pt-1 flex-1">
+                                Respeito mútuo, estabelecer limites, consentimento claro e responsabilidade.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 02: 01. ENTENDER -->
+        <section class="slide-item min-h-[calc(100vh-5rem)] w-full flex items-center justify-center p-6 relative">
+            <div class="max-w-5xl w-full space-y-6">
+                <div class="flex flex-col md:flex-row md:items-end justify-between border-b border-white/10 pb-4 gap-4">
+                    <div>
+                        <span class="text-xs uppercase tracking-widest text-brand-400 font-mono font-bold">Módulo 01</span>
+                        <h2 class="font-serif text-4xl sm:text-6xl font-bold text-white">ENTENDER</h2>
+                    </div>
+                    <p class="text-slate-300 max-w-md text-sm sm:text-base">
+                        O corpo muda – e cada pessoa tem seu ritmo. Puberdade não acontece igual para todo mundo.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
+                    <!-- Image Showcase Column -->
+                    <div class="lg:col-span-5 rounded-2xl glass-panel image-card-hover relative overflow-hidden flex flex-col justify-end min-h-[240px] lg:min-h-full">
+                        <img src="https://media.istockphoto.com/id/1500076836/pt/foto/group-of-teenagers-using-mobile-phones-in-hallway-at-high-school.jpg?s=612x612&w=0&k=20&c=X5oy_VJzOfnGWMsA35-YAuyZhdhRHY75LU3W_wRIl7Y=" alt="Autocuidado e Descoberta" class="absolute inset-0 w-full h-full object-cover" onerror="this.onerror=null; this.src='https://placehold.co/800x600/1e1b2e/e05988?text=Entender';"/>
+                        <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent"></div>
+                        <div class="relative z-10 p-6 space-y-2">
+                            <span class="px-2.5 py-1 rounded-md bg-brand-500/20 text-brand-300 text-xs font-mono uppercase tracking-wider border border-brand-500/30">Diversidade de Ritmos</span>
+                            <p class="text-white font-serif text-lg leading-snug">Cada corpo tem sua própria história e tempo de desenvolvimento.</p>
+                        </div>
+                    </div>
+
+                    <!-- Content Cards Column -->
+                    <div class="lg:col-span-7 space-y-4 flex flex-col justify-between">
+                        <div class="glass-panel p-5 rounded-2xl space-y-2 border-l-4 border-l-brand-500">
+                            <div class="flex items-center gap-3 text-brand-400">
+                                <i data-lucide="activity" class="w-5 h-5"></i>
+                                <h3 class="font-semibold text-white">Mudanças Físicas</h3>
+                            </div>
+                            <p class="text-slate-300 text-xs sm:text-sm leading-relaxed">
+                                Crescimento, pele, pelos, voz, menstruação e ereções podem acontecer em ritmos completamente diferentes para cada jovem.
+                            </p>
+                        </div>
+
+                        <div class="glass-panel p-5 rounded-2xl space-y-2 border-l-4 border-l-violetbrand-400">
+                            <div class="flex items-center gap-3 text-violetbrand-400">
+                                <i data-lucide="brain" class="w-5 h-5"></i>
+                                <h3 class="font-semibold text-white">Mudanças Emocionais</h3>
+                            </div>
+                            <p class="text-slate-300 text-xs sm:text-sm leading-relaxed">
+                                Oscilações de humor, variações na autoestima, curiosidade aflorada e maior necessidade de privacidade são normais.
+                            </p>
+                        </div>
+
+                        <div class="glass-panel p-5 rounded-2xl space-y-2 border-l-4 border-l-emerald-400">
+                            <div class="flex items-center gap-3 text-emerald-400">
+                                <i data-lucide="sparkle" class="w-5 h-5"></i>
+                                <h3 class="font-semibold text-white">Autocuidado Integral</h3>
+                            </div>
+                            <p class="text-slate-300 text-xs sm:text-sm leading-relaxed">
+                                Higiene pessoal, rotina de sono saudável, boa alimentação e acompanhamento de saúde fazem parte do cuidado diário.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Callout Highlight -->
+                <div class="p-5 rounded-2xl bg-gradient-to-r from-brand-950/80 to-slate-900 border border-brand-500/30 flex items-center gap-4 shadow-xl">
+                    <div class="p-3 rounded-full bg-brand-500/20 text-brand-400 shrink-0">
+                        <i data-lucide="compass" class="w-6 h-6"></i>
+                    </div>
+                    <div>
+                        <p class="text-white font-serif text-base sm:text-lg font-medium">
+                            "Comparação não é régua. Seu corpo não está 'atrasado' por ser diferente."
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 03: 02. ESCOLHER -->
+        <section class="slide-item min-h-[calc(100vh-5rem)] w-full flex items-center justify-center p-6 relative">
+            <div class="max-w-5xl w-full space-y-6">
+                <div class="text-center max-w-2xl mx-auto space-y-2">
+                    <span class="text-xs uppercase tracking-widest text-brand-400 font-mono font-bold">Módulo 02</span>
+                    <h2 class="font-serif text-4xl sm:text-6xl font-bold text-white">ESCOLHER</h2>
+                    <p class="text-slate-300 text-sm sm:text-base">
+                        Consentimento é a base de qualquer relação. Consentir é querer sem medo, pressão ou chantagem.
+                    </p>
+                </div>
+
+                <!-- Banner Image + 4 Pillars -->
+                <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
+                    <div class="md:col-span-4 rounded-2xl glass-panel image-card-hover relative overflow-hidden h-48 md:h-full min-h-[220px]">
+                        <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=800&q=80" alt="Decisão consciente e autonomia" class="absolute inset-0 w-full h-full object-cover" onerror="this.onerror=null; this.src='https://placehold.co/800x600/1e1b2e/e05988?text=Escolher';"/>
+                        <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/30 to-transparent"></div>
+                        <div class="absolute bottom-4 left-4 right-4 text-xs text-slate-200 font-medium">
+                            Empoderamento e respeito às próprias escolhas.
+                        </div>
+                    </div>
+
+                    <!-- 4 Pillars Grid -->
+                    <div class="md:col-span-8 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div class="glass-panel p-4 rounded-2xl border-white/5 space-y-2 hover:border-brand-500/40 transition">
+                            <div class="flex items-center gap-3">
+                                <span class="w-8 h-8 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold text-sm shrink-0">1</span>
+                                <h3 class="font-bold text-white text-base">Livre</h3>
+                            </div>
+                            <p class="text-slate-300 text-xs leading-relaxed">
+                                Acontece espontaneamente, sem qualquer tipo de pressão, chantagem ou ameaça.
+                            </p>
+                        </div>
+
+                        <div class="glass-panel p-4 rounded-2xl border-white/5 space-y-2 hover:border-brand-500/40 transition">
+                            <div class="flex items-center gap-3">
+                                <span class="w-8 h-8 rounded-full bg-blue-500/20 text-blue-400 flex items-center justify-center font-bold text-sm shrink-0">2</span>
+                                <h3 class="font-bold text-white text-base">Informado</h3>
+                            </div>
+                            <p class="text-slate-300 text-xs leading-relaxed">
+                                Sabendo exatamente o que vai acontecer e concordando conscientemente.
+                            </p>
+                        </div>
+
+                        <div class="glass-panel p-4 rounded-2xl border-white/5 space-y-2 hover:border-brand-500/40 transition">
+                            <div class="flex items-center gap-3">
+                                <span class="w-8 h-8 rounded-full bg-purple-500/20 text-purple-400 flex items-center justify-center font-bold text-sm shrink-0">3</span>
+                                <h3 class="font-bold text-white text-base">Claro</h3>
+                            </div>
+                            <p class="text-slate-300 text-xs leading-relaxed">
+                                Um "sim" compreensível, entusiasmado e demonstrado abertamente.
+                            </p>
+                        </div>
+
+                        <div class="glass-panel p-4 rounded-2xl border-white/5 space-y-2 hover:border-brand-500/40 transition">
+                            <div class="flex items-center gap-3">
+                                <span class="w-8 h-8 rounded-full bg-amber-500/20 text-amber-400 flex items-center justify-center font-bold text-sm shrink-0">4</span>
+                                <h3 class="font-bold text-white text-base">Reversível</h3>
+                            </div>
+                            <p class="text-slate-300 text-xs leading-relaxed">
+                                Você pode mudar de ideia a qualquer momento, e a decisão deve ser respeitada.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Warning Banner -->
+                <div class="p-5 rounded-2xl bg-rose-950/40 border border-rose-500/30 flex items-start sm:items-center gap-4">
+                    <div class="p-3 rounded-xl bg-rose-500/20 text-rose-400 shrink-0">
+                        <i data-lucide="alert-triangle" class="w-6 h-6"></i>
+                    </div>
+                    <div>
+                        <h4 class="text-rose-200 font-bold text-xs uppercase tracking-wider">Atenção Crítica</h4>
+                        <p class="text-slate-200 text-base sm:text-lg font-serif italic mt-0.5">
+                            Silêncio, medo, sono ou embriaguez NÃO são consentimento.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 04: 03. RELACIONAR -->
+        <section class="slide-item min-h-[calc(100vh-5rem)] w-full flex items-center justify-center p-6 relative">
+            <div class="max-w-5xl w-full space-y-6">
+                <div class="flex flex-col md:flex-row md:items-end justify-between border-b border-white/10 pb-4 gap-4">
+                    <div>
+                        <span class="text-xs uppercase tracking-widest text-brand-400 font-mono font-bold">Módulo 03</span>
+                        <h2 class="font-serif text-4xl sm:text-6xl font-bold text-white">RELACIONAR</h2>
+                    </div>
+                    <p class="text-slate-300 max-w-md text-sm sm:text-base">
+                        Uma relação saudável tem espaço para dizer não.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
+                    <!-- Image Card -->
+                    <div class="md:col-span-5 rounded-2xl glass-panel image-card-hover relative overflow-hidden min-h-[220px]">
+                        <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=800&q=80" alt="Comunicação em grupo" class="absolute inset-0 w-full h-full object-cover" onerror="this.onerror=null; this.src='https://placehold.co/800x600/1e1b2e/8b5cf6?text=Relacionar';"/>
+                        <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent"></div>
+                        <div class="absolute bottom-4 left-4 right-4">
+                            <span class="text-xs text-brand-300 font-semibold uppercase tracking-wider">Diálogo Aberto</span>
+                            <p class="text-white font-serif text-base">Construindo vínculos baseados na confiança e na empatia.</p>
+                        </div>
+                    </div>
+
+                    <!-- 4 Principles Cards -->
+                    <div class="md:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div class="glass-panel p-4 rounded-2xl space-y-2 border-white/10">
+                            <div class="flex items-center gap-2 text-brand-400">
+                                <i data-lucide="shield-check" class="w-5 h-5"></i>
+                                <h3 class="font-bold text-white text-base">Respeito</h3>
+                            </div>
+                            <p class="text-slate-300 text-xs leading-relaxed">
+                                Seus limites, opiniões e sentimentos são valorizados e considerados.
+                            </p>
+                        </div>
+
+                        <div class="glass-panel p-4 rounded-2xl space-y-2 border-white/10">
+                            <div class="flex items-center gap-2 text-violetbrand-400">
+                                <i data-lucide="user-check" class="w-5 h-5"></i>
+                                <h3 class="font-bold text-white text-base">Autonomia</h3>
+                            </div>
+                            <p class="text-slate-300 text-xs leading-relaxed">
+                                Cada pessoa mantém suas amizades, seus próprios sonhos e escolhas.
+                            </p>
+                        </div>
+
+                        <div class="glass-panel p-4 rounded-2xl space-y-2 border-white/10">
+                            <div class="flex items-center gap-2 text-sky-400">
+                                <i data-lucide="message-square" class="w-5 h-5"></i>
+                                <h3 class="font-bold text-white text-base">Diálogo</h3>
+                            </div>
+                            <p class="text-slate-300 text-xs leading-relaxed">
+                                Dúvidas, incômodos e conflitos podem ser conversados abertamente.
+                            </p>
+                        </div>
+
+                        <div class="glass-panel p-4 rounded-2xl space-y-2 border-white/10">
+                            <div class="flex items-center gap-2 text-emerald-400">
+                                <i data-lucide="heart" class="w-5 h-5"></i>
+                                <h3 class="font-bold text-white text-base">Cuidado</h3>
+                            </div>
+                            <p class="text-slate-300 text-xs leading-relaxed">
+                                Ninguém usa medo, ciúme excessivo ou controle como prova de amor.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Highlight Box -->
+                <div class="p-5 rounded-2xl bg-gradient-to-r from-violet-950/60 to-slate-900 border border-violet-500/30 text-center">
+                    <p class="text-white font-serif text-xl sm:text-2xl italic">
+                        "Ciúme não é prova de amor. Controle não é cuidado."
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 05: 04. CUIDAR -->
+        <section class="slide-item min-h-[calc(100vh-5rem)] w-full flex items-center justify-center p-6 relative">
+            <div class="max-w-5xl w-full space-y-6">
+                <div class="text-center max-w-2xl mx-auto space-y-2">
+                    <span class="text-xs uppercase tracking-widest text-brand-400 font-mono font-bold">Módulo 04</span>
+                    <h2 class="font-serif text-4xl sm:text-6xl font-bold text-white">CUIDAR</h2>
+                    <p class="text-slate-300 text-sm sm:text-base">
+                        Saúde sexual é informação clara e responsabilidade com o próprio corpo.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="glass-panel rounded-2xl image-card-hover overflow-hidden flex flex-col glass-panel-interactive">
+                        <div class="h-36 relative overflow-hidden">
+                            <img src="https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&w=600&q=80" alt="Prevenção e preservação" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='https://placehold.co/600x400/1e1b2e/e05988?text=Prevencao';"/>
+                            <div class="absolute inset-0 bg-gradient-to-t from-slate-950/90 to-transparent"></div>
+                            <div class="absolute bottom-3 left-4 flex items-center gap-2 text-brand-400">
+                                <i data-lucide="shield" class="w-5 h-5"></i>
+                                <h3 class="font-bold text-white text-lg">Prevenção</h3>
+                            </div>
+                        </div>
+                        <p class="text-xs text-slate-300 leading-relaxed p-4 flex-1">
+                            O uso correto de preservativos reduz significativamente o risco de ISTs e gravidez não planejada.
+                        </p>
+                    </div>
+
+                    <div class="glass-panel rounded-2xl image-card-hover overflow-hidden flex flex-col glass-panel-interactive">
+                        <div class="h-36 relative overflow-hidden">
+                            <img src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=600&q=80" alt="Atendimento em saúde" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='https://placehold.co/600x400/1e1b2e/14b8a6?text=Atendimento';"/>
+                            <div class="absolute inset-0 bg-gradient-to-t from-slate-950/90 to-transparent"></div>
+                            <div class="absolute bottom-3 left-4 flex items-center gap-2 text-teal-400">
+                                <i data-lucide="stethoscope" class="w-5 h-5"></i>
+                                <h3 class="font-bold text-white text-lg">Acompanhamento</h3>
+                            </div>
+                        </div>
+                        <p class="text-xs text-slate-300 leading-relaxed p-4 flex-1">
+                            Unidades Básicas de Saúde (UBS), equipes de enfermagem e médicos orientam com sigilo e acolhimento.
+                        </p>
+                    </div>
+
+                    <div class="glass-panel rounded-2xl image-card-hover overflow-hidden flex flex-col glass-panel-interactive">
+                        <div class="h-36 relative overflow-hidden">
+                            <img src="https://images.unsplash.com/photo-1579684385127-1ef15d508118?auto=format&fit=crop&w=600&q=80" alt="Exames e diagnósticos" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='https://placehold.co/600x400/1e1b2e/f59e0b?text=Testagem';"/>
+                            <div class="absolute inset-0 bg-gradient-to-t from-slate-950/90 to-transparent"></div>
+                            <div class="absolute bottom-3 left-4 flex items-center gap-2 text-amber-400">
+                                <i data-lucide="check-circle-2" class="w-5 h-5"></i>
+                                <h3 class="font-bold text-white text-lg">Testagem</h3>
+                            </div>
+                        </div>
+                        <p class="text-xs text-slate-300 leading-relaxed p-4 flex-1">
+                            Muitas ISTs podem ser assintomáticas. Fazer exames de rotina é um ato simples de prevenção.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Distinction Banner -->
+                <div class="glass-panel p-5 rounded-2xl border-brand-500/30 flex flex-col sm:flex-row items-center justify-between gap-4 bg-slate-900/90">
+                    <div class="flex items-center gap-4">
+                        <div class="p-3 rounded-full bg-brand-500/20 text-brand-400 shrink-0">
+                            <i data-lucide="info" class="w-6 h-6"></i>
+                        </div>
+                        <p class="text-slate-200 text-sm sm:text-base font-medium">
+                            <strong class="text-white">Lembre-se:</strong> Anticoncepcionais previnem gravidez, mas <span class="text-brand-300 underline font-semibold">apenas o preservativo</span> protege também contra ISTs.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 06: 05. PROTEGER -->
+        <section class="slide-item min-h-[calc(100vh-5rem)] w-full flex items-center justify-center p-6 relative">
+            <div class="max-w-5xl w-full space-y-6">
+                <div class="flex flex-col md:flex-row md:items-end justify-between border-b border-white/10 pb-4 gap-4">
+                    <div>
+                        <span class="text-xs uppercase tracking-widest text-brand-400 font-mono font-bold">Módulo 05</span>
+                        <h2 class="font-serif text-4xl sm:text-6xl font-bold text-white">PROTEGER</h2>
+                    </div>
+                    <p class="text-slate-300 max-w-md text-sm sm:text-base">
+                        Na internet, intimidade também precisa de limite e proteção.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-stretch">
+                    <!-- Cards Grid -->
+                    <div class="md:col-span-7 space-y-4">
+                        <div class="glass-panel p-4 rounded-2xl space-y-2 border-white/5 flex gap-4 items-start">
+                            <div class="p-2.5 rounded-xl bg-indigo-500/10 text-indigo-400 shrink-0">
+                                <i data-lucide="lock" class="w-5 h-5"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-white text-base">Privacidade Digital</h3>
+                                <p class="text-slate-300 text-xs leading-relaxed mt-0.5">
+                                    Não compartilhe senhas de redes sociais, sua localização em tempo real ou fotos e vídeos íntimos.
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="glass-panel p-4 rounded-2xl space-y-2 border-white/5 flex gap-4 items-start">
+                            <div class="p-2.5 rounded-xl bg-rose-500/10 text-rose-400 shrink-0">
+                                <i data-lucide="alert-octagon" class="w-5 h-5"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-white text-base">Pressão & Chantagem</h3>
+                                <p class="text-slate-300 text-xs leading-relaxed mt-0.5">
+                                    Insistir ou pedir foto íntima, assim como chantagear ou ameaçar divulgar conteúdos, é violência e crime.
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="glass-panel p-4 rounded-2xl space-y-2 border-white/5 flex gap-4 items-start">
+                            <div class="p-2.5 rounded-xl bg-emerald-500/10 text-emerald-400 shrink-0">
+                                <i data-lucide="shield-alert" class="w-5 h-5"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-white text-base">Segurança & Registro</h3>
+                                <p class="text-slate-300 text-xs leading-relaxed mt-0.5">
+                                    Guarde prints e provas, bloqueie o agressor imediatamente e busque ajuda de um adulto de confiança.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Image Showcase -->
+                    <div class="md:col-span-5 rounded-2xl glass-panel image-card-hover relative overflow-hidden min-h-[220px]">
+                        <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=800&q=80" alt="Privacidade em dispositivos digitais" class="absolute inset-0 w-full h-full object-cover" onerror="this.onerror=null; this.src='https://placehold.co/800x600/1e1b2e/6366f1?text=Proteger';"/>
+                        <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/30 to-transparent"></div>
+                        <div class="absolute bottom-4 left-4 right-4 text-xs text-slate-200">
+                            Cuidado constante com dados e exposição na rede.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Strong Reassurance Banner -->
+                <div class="p-5 rounded-2xl bg-rose-950/30 border border-rose-500/30 space-y-1">
+                    <p class="text-rose-200 font-semibold text-xs sm:text-sm">
+                        • Nenhuma pessoa deve ser pressionada a enviar imagens íntimas.
+                    </p>
+                    <p class="text-white font-serif text-base sm:text-xl font-bold">
+                        • Se algo acontecer, a culpa NUNCA é de quem foi exposto.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 07: 06. ROMPER MITOS -->
+        <section class="slide-item min-h-[calc(100vh-5rem)] w-full flex items-center justify-center p-6 relative">
+            <div class="max-w-5xl w-full space-y-6">
+                <div class="text-center max-w-2xl mx-auto space-y-2">
+                    <span class="text-xs uppercase tracking-widest text-brand-400 font-mono font-bold">Módulo 06</span>
+                    <h2 class="font-serif text-4xl sm:text-6xl font-bold text-white">ROMPER MITOS</h2>
+                    <p class="text-slate-300 text-sm sm:text-base">
+                        Dúvida não é vergonha. Informação é o que de fato protege.
+                    </p>
+                </div>
+
+                <!-- Interactive Myth vs Fact Cards + Side Image -->
+                <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-stretch">
+                    <div class="md:col-span-4 rounded-2xl glass-panel image-card-hover relative overflow-hidden min-h-[200px]">
+                        <img src="https://images.unsplash.com/photo-1455849318743-b2233052fcff?auto=format&fit=crop&w=800&q=80" alt="Busca por informação verdadeira" class="absolute inset-0 w-full h-full object-cover" onerror="this.onerror=null; this.src='https://placehold.co/800x600/1e1b2e/e05988?text=Romper+Mitos';"/>
+                        <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/30 to-transparent"></div>
+                        <div class="absolute bottom-4 left-4 right-4 text-xs text-slate-200">
+                            Desconstruindo pressões e falsas verdades.
+                        </div>
+                    </div>
+
+                    <div class="md:col-span-8 space-y-4">
+                        <!-- Myth 1 -->
+                        <div class="glass-panel p-5 rounded-2xl border-white/10 space-y-3 hover:border-brand-500/40 transition">
+                            <div class="inline-flex items-center gap-2 px-2.5 py-0.5 rounded-full bg-rose-500/20 text-rose-300 text-xs font-bold uppercase tracking-wider">
+                                <i data-lucide="x-circle" class="w-3.5 h-3.5"></i>
+                                MITO
+                            </div>
+                            <h3 class="text-base sm:text-lg font-bold text-slate-100">"Todo mundo já fez."</h3>
+                            <div class="pt-2 border-t border-white/10">
+                                <div class="inline-flex items-center gap-2 px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 text-xs font-bold uppercase tracking-wider mb-1.5">
+                                    <i data-lucide="check-circle" class="w-3.5 h-3.5"></i>
+                                    VERDADE
+                                </div>
+                                <p class="text-slate-300 text-xs sm:text-sm leading-relaxed">
+                                    Cada pessoa tem seu próprio tempo. Ninguém precisa provar nada a ninguém ou ceder a pressões sociais.
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Myth 2 -->
+                        <div class="glass-panel p-5 rounded-2xl border-white/10 space-y-3 hover:border-brand-500/40 transition">
+                            <div class="inline-flex items-center gap-2 px-2.5 py-0.5 rounded-full bg-rose-500/20 text-rose-300 text-xs font-bold uppercase tracking-wider">
+                                <i data-lucide="x-circle" class="w-3.5 h-3.5"></i>
+                                MITO
+                            </div>
+                            <h3 class="text-base sm:text-lg font-bold text-slate-100">"Se ama, tem que aceitar tudo."</h3>
+                            <div class="pt-2 border-t border-white/10">
+                                <div class="inline-flex items-center gap-2 px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 text-xs font-bold uppercase tracking-wider mb-1.5">
+                                    <i data-lucide="check-circle" class="w-3.5 h-3.5"></i>
+                                    VERDADE
+                                </div>
+                                <p class="text-slate-300 text-xs sm:text-sm leading-relaxed">
+                                    Amor não elimina limites, consentimento ou autonomia. Amar também é respeitar o "não" do outro.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="text-center p-4 rounded-2xl bg-white/5 border border-white/10">
+                    <p class="text-brand-300 font-serif text-lg sm:text-xl italic font-semibold">
+                        "Perguntar é uma forma essencial de se cuidar."
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 08: 07. PEDIR AJUDA -->
+        <section class="slide-item min-h-[calc(100vh-5rem)] w-full flex items-center justify-center p-6 relative">
+            <div class="max-w-5xl w-full space-y-6">
+                <div class="flex flex-col md:flex-row md:items-end justify-between border-b border-white/10 pb-4 gap-4">
+                    <div>
+                        <span class="text-xs uppercase tracking-widest text-brand-400 font-mono font-bold">Módulo 07</span>
+                        <h2 class="font-serif text-4xl sm:text-6xl font-bold text-white">PEDIR AJUDA</h2>
+                    </div>
+                    <p class="text-slate-300 max-w-md text-sm sm:text-base">
+                        Quando algo incomodar ou parecer errado, você não precisa passar por isso a sós.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-stretch">
+                    <!-- Image Card -->
+                    <div class="md:col-span-4 rounded-2xl glass-panel image-card-hover relative overflow-hidden min-h-[220px]">
+                        <img src="https://images.unsplash.com/photo-1582213782179-e0d53f98f2ca?auto=format&fit=crop&w=800&q=80" alt="Apoio e acolhimento" class="absolute inset-0 w-full h-full object-cover" onerror="this.onerror=null; this.src='https://placehold.co/800x600/1e1b2e/e05988?text=Apoio';"/>
+                        <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/30 to-transparent"></div>
+                        <div class="absolute bottom-4 left-4 right-4 text-xs text-slate-200">
+                            Rede de apoio e escuta qualificada.
+                        </div>
+                    </div>
+
+                    <!-- Who to talk to -->
+                    <div class="md:col-span-8 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div class="glass-panel p-5 rounded-2xl space-y-3">
+                            <h3 class="font-bold text-white text-base flex items-center gap-2">
+                                <i data-lucide="life-buoy" class="w-5 h-5 text-brand-400"></i>
+                                Você pode falar com...
+                            </h3>
+                            <ul class="space-y-2 text-slate-300 text-xs">
+                                <li class="flex items-center gap-2.5 p-2 rounded-lg bg-white/5">
+                                    <i data-lucide="user-check" class="w-4 h-4 text-emerald-400 shrink-0"></i>
+                                    <span>Um adulto de sua confiança</span>
+                                </li>
+                                <li class="flex items-center gap-2.5 p-2 rounded-lg bg-white/5">
+                                    <i data-lucide="graduation-cap" class="w-4 h-4 text-blue-400 shrink-0"></i>
+                                    <span>Professor ou orientador escolar</span>
+                                </li>
+                                <li class="flex items-center gap-2.5 p-2 rounded-lg bg-white/5">
+                                    <i data-lucide="heart-pulse" class="w-4 h-4 text-brand-400 shrink-0"></i>
+                                    <span>Profissional da UBS / Posto de Saúde</span>
+                                </li>
+                                <li class="flex items-center gap-2.5 p-2 rounded-lg bg-white/5">
+                                    <i data-lucide="brain" class="w-4 h-4 text-purple-400 shrink-0"></i>
+                                    <span>Psicólogo ou serviço de proteção</span>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <!-- Action Steps -->
+                        <div class="glass-panel p-5 rounded-2xl space-y-3 border-brand-500/20 flex flex-col justify-between">
+                            <div>
+                                <h3 class="font-bold text-white text-base flex items-center gap-2">
+                                    <i data-lucide="alert-circle" class="w-5 h-5 text-rose-400"></i>
+                                    Pressão ou Violência
+                                </h3>
+                                <p class="text-slate-300 text-xs leading-relaxed mt-2">
+                                    Afaste-se do perigo, procure um local seguro e peça ajuda sem hesitar.
+                                </p>
+                            </div>
+
+                            <button onclick="openHelpModal()" class="w-full py-3 px-4 rounded-xl accent-gradient text-white text-xs font-semibold flex items-center justify-center gap-2 shadow-lg shadow-brand-500/20 hover:opacity-95 transition">
+                                <i data-lucide="phone-call" class="w-4 h-4"></i>
+                                <span>Ver Canais de Emergência & Contatos</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 09: DINÂMICA INTERATIVA -->
+        <section class="slide-item min-h-[calc(100vh-5rem)] w-full flex items-center justify-center p-6 relative">
+            <div class="max-w-5xl w-full space-y-6">
+                <div class="text-center space-y-2">
+                    <span class="text-xs uppercase tracking-widest text-brand-400 font-mono font-bold">Atividade Prática</span>
+                    <h2 class="font-serif text-4xl sm:text-6xl font-bold text-white">DINÂMICA: O que você faria?</h2>
+                    <p class="text-slate-300 text-xs sm:text-sm max-w-xl mx-auto">
+                        Analise as situações abaixo reflexivamente (sem necessidade de relatar histórias pessoais).
+                    </p>
+                </div>
+
+                <!-- Dynamic Situation Selector Tabs -->
+                <div class="glass-panel p-6 rounded-3xl space-y-6">
+                    <div class="flex flex-wrap gap-2 justify-center border-b border-white/10 pb-4" id="situation-tabs">
+                        <button onclick="selectSituation('A')" id="tab-A" class="situation-tab px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition bg-brand-500 text-white">
+                            Situação A
+                        </button>
+                        <button onclick="selectSituation('B')" id="tab-B" class="situation-tab px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition bg-white/5 text-slate-400 hover:text-white">
+                            Situação B
+                        </button>
+                        <button onclick="selectSituation('C')" id="tab-C" class="situation-tab px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition bg-white/5 text-slate-400 hover:text-white">
+                            Situação C
+                        </button>
+                    </div>
+
+                    <!-- Situation Card Content -->
+                    <div id="situation-content" class="min-h-[220px] flex flex-col justify-between space-y-6">
+                        <!-- JS renders content dynamically -->
+                    </div>
+
+                    <!-- Reflection Guide Footer -->
+                    <div class="p-4 rounded-2xl bg-white/5 border border-white/10 flex flex-wrap justify-around text-xs text-slate-300 gap-4">
+                        <div class="flex items-center gap-2">
+                            <i data-lucide="help-circle" class="w-4 h-4 text-brand-400"></i>
+                            <span><strong>Pergunta 1:</strong> Há respeito mútuo?</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <i data-lucide="help-circle" class="w-4 h-4 text-brand-400"></i>
+                            <span><strong>Pergunta 2:</strong> Existe consentimento livre?</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <i data-lucide="help-circle" class="w-4 h-4 text-brand-400"></i>
+                            <span><strong>Pergunta 3:</strong> Quem pode ajudar?</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 10: PARA LEVAR / ENCERRAMENTO -->
+        <section class="slide-item min-h-[calc(100vh-5rem)] w-full flex items-center justify-center p-6 relative overflow-hidden">
+            <!-- Background Accent Image -->
+            <div class="absolute inset-0 z-0 opacity-15 pointer-events-none">
+                <img src="https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?auto=format&fit=crop&w=1600&q=80" alt="Paisagem inspiradora de horizonte" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='https://placehold.co/1600x900/1e1b2e/e05988?text=Para+Levar';"/>
+                <div class="absolute inset-0 bg-gradient-to-t from-[#0B0F17] via-[#0B0F17]/80 to-transparent"></div>
+            </div>
+
+            <div class="max-w-4xl w-full text-center space-y-6 relative z-10">
+                <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-brand-500/20 border border-brand-500/30 text-brand-300 text-xs font-semibold uppercase tracking-widest">
+                    Recapitulando
+                </div>
+
+                <h2 class="font-serif text-4xl sm:text-6xl font-bold text-white">PARA LEVAR</h2>
+
+                <div class="glass-panel p-6 sm:p-8 rounded-3xl space-y-6">
+                    <p class="text-xl sm:text-2xl font-serif italic text-slate-200">
+                        "Informação, respeito e cuidado caminham juntos."
+                    </p>
+                    
+                    <div class="p-4 rounded-xl bg-brand-500/10 border border-brand-500/20 text-brand-200 text-base sm:text-lg font-medium">
+                        Seu corpo é seu. Seu tempo é seu. Seu "não" merece respeito.
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2">
+                        <div class="p-4 rounded-2xl bg-white/5 border border-white/5 text-center space-y-1">
+                            <div class="font-bold text-white text-lg">Conheça</div>
+                            <p class="text-xs text-slate-400">seu corpo e seus direitos.</p>
+                        </div>
+                        <div class="p-4 rounded-2xl bg-white/5 border border-white/5 text-center space-y-1">
+                            <div class="font-bold text-white text-lg">Converse</div>
+                            <p class="text-xs text-slate-400">com fontes confiáveis.</p>
+                        </div>
+                        <div class="p-4 rounded-2xl bg-white/5 border border-white/5 text-center space-y-1">
+                            <div class="font-bold text-white text-lg">Cuide</div>
+                            <p class="text-xs text-slate-400">de você e das outras pessoas.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="space-y-2 pt-2">
+                    <p class="text-slate-300 text-sm">Dúvidas? Procure um adulto seguro ou um profissional de saúde.</p>
+                    <h3 class="font-serif text-4xl sm:text-6xl font-bold gradient-text">Obrigada!</h3>
+                </div>
+
+                <div class="pt-4">
+                    <button onclick="goToSlide(0)" class="px-6 py-3 rounded-xl bg-white/10 hover:bg-white/20 border border-white/10 text-white text-sm font-medium transition inline-flex items-center gap-2">
+                        <i data-lucide="rotate-ccw" class="w-4 h-4"></i>
+                        <span>Recomeçar Apresentação</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Floating Bottom Slide Navigation Bar -->
+    <footer class="fixed bottom-0 left-0 right-0 z-40 bg-slate-950/80 backdrop-blur-md border-t border-white/10 px-6 py-3 flex items-center justify-between">
+        <!-- Progress bar -->
+        <div class="absolute top-0 left-0 right-0 h-1 bg-white/10">
+            <div id="progress-bar" class="h-full accent-gradient transition-all duration-300 w-[10%]"></div>
+        </div>
+
+        <div class="text-xs text-slate-400 font-mono hidden sm:block">
+            Use as setas <kbd class="px-1.5 py-0.5 rounded bg-white/10 border border-white/20 text-slate-200">←</kbd> <kbd class="px-1.5 py-0.5 rounded bg-white/10 border border-white/20 text-slate-200">→</kbd> para navegar
+        </div>
+
+        <div class="flex items-center space-x-3 mx-auto sm:mx-0">
+            <button id="prev-slide-btn" onclick="prevSlide()" class="p-2.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-white transition disabled:opacity-30 disabled:cursor-not-allowed">
+                <i data-lucide="chevron-left" class="w-5 h-5"></i>
+            </button>
+            <button id="next-slide-btn" onclick="nextSlide()" class="px-5 py-2.5 rounded-xl accent-gradient text-white font-medium text-xs sm:text-sm flex items-center gap-2 shadow-lg shadow-brand-500/20 hover:opacity-95 transition">
+                <span>Próximo</span>
+                <i data-lucide="chevron-right" class="w-4 h-4"></i>
+            </button>
+        </div>
+    </footer>
+
+    <!-- Emergency Helpline Modal -->
+    <div id="help-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md hidden">
+        <div class="glass-panel max-w-lg w-full rounded-3xl p-6 sm:p-8 space-y-6 border-brand-500/30 relative">
+            <button onclick="closeHelpModal()" class="absolute top-5 right-5 p-2 text-slate-400 hover:text-white">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+
+            <div class="flex items-center gap-3">
+                <div class="p-3 rounded-full bg-brand-500/20 text-brand-400">
+                    <i data-lucide="shield-alert" class="w-6 h-6"></i>
+                </div>
+                <div>
+                    <h3 class="font-serif text-2xl font-bold text-white">Canais de Ajuda & Apoio</h3>
+                    <p class="text-xs text-slate-400">Atendimento gratuito, seguro e confidencial</p>
+                </div>
+            </div>
+
+            <div class="space-y-3">
+                <div class="p-4 rounded-xl bg-white/5 border border-white/10 flex items-center justify-between">
+                    <div>
+                        <div class="text-xs text-slate-400 font-semibold uppercase">Risco Imediato / Polícia</div>
+                        <div class="font-bold text-white text-lg">Ligue 190</div>
+                    </div>
+                    <a href="tel:190" class="px-4 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold transition">
+                        Ligar Agora
+                    </a>
+                </div>
+
+                <div class="p-4 rounded-xl bg-white/5 border border-white/10 flex items-center justify-between">
+                    <div>
+                        <div class="text-xs text-slate-400 font-semibold uppercase">Direitos Humanos / Criança e Adolescente</div>
+                        <div class="font-bold text-white text-lg">Disque 100</div>
+                    </div>
+                    <a href="tel:100" class="px-4 py-2 rounded-lg bg-brand-600 hover:bg-brand-500 text-white text-xs font-bold transition">
+                        Ligar Agora
+                    </a>
+                </div>
+
+                <div class="p-4 rounded-xl bg-white/5 border border-white/10">
+                    <div class="text-xs text-brand-400 font-semibold uppercase mb-1">Conselho Tutelar & UBS</div>
+                    <p class="text-slate-300 text-xs">
+                        Procure a Unidade Básica de Saúde do seu bairro ou o Conselho Tutelar do seu município. Todos os profissionais são preparados para acolher com sigilo.
+                    </p>
+                </div>
+            </div>
+
+            <button onclick="closeHelpModal()" class="w-full py-3 rounded-xl bg-white/10 text-slate-300 hover:text-white font-medium text-xs transition">
+                Fechar
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Lucide Icons Initialization
+        lucide.createIcons();
+
+        // Slide State Management
+        let currentSlideIndex = 0;
+        const totalSlides = 10;
+        const wrapper = document.getElementById('slides-wrapper');
+        const slideCounter = document.getElementById('current-slide-num');
+        const progressBar = document.getElementById('progress-bar');
+        const prevBtn = document.getElementById('prev-slide-btn');
+        const nextBtn = document.getElementById('next-slide-btn');
+
+        // Drawer elements
+        const menuBtn = document.getElementById('menu-toggle-btn');
+        const closeDrawerBtn = document.getElementById('close-drawer');
+        const drawerMenu = document.getElementById('drawer-menu');
+        const drawerOverlay = document.getElementById('drawer-overlay');
+
+        // Mode Switch
+        let isContinuousScroll = false;
+        const modeBtn = document.getElementById('mode-toggle-btn');
+
+        // Situations Data for Slide 09
+        const situationsData = {
+            'A': {
+                title: 'Situação A: Pressão entre Amigos',
+                description: 'Um colega conta que está sendo constantemente pressionado por um grupo a beijar alguém numa festa para "provar" algo aos outros.',
+                analysis: [
+                    { icon: 'shield-x', text: 'Não há consentimento genuíno quando há pressão social ou constrangimento.', highlight: 'Sem Consentimento' },
+                    { icon: 'users', text: 'Amigos de verdade respeitam os limites e o tempo do outro.', highlight: 'Respeito' },
+                    { icon: 'heart-handshake', text: 'Apoio: Ofereça apoio ao colega, ajude-o a dizer não e converse com um adulto de confiança.', highlight: 'Ação' }
+                ]
+            },
+            'B': {
+                title: 'Situação B: Pedido de Foto Íntima na Internet',
+                description: 'Uma pessoa do convívio virtual pede uma foto íntima e promete guardar segredo absoluto.',
+                analysis: [
+                    { icon: 'alert-triangle', text: 'Pedir ou enviar imagens íntimas envolve riscos reais de vazamento ou chantagem.', highlight: 'Risco Digital' },
+                    { icon: 'lock', text: 'Você NUNCA é obrigado(a) a ceder para provar confiança ou afeto.', highlight: 'Sua Privacidade' },
+                    { icon: 'life-buoy', text: 'Se houver insistência, ameça ou chantagem: guarde provas (prints), bloqueie e procure apoio adulto.', highlight: 'Segurança' }
+                ]
+            },
+            'C': {
+                title: 'Situação C: Dúvida sobre Saúde e Prevenção',
+                description: 'Uma amiga quer orientação sobre onde buscar preservativos e como tirar dúvidas sobre saúde sexual com segurança.',
+                analysis: [
+                    { icon: 'check-circle-2', text: 'Buscar informação de saúde é um ato responsável e maduro de autocuidado.', highlight: 'Atitude Positiva' },
+                    { icon: 'building-2', text: 'A Unidade Básica de Saúde (UBS) fornece preservativos gratuitos e orientação profissional sigilosa.', highlight: 'Acesso Livre' },
+                    { icon: 'user-check', text: 'Você pode acompanhá-la ao posto de saúde ou indicar a orientação de um enfermeiro(a).', highlight: 'Rede de Apoio' }
+                ]
+            }
+        };
+
+        // Initialize Dynamic Situation UI
+        function selectSituation(key) {
+            const data = situationsData[key];
+            const container = document.getElementById('situation-content');
+
+            // Update Tab styles
+            ['A', 'B', 'C'].forEach(k => {
+                const tab = document.getElementById(`tab-${k}`);
+                if (k === key) {
+                    tab.className = 'situation-tab px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition bg-brand-500 text-white shadow-lg shadow-brand-500/20';
+                } else {
+                    tab.className = 'situation-tab px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition bg-white/5 text-slate-400 hover:text-white';
+                }
+            });
+
+            // Render scenario HTML
+            container.innerHTML = `
+                <div class="space-y-3 fade-in-up">
+                    <h3 class="font-bold text-white text-lg sm:text-xl font-serif text-brand-300">${data.title}</h3>
+                    <p class="text-slate-200 text-base leading-relaxed bg-white/5 p-4 rounded-xl border border-white/5">
+                        "${data.description}"
+                    </p>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2 fade-in-up">
+                    ${data.analysis.map(item => `
+                        <div class="glass-panel p-4 rounded-xl border-white/5 space-y-2">
+                            <span class="text-[10px] font-bold uppercase tracking-wider text-brand-400 bg-brand-500/10 px-2.5 py-1 rounded-md border border-brand-500/20 inline-block">
+                                ${item.highlight}
+                            </span>
+                            <p class="text-xs text-slate-300 leading-relaxed">${item.text}</p>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+            lucide.createIcons();
+        }
+
+        // Navigation Engine
+        function updateSlideUI() {
+            slideCounter.textContent = currentSlideIndex + 1;
+            const progressPercent = ((currentSlideIndex + 1) / totalSlides) * 100;
+            progressBar.style.width = `${progressPercent}%`;
+
+            // Button States
+            prevBtn.disabled = currentSlideIndex === 0;
+            if (currentSlideIndex === totalSlides - 1) {
+                nextBtn.innerHTML = `<span>Abertura</span> <i data-lucide="rotate-ccw" class="w-4 h-4"></i>`;
+            } else {
+                nextBtn.innerHTML = `<span>Próximo</span> <i data-lucide="chevron-right" class="w-4 h-4"></i>`;
+            }
+            lucide.createIcons();
+        }
+
+        function goToSlide(index) {
+            currentSlideIndex = index;
+            if (currentSlideIndex >= totalSlides) currentSlideIndex = 0;
+            if (currentSlideIndex < 0) currentSlideIndex = 0;
+
+            const slides = document.querySelectorAll('.slide-item');
+            if (slides[currentSlideIndex]) {
+                slides[currentSlideIndex].scrollIntoView({ behavior: 'smooth' });
+            }
+            updateSlideUI();
+            closeDrawer();
+        }
+
+        function nextSlide() {
+            if (currentSlideIndex < totalSlides - 1) {
+                goToSlide(currentSlideIndex + 1);
+            } else {
+                goToSlide(0);
+            }
+        }
+
+        function prevSlide() {
+            if (currentSlideIndex > 0) {
+                goToSlide(currentSlideIndex - 1);
+            }
+        }
+
+        // Detect active slide on scroll
+        let isScrolling;
+        wrapper.addEventListener('scroll', () => {
+            window.clearTimeout(isScrolling);
+            isScrolling = setTimeout(() => {
+                const slides = document.querySelectorAll('.slide-item');
+                const scrollTop = wrapper.scrollTop;
+                const windowHeight = window.innerHeight;
+                
+                slides.forEach((slide, idx) => {
+                    const rect = slide.getBoundingClientRect();
+                    if (rect.top >= -100 && rect.top <= windowHeight / 2) {
+                        currentSlideIndex = idx;
+                        updateSlideUI();
+                    }
+                });
+            }, 50);
+        });
+
+        // Keyboard Navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === ' ') {
+                nextSlide();
+            } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+                prevSlide();
+            }
+        });
+
+        // Drawer Menu Listeners
+        function openDrawer() {
+            drawerMenu.classList.remove('translate-x-full');
+            drawerOverlay.classList.remove('hidden');
+        }
+
+        function closeDrawer() {
+            drawerMenu.classList.add('translate-x-full');
+            drawerOverlay.classList.add('hidden');
+        }
+
+        menuBtn.addEventListener('click', openDrawer);
+        closeDrawerBtn.addEventListener('click', closeDrawer);
+        drawerOverlay.addEventListener('click', closeDrawer);
+
+        // Continuous Scroll vs Snap Presentation Toggle
+        modeBtn.addEventListener('click', () => {
+            isContinuousScroll = !isContinuousScroll;
+            if (isContinuousScroll) {
+                wrapper.classList.remove('slide-container');
+                modeBtn.classList.add('bg-brand-500/30', 'text-brand-300');
+                modeBtn.title = "Modo Apresentação (Ativar Snap)";
+            } else {
+                wrapper.classList.add('slide-container');
+                modeBtn.classList.remove('bg-brand-500/30', 'text-brand-300');
+                modeBtn.title = "Modo Leitura Contínua";
+            }
+        });
+
+        // Modal Help Controls
+        function openHelpModal() {
+            document.getElementById('help-modal').classList.remove('hidden');
+        }
+
+        function closeHelpModal() {
+            document.getElementById('help-modal').classList.add('hidden');
+        }
+
+        // Initialize defaults on load
+        window.onload = function() {
+            selectSituation('A');
+            updateSlideUI();
+        };
+    </script>
+</body>
+</html>
