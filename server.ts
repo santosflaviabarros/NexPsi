@@ -239,17 +239,23 @@ Evite jargões promocionais. Seja estritamente clínico, empático e realista.`;
     }
   });
 
-  // Serve static presentations directly (sexualidade, companhias, deszenvolvimento)
-  const sexualidadePath = path.join(process.cwd(), 'public', 'sexualidade', 'sexualidade.html');
-  const companhiasPath = path.join(process.cwd(), 'public', 'companhias', 'companhias.html');
-  const deszenvolvimentoPath = path.join(process.cwd(), 'public', 'deszenvolvimento', 'deszenvolvimento.html');
+  // Serve static presentations directly from public/slides
+  const sexualidadePath = path.join(process.cwd(), 'public', 'slides', 'sexualidade', 'sexualidade.html');
+  const companhiasPath = path.join(process.cwd(), 'public', 'slides', 'companhias', 'companhias.html');
+  const desenvolvimentoPath = path.join(process.cwd(), 'public', 'slides', 'desenvolvimento', 'desenvolvimento.html');
 
-  app.use('/sexualidade', express.static(path.join(process.cwd(), 'public', 'sexualidade')));
-  app.use('/companhias', express.static(path.join(process.cwd(), 'public', 'companhias')));
-  app.use('/deszenvolvimento', express.static(path.join(process.cwd(), 'public', 'deszenvolvimento')));
-  app.use('/desenvolvimento', express.static(path.join(process.cwd(), 'public', 'desenvolvimento')));
+  // Serve static assets from /slides and aliases
+  app.use('/slides', express.static(path.join(process.cwd(), 'public', 'slides')));
+  app.use('/sexualidade', express.static(path.join(process.cwd(), 'public', 'slides', 'sexualidade')));
+  app.use('/companhias', express.static(path.join(process.cwd(), 'public', 'slides', 'companhias')));
+  app.use('/desenvolvimento', express.static(path.join(process.cwd(), 'public', 'slides', 'desenvolvimento')));
 
-  app.get(['/sexualidade', '/sexualidade.html'], (req, res) => {
+  // Direct routes for slides
+  app.get(['/slides/sexualidade', '/slides/sexualidade.html', '/sexualidade', '/sexualidade.html'], (req, res) => {
+    res.sendFile(sexualidadePath);
+  });
+
+  app.get(/^\/slides\/sexualidade(\/.*)?$/, (req, res) => {
     res.sendFile(sexualidadePath);
   });
 
@@ -257,7 +263,11 @@ Evite jargões promocionais. Seja estritamente clínico, empático e realista.`;
     res.sendFile(sexualidadePath);
   });
 
-  app.get(['/companhias', '/companhias.html'], (req, res) => {
+  app.get(['/slides/companhias', '/slides/companhias.html', '/companhias', '/companhias.html'], (req, res) => {
+    res.sendFile(companhiasPath);
+  });
+
+  app.get(/^\/slides\/companhias(\/.*)?$/, (req, res) => {
     res.sendFile(companhiasPath);
   });
 
@@ -265,16 +275,16 @@ Evite jargões promocionais. Seja estritamente clínico, empático e realista.`;
     res.sendFile(companhiasPath);
   });
 
-  app.get(['/deszenvolvimento', '/deszenvolvimento.html', '/desenvolvimento', '/desenvolvimento.html'], (req, res) => {
-    res.sendFile(deszenvolvimentoPath);
+  app.get(['/slides/desenvolvimento', '/slides/desenvolvimento.html', '/desenvolvimento', '/desenvolvimento.html'], (req, res) => {
+    res.sendFile(desenvolvimentoPath);
   });
 
-  app.get(/^\/deszenvolvimento(\/.*)?$/, (req, res) => {
-    res.sendFile(deszenvolvimentoPath);
+  app.get(/^\/slides\/desenvolvimento(\/.*)?$/, (req, res) => {
+    res.sendFile(desenvolvimentoPath);
   });
 
   app.get(/^\/desenvolvimento(\/.*)?$/, (req, res) => {
-    res.sendFile(deszenvolvimentoPath);
+    res.sendFile(desenvolvimentoPath);
   });
 
   // Serve static UI / Vite integration

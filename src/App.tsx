@@ -41,6 +41,7 @@ import ReferencesView from './components/ReferencesView';
 import FinancialView from './components/FinancialView';
 import WhatsAppView from './components/WhatsAppView';
 import PatientPortalView from './components/PatientPortalView';
+import AboutAppModal from './components/AboutAppModal';
 
 export default function App() {
   const urlParams = new URLSearchParams(window.location.search);
@@ -53,6 +54,7 @@ export default function App() {
 
   const [currentUser, setCurrentUser] = useState<{ id: string; email: string; photoURL?: string } | null>(null);
   const [activeTab, setActiveTab] = useState('dashboard');
+  const [isAboutModalOpen, setIsAboutModalOpen] = useState(false);
   
   // Roster lists
   const [patients, setPatients] = useState<Patient[]>([]);
@@ -188,16 +190,27 @@ export default function App() {
       {/* DESKTOP SIDEBAR */}
       <aside className="hidden md:flex md:flex-col md:w-64 md:h-screen md:sticky md:top-0 border-r border-slate-100 bg-white shrink-0 z-40">
         {/* Logo brand */}
-        <div className="p-6 border-b border-slate-100/80 flex items-center gap-2.5 shrink-0">
-          <div className="p-2 bg-indigo-600 text-white rounded-xl shadow-md">
-            <ShieldCheck className="w-5.5 h-5.5" id="sidebar-brand-logo" />
+        <div 
+          onClick={() => setIsAboutModalOpen(true)}
+          role="button"
+          tabIndex={0}
+          title="Clique para ver informações sobre o aplicativo (v1.2)"
+          className="p-6 border-b border-slate-100/80 flex items-center justify-between gap-2.5 shrink-0 cursor-pointer group hover:bg-slate-50/80 transition-colors"
+        >
+          <div className="flex items-center gap-2.5">
+            <div className="p-2 bg-indigo-600 group-hover:bg-indigo-700 text-white rounded-xl shadow-md transition-all group-hover:scale-105">
+              <ShieldCheck className="w-5.5 h-5.5" id="sidebar-brand-logo" />
+            </div>
+            <div className="flex flex-col">
+              <span className="text-lg font-extrabold tracking-tight text-slate-900 leading-none">
+                Nex<span className="text-indigo-600">Psi</span>
+              </span>
+              <span className="text-[10px] text-slate-400 font-semibold mt-1 uppercase tracking-wider">Portal Clínico</span>
+            </div>
           </div>
-          <div className="flex flex-col">
-            <span className="text-lg font-extrabold tracking-tight text-slate-900 leading-none">
-              Nex<span className="text-indigo-600">Psi</span>
-            </span>
-            <span className="text-[10px] text-slate-400 font-semibold mt-1 uppercase tracking-wider">Portal Clínico</span>
-          </div>
+          <span className="text-[10px] font-black bg-indigo-50 text-indigo-600 border border-indigo-100 px-2 py-0.5 rounded-full group-hover:bg-indigo-600 group-hover:text-white transition-colors shadow-xs">
+            v1.2
+          </span>
         </div>
 
         {/* Navigation List */}
@@ -367,13 +380,24 @@ export default function App() {
             <div className="flex justify-between items-center h-16">
               
               {/* Logo brand */}
-              <div className="flex items-center gap-2">
-                <div className="p-2 bg-indigo-600 text-white rounded-xl shadow-md">
+              <div 
+                onClick={() => setIsAboutModalOpen(true)}
+                role="button"
+                tabIndex={0}
+                className="flex items-center gap-2 cursor-pointer group"
+                title="Sobre o App (v1.2)"
+              >
+                <div className="p-2 bg-indigo-600 text-white rounded-xl shadow-md group-hover:bg-indigo-700 transition">
                   <ShieldCheck className="w-5 h-5" id="header-brand-logo" />
                 </div>
-                <span className="text-xl font-bold tracking-tight text-slate-900">
-                  Nex<span className="text-indigo-600">Psi</span>
-                </span>
+                <div className="flex items-center gap-1.5">
+                  <span className="text-xl font-bold tracking-tight text-slate-900">
+                    Nex<span className="text-indigo-600">Psi</span>
+                  </span>
+                  <span className="text-[9px] font-bold bg-indigo-50 text-indigo-700 border border-indigo-100 px-1.5 py-0.2 rounded-full">
+                    v1.2
+                  </span>
+                </div>
               </div>
 
               {/* Right therapist profile chip */}
@@ -797,6 +821,12 @@ export default function App() {
         </div>
       </footer>
       </div> {/* Closes flex-1 flex flex-col min-w-0 */}
+
+      {/* About App Modal */}
+      <AboutAppModal
+        isOpen={isAboutModalOpen}
+        onClose={() => setIsAboutModalOpen(false)}
+      />
     </div>
   );
 }
